@@ -1,3 +1,4 @@
+lib.locale()
 Config = Config or {}
 
 -- Configs for Payment and Banking
@@ -382,7 +383,7 @@ Config.JobCenter = {
         icon = 'fas fa-warehouse',
         icons = '💲💲💲💲💲',
         label = "Impound Worker",
-        event = "qb-phone:jobcenter:tow",
+        event = "Renewed-Phone:jobcenter:tow",
     },
     [2] = {
         job = "garbage",
@@ -399,7 +400,7 @@ Config.JobCenter = {
         icon = 'fas fa-fish',
         icons = '💲💲💲💲',
         label = 'Fishing',
-        event = 'qb-phone:jobcenter:fish',
+        event = 'Renewed-Phone:jobcenter:fish',
     },
     [5] = {
         vpn = true,
@@ -412,14 +413,14 @@ Config.JobCenter = {
         icon = 'fas fa-trash',
         label = "Sanitation Worker",
         icons = '💲💲💲💲💲',
-        event = "qb-phone:jobcenter:sanitation",
+        event = "Renewed-Phone:jobcenter:sanitation",
     },
     [7] = {
         vpn = false,
         icon = 'fas fa-shop',
         icons = '💲💲💲💲',
         label = "Road Runner Delivery",
-        event = "qb-phone:jobcenter:postop",
+        event = "Renewed-Phone:jobcenter:postop",
     },
     [8] = {
         vpn = true,
@@ -432,7 +433,7 @@ Config.JobCenter = {
         icon = 'fas fa-warehouse',
         icons = '💲💲💲💲💲',
         label = "PD Impound Worker",
-        event = "qb-phone:jobcenter:pdimpound"
+        event = "Renewed-Phone:jobcenter:pdimpound"
     }
 }
 

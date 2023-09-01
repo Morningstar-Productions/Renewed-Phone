@@ -1,5 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 -- Functions
 
 local function escape_str(s)
@@ -14,7 +12,7 @@ end
 -- NUI Callback
 
 RegisterNUICallback('GetTweets', function(_, cb)
-    local hasVPN = exports.ox_inventory:Search(1, Config.VPNItem)
+    local hasVPN = QBCore.Functions.HasItem(Config.VPNItem)
 
     cb({
         TweetData = PhoneData.Tweets,
@@ -53,7 +51,7 @@ RegisterNUICallback('DeleteTweet',function(data)
 end)
 
 RegisterNUICallback('FlagTweet',function(data, cb)
-    lib.notify({ description = data.name..' was reported for saying '..data.message, type = "error" })
+    QBCore.Functions.Notify(data.name..' was reported for saying '..data.message, "error")
     cb('ok')
 end)
 
@@ -78,7 +76,7 @@ RegisterNetEvent('Renewed-Phone:client:UpdateTweets', function(src, Tweets, dele
         })
     end
 
-    local hasVPN = exports.ox_inventory:Search(1, Config.VPNItem)
+    local hasVPN = QBCore.Functions.HasItem(Config.VPNItem)
 
     SendNUIMessage({
         action = "UpdateTweets",

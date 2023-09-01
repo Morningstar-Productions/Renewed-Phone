@@ -1,5 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 -- Functions
 
 local function findVehFromPlateAndLocate(plate)
@@ -19,23 +17,13 @@ end
 -- NUI Callback
 
 RegisterNUICallback('SetupGarageVehicles', function(_, cb)
-<<<<<<< Updated upstream
-    QBCore.Functions.TriggerCallback('qb-phone:server:GetGarageVehicles', function(vehicles)
-=======
     lib.callback('Renewed-Phone:server:GetGarageVehicles', false, function(vehicles)
->>>>>>> Stashed changes
         cb(vehicles)
     end)
 end)
 
 RegisterNUICallback('gps-vehicle-garage', function(data, cb)
     local veh = data.veh
-<<<<<<< Updated upstream
-    if veh.state == 'In' then
-        if veh.parkingspot then
-            SetNewWaypoint(veh.parkingspot.x, veh.parkingspot.y)
-            QBCore.Functions.Notify("Your vehicle has been marked", "success")
-=======
     if Config.Garage == 'jdev' then
         exports['qb-garages']:TrackVehicleByPlate(veh.plate)
         TriggerEvent('Renewed-Phone:client:CustomNotification',
@@ -57,12 +45,11 @@ RegisterNUICallback('gps-vehicle-garage', function(data, cb)
             lib.notify({ title = 'Valet', description = "Your vehicle has been marked", type = "success" })
         else
             lib.notify({ title = 'Valet', description = "This vehicle cannot be located", type = "error" })
->>>>>>> Stashed changes
         end
     elseif veh.state == 'Out' and findVehFromPlateAndLocate(veh.plate) then
-        QBCore.Functions.Notify("Your vehicle has been marked", "success")
+        lib.notify({ title = 'Valet', description = "Your vehicle has been marked", type = "success" })
     else
-        QBCore.Functions.Notify("This vehicle cannot be located", "error")
+        lib.notify({ title = 'Valet', description = "This vehicle cannot be located", type = "error" })
     end
     cb("ok")
 end)

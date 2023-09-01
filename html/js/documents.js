@@ -18,7 +18,18 @@ $(document).ready(function(){
     window.addEventListener('message', function(event) {
         switch(event.data.action) {
             case "DocumentRefresh":
-                getDocuments();
+                $(this).parents('.documents-dropdown').find('span').text($(this).text());
+                $(this).parents('.documents-dropdown').find('input').attr('value', $(this).attr('id'));
+                $(".documents-list").html(""); // Frown Face before loading any contents if any!
+                    var AddOption = '<div class="casino-text-clear">Nothing Here!</div>'+
+                    '<div class="casino-text-clear" style="font-size: 500%;color: #FFFFFF;"><i class="fas fa-frown"></i></div>'
+                $('.documents-list').append(AddOption);
+            
+                $.post('https://Renewed-Phone/GetNote_for_Documents_app', JSON.stringify({}), function(HasNote){
+                    if(HasNote){
+                        AddDocuments(HasNote)
+                    }
+                });
             break;
             case "DocumentSent":
                 SendDocument(event.data.DocumentSend.title, event.data.DocumentSend.text);
@@ -55,21 +66,6 @@ function MainMenu(){
     }
 }
 
-function getDocuments(){
-    $(this).parents('.documents-dropdown').find('span').text($(this).text());
-    $(this).parents('.documents-dropdown').find('input').attr('value', $(this).attr('id'));
-    $(".documents-list").html(""); // Frown Face before loading any contents if any!
-        var AddOption = '<div class="casino-text-clear">Nothing Here!</div>'+
-        '<div class="casino-text-clear" style="font-size: 500%;color: #FFFFFF;"><i class="fas fa-frown"></i></div>'
-    $('.documents-list').append(AddOption);
-
-    $.post('https://Renewed-Phone/GetNote_for_Documents_app', JSON.stringify({}), function(HasNote){
-        if(HasNote){
-            AddDocuments(HasNote)
-        }
-    });
-}
-
 function AddDocuments(data){
     $(".documents-list").html("");
 
@@ -93,9 +89,12 @@ function AddDocuments(data){
 
 function LoadGetNotes(){
     $(".documents-dropdown-menu").html("");
-    var Shitter = '<li id="documents-docs" data-title="Documents">Documents' +
+    var Shitter = '<li id="documents-notes" data-title="Notes">Notes</li>' +
         '<li id="documents-licenses" data-title="Licenses">Licenses</li>' +
+        '<li id="documents-docs" data-title="Documents">Documents</li>' +
         '<li id="documents-vehicle" data-title="Vehicle">Vehicle Registrations</li>' +
+        '<li id="documents-housing" data-title="Housing">Housing Registrations</li>' +
+        '<li id="documents-contracts" data-title="Contracts">Contracts</li>' +
     '</li>';
 
     $('.documents-dropdown-menu').append(Shitter);
@@ -137,8 +136,6 @@ function SendDocument(title, text){
 
 // Clicks
 
-<<<<<<< Updated upstream
-=======
 $(document).on('click', '#documents-notes', function(e) {
     QB.Phone.Notifications.Add("fas fa-triange-exclamation", "Documents", "This feature is still unavailable", "rgb(255, 165, 0)", 1250);
 })
@@ -167,11 +164,19 @@ $(document).on('click', '#documents-contracts', function(e) {
     QB.Phone.Notifications.Add("fas fa-triange-exclamation", "Documents", "This feature is still unavailable", "rgb(255, 165, 0)", 1250);
 })
 
->>>>>>> Stashed changes
 $(document).on('click', '#documents-docs', function(e) {
     $(this).parents('.documents-dropdown').find('span').text($(this).text());
     $(this).parents('.documents-dropdown').find('input').attr('value', $(this).attr('id'));
-    getDocuments();
+    $(".documents-list").html(""); // Frown Face before loading any contents if any!
+        var AddOption = '<div class="casino-text-clear">Nothing Here!</div>'+
+        '<div class="casino-text-clear" style="font-size: 500%;color: #FFFFFF;"><i class="fas fa-frown"></i></div>'
+    $('.documents-list').append(AddOption);
+
+    $.post('https://Renewed-Phone/GetNote_for_Documents_app', JSON.stringify({}), function(HasNote){
+        if(HasNote){
+            AddDocuments(HasNotje)
+        }
+    });
 });
 
 $(document).on('click', '#documents-vehicle', function(e) {
@@ -181,7 +186,7 @@ $(document).on('click', '#documents-vehicle', function(e) {
     $.post('https://Renewed-Phone/SetupGarageVehicles', JSON.stringify({}), function(Vehicles){
         if(Vehicles != null){
             $.each(Vehicles, function(i, vehicle){
-                if (vehicle.vinscratched != 'false'){
+                if (vehicle.vinscratch != 0){
                         DocEndtitle = null
                         DocEndtext = null
                         DocEndid = null

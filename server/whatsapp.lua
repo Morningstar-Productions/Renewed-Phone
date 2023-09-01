@@ -1,11 +1,4 @@
-<<<<<<< Updated upstream
-local QBCore = exports['qb-core']:GetCoreObject()
-
-
-RegisterNetEvent('qb-phone:server:UpdateMessages', function(ChatMessages, ChatNumber)
-=======
 RegisterNetEvent('Renewed-Phone:server:UpdateMessages', function(ChatMessages, ChatNumber)
->>>>>>> Stashed changes
     if not ChatNumber or not ChatMessages then return end
 
     local src = source

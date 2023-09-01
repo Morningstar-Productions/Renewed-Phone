@@ -1,14 +1,7 @@
-<<<<<<< Updated upstream
-local QBCore = exports['qb-core']:GetCoreObject()
-
-
--- exports['qb-phone']:RemoveCrypto(Player, type, amount)
-=======
 -- exports['Renewed-Phone']:RemoveCrypto(Player, type, amount)
 ---@param src any
 ---@param type string
 ---@param amount? number
->>>>>>> Stashed changes
 local function RemoveCrypto(src, type, amount)
     if not src then return end
     local Player = QBCore.Functions.GetPlayer(src)

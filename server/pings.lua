@@ -1,10 +1,4 @@
-<<<<<<< Updated upstream
-local QBCore = exports['qb-core']:GetCoreObject()
-
-RegisterNetEvent("qb-phone:server:sendPing", function(id)
-=======
 RegisterNetEvent("Renewed-Phone:server:sendPing", function(id)
->>>>>>> Stashed changes
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local Shitter = tonumber(id)

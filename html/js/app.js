@@ -47,6 +47,18 @@ function IsAppJobBlocked(joblist, myjob) {
     return retval;
 }
 
+/*function IsAppItemBlocked(itemlist, myitems) {
+    var retval = false;
+    if (itemlist.length > 0) {
+        $.each(itemlist, function(i, item){
+            if (item == myitems && QB.Phone.Data.PlayerData.items) {
+                retval = true;
+            }
+        });
+    }
+    return retval
+}*/
+
 QB.Phone.Functions.SetupApplications = function(data) {
     QB.Phone.Data.Applications = data.applications;
 
@@ -65,47 +77,47 @@ QB.Phone.Functions.SetupApplications = function(data) {
     $.each(data.applications, function(i, app){
         var applicationSlot = $(".phone-applications").find('[data-appslot="'+app.slot+'"]');
         var blockedapp = IsAppJobBlocked(app.blockedjobs, QB.Phone.Data.PlayerJob.name)
+        //var itemapp = IsAppItemBlocked(app.items, QB.Phone.Data.PlayerData.items)
 
         if ((!app.job || app.job === QB.Phone.Data.PlayerJob.name) && !blockedapp) {
-            $(applicationSlot).css("background-image","-webkit-gradient(linear,0% 0%,0% 100%,color-stop(0.4, "+app.color+"),color-stop(0.9, "+app.color2+")");
+            //if ((!app.item || app.item === QB.Phone.Data.PlayerData.items) && !itemapp) {
+                $(applicationSlot).css("background-image","-webkit-gradient(linear,0% 0%,0% 100%,color-stop(0.4, "+app.color+"),color-stop(0.9, "+app.color2+")");
 
+                var icon = '<i class="ApplicationIcon '+app.icon+'" style="'+app.style+'"></i>';
+                if (app.app == "garage"){
+                    icon = '<img src="./img/apps/garage_img.png" class="garage-icon">';
+                } else if (app.app == "advert"){
+                    icon = '<img src="./img/apps/Advertisements.png" class="advert-icon">';
+                } else if (app.app == "calculator"){
+                    icon = '<img src="./img/apps/calcilator.png" class="calc-icon">';
+                } /* else if (app.app == "employment"){
+                    icon = '<img src="./img/apps/employment.png" style="width: 87%;margin-top: 6%;margin-left: -2%;">';
+                } */ else if (app.app == "debt"){
+                    icon = '<img src="./img/apps/debt.png">';
+                } else if (app.app == "wenmo"){
+                    icon = '<img src="./img/apps/wenmo.png" class="calc-icon">';
+                }else if (app.app == "job"){
+                    icon = '<img src="./img/apps/employment.png" class="calc-icon">';
+                } else if (app.app == "jobcenter"){
+                    icon = '<img src="./img/apps/jobcenter.png" class="calc-icon">';
+                } else if (app.app == "crypto"){
+                    icon = '<img src="./img/apps/crypto.png" style="width: 85%;margin-top: 7%;">';
+                } else if (app.app == "taxi"){
+                    icon = '<img src="./img/apps/taxiapp.png" style="width: 85%;margin-top: 7%;">';
+                } else if (app.app == "lsbn"){
+                    icon = '<img src="./img/apps/lsbn.png" style="width: 85%;margin-top: 7%;">';
+                } else if (app.app == "contacts"){
+                    icon = '<img src="./img/apps/contacts.png" style="width: 85%;margin-top: 7%;">';
+                }
 
-            var icon = '<i class="ApplicationIcon '+app.icon+'" style="'+app.style+'"></i>';
-            if (app.app == "meos") {
-                icon = '<img src="./img/apps/politie.png" class="police-icon">';
-            } else if (app.app == "garage"){
-                icon = '<img src="./img/apps/garage_img.png" class="garage-icon">';
-            } else if (app.app == "advert"){
-                icon = '<img src="./img/apps/Advertisements.png" class="advert-icon">';
-            } else if (app.app == "calculator"){
-                icon = '<img src="./img/apps/calcilator.png" class="calc-icon">';
-            } else if (app.app == "employment"){
-                icon = '<img src="./img/apps/employment.png" style="width: 87%;margin-top: 6%;margin-left: -2%;">';
-            } else if (app.app == "debt"){
-                icon = '<img src="./img/apps/debt.png">';
-            } else if (app.app == "wenmo"){
-                icon = '<img src="./img/apps/wenmo.png" class="calc-icon">';
-            } else if (app.app == "jobcenter"){
-                icon = '<img src="./img/apps/jobcenter.png" class="calc-icon">';
-            } else if (app.app == "crypto"){
-                icon = '<img src="./img/apps/crypto.png" style="width: 85%;margin-top: 7%;">';
-            } else if (app.app == "taxi"){
-                icon = '<img src="./img/apps/taxiapp.png" style="width: 85%;margin-top: 7%;">';
-            } else if (app.app == "lsbn"){
-                icon = '<img src="./img/apps/lsbn.png" style="width: 85%;margin-top: 7%;">';
-            } else if (app.app == "contacts"){
-                icon = '<img src="./img/apps/contacts.png" style="width: 85%;margin-top: 7%;">';
-            }
+                $(applicationSlot).html(icon+'<div class="app-unread-alerts">0</div>');
+                $(applicationSlot).prop('title', app.tooltipText);
+                $(applicationSlot).data('app', app.app);
 
-
-
-            $(applicationSlot).html(icon+'<div class="app-unread-alerts">0</div>');
-            $(applicationSlot).prop('title', app.tooltipText);
-            $(applicationSlot).data('app', app.app);
-
-            if (app.tooltipPos !== undefined) {
-                $(applicationSlot).data('placement', app.tooltipPos)
-            }
+                if (app.tooltipPos !== undefined) {
+                    $(applicationSlot).data('placement', app.tooltipPos)
+                }
+            //}
         }
     });
 
@@ -197,6 +209,8 @@ $(document).on('click', '.phone-application', function(e){
                     $.post('https://Renewed-Phone/GetAvailableRaces', JSON.stringify({}), function(Races){
                         SetupRaces(Races);
                     });
+                } else if (PressedApplication == "hotspot") {
+                    loadMilkroad()
                 } else if (PressedApplication == "houses") {
                     $.post('https://Renewed-Phone/GetPlayerHouses', JSON.stringify({}), function(Houses){
                         SetupPlayerHouses(Houses);
@@ -211,8 +225,6 @@ $(document).on('click', '.phone-application', function(e){
                             });
                         }
                     });
-                } else if (PressedApplication == "meos") {
-                    SetupMeosHome();
                 } else if (PressedApplication == "taxi") {
                     $.post('https://Renewed-Phone/GetAvailableTaxiDrivers', JSON.stringify({}), function(data){
                         SetupTaxiDrivers(data);
@@ -228,6 +240,9 @@ $(document).on('click', '.phone-application', function(e){
                 }
                 else if (PressedApplication == "casino") {
                     LoadCasinoJob();
+                }
+                else if (PressedApplication == "job") {
+                    LoadJobCenter();
                 }
                 else if (PressedApplication == "jobcenter") {
                     LoadJobCenterApp();
@@ -353,12 +368,6 @@ $(document).on('click', '.phone-tab-button', function(event){
                     CurrentTab = "accounts";
                 }, 400)
             }
-        } else if (QB.Phone.Data.currentApplication == "meos") {
-            $(".meos-alert-new").remove();
-            setTimeout(function(){
-                $(".meos-recent-alert").removeClass("noodknop");
-                $(".meos-recent-alert").css({"background-color":"#004682"});
-            }, 400)
         }
 
         QB.Phone.Data.currentApplication = null;
@@ -400,10 +409,6 @@ QB.Phone.Functions.Close = function() {
             OpenedChatPicture = null;
             QB.Phone.Data.currentApplication = null;
         }, 500)
-    } else if (QB.Phone.Data.currentApplication == "meos") {
-        $(".meos-alert-new").remove();
-        $(".meos-recent-alert").removeClass("noodknop");
-        $(".meos-recent-alert").css({"background-color":"#004682"});
     }
     $('.publicphonebase').css('display', 'none')
     QB.Phone.Animations.BottomSlideDown('.container', 500, -70);
@@ -688,7 +693,7 @@ QB.Screen.popUp = function(source){
     if(!up){
         $('#popup').fadeIn('slow');
         $('.popupclass').fadeIn('slow');
-        $('<img class="popupclass2" src='+source+'>').appendTo('.popupclass')
+        $('<img src='+source+' style="width:343px;">').appendTo('.popupclass')
         up = true
     }
 }

@@ -1,10 +1,4 @@
-<<<<<<< Updated upstream
-local QBCore = exports['qb-core']:GetCoreObject()
-
-RegisterNetEvent("qb-phone:server:sendDocument", function(data)
-=======
 RegisterNetEvent("Renewed-Phone:server:sendDocument", function(data)
->>>>>>> Stashed changes
     local src = source
     local Ply = QBCore.Functions.GetPlayer(src)
     local Receiver = QBCore.Functions.GetPlayer(tonumber(data.StateID))

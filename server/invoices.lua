@@ -1,5 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 -- Events
 
 RegisterNetEvent('Renewed-Phone:server:InvoiceHandler')
@@ -8,7 +6,6 @@ RegisterNetEvent('Renewed-Phone:server:InvoiceHandler')
 
 -- Has player paid something this --
 --[[AddEventHandler('Renewed-Phone:server:InvoiceHandler', function(paid, amount, source, resource)
-
     if paid and resource == GetCurrentResourceName() then
         if amount >= config.minPayment then
             if Config.RenewedBanking then
@@ -21,22 +18,15 @@ RegisterNetEvent('Renewed-Phone:server:InvoiceHandler')
     end
 end)]]
 
-<<<<<<< Updated upstream
-
-
-
-RegisterNetEvent('qb-phone:server:PayMyInvoice', function(society, amount, invoiceId, sendercitizenid, resource)
-=======
 RegisterNetEvent('Renewed-Phone:server:PayMyInvoice', function(society, amount, invoiceId, sendercitizenid, resource)
->>>>>>> Stashed changes
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local SenderPly = QBCore.Functions.GetPlayerByCitizenId(sendercitizenid)
     if Player.PlayerData.money.bank >= amount then
-        Player.Functions.RemoveMoney('bank', amount, "paid-invoice")
+        Player.Functions.RemoveMoney('bank', amount, "Paid Mobile Invoice")
         if SenderPly and Config.BillingCommissions and Config.BillingCommissions[society] then
             local commission = math.ceil(amount * Config.BillingCommissions[society])
-            SenderPly.Functions.AddMoney('bank', commission)
+            SenderPly.Functions.AddMoney('bank', commission, "Invoice Paid")
         end
 
         if SenderPly then
@@ -99,12 +89,8 @@ RegisterNetEvent('Renewed-Phone:server:CreateInvoice', function(billed, biller, 
     end)
 end)
 
-<<<<<<< Updated upstream
-QBCore.Functions.CreateCallback('qb-phone:server:GetInvoices', function(source, cb)
-=======
 lib.callback.register('Renewed-Phone:server:GetInvoices', function(source)
->>>>>>> Stashed changes
     local Player = QBCore.Functions.GetPlayer(source)
     local invoices = exports.oxmysql:executeSync('SELECT * FROM phone_invoices WHERE citizenid = ?', {Player.PlayerData.citizenid})
-    cb(invoices)
+    return invoices
 end)

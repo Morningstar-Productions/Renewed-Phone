@@ -1,5 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 ---- EMPLOYMENT (GROUP APPS)
 
 local Players = {} -- Don't Touch
@@ -245,13 +243,8 @@ RegisterNetEvent('Renewed-Phone:server:jobcenter_DeleteGroup', function(data)
     end
 end)
 
-<<<<<<< Updated upstream
-QBCore.Functions.CreateCallback('qb-phone:server:GetGroupsApp', function(_, cb)
-    cb(EmploymentGroup)
-=======
 lib.callback.register('Renewed-Phone:server:GetGroupsApp', function(_)
     return EmploymentGroup
->>>>>>> Stashed changes
 end)
 
 RegisterNetEvent('Renewed-Phone:server:jobcenter_JoinTheGroup', function(data)
@@ -274,38 +267,25 @@ local function GetGroupStages(groupID)
     return EmploymentGroup[groupID].stage
 end exports('GetGroupStages', GetGroupStages)
 
-<<<<<<< Updated upstream
-QBCore.Functions.CreateCallback('qb-phone:server:getAllGroups', function(source, cb)
-=======
 lib.callback.register('Renewed-Phone:server:getAllGroups', function(source)
->>>>>>> Stashed changes
     local src = source
 
     if Players[src] then
-        cb(EmploymentGroup, true, getJobStatus(GetGroupByMembers(src)), GetGroupStages(GetGroupByMembers(src)))
+        return EmploymentGroup, true, getJobStatus(GetGroupByMembers(src)), GetGroupStages(GetGroupByMembers(src))
     else
-        cb(EmploymentGroup, false)
+        return EmploymentGroup, false
     end
 end)
 
-<<<<<<< Updated upstream
-QBCore.Functions.CreateCallback('qb-phone:server:jobcenter_CheckPlayerNames', function(_, cb, csn)
-=======
 lib.callback.register('Renewed-Phone:server:jobcenter_CheckPlayerNames', function(_, csn)
->>>>>>> Stashed changes
     local Names = {}
     for _, v in pairs(EmploymentGroup[csn].members) do
         Names[#Names+1] = v.name
     end
-    cb(Names)
+    return Names
 end)
 
-<<<<<<< Updated upstream
-
-RegisterNetEvent('qb-phone:server:jobcenter_leave_grouped', function(data)
-=======
 RegisterNetEvent('Renewed-Phone:server:jobcenter_leave_grouped', function(data)
->>>>>>> Stashed changes
     local src = source
     if not Players[src] then return end
     RemovePlayerFromGroup(src, data.id)
@@ -315,7 +295,6 @@ local function isGroupTemp(groupID)
     if not groupID or not EmploymentGroup[groupID] then return print("isGroupTemp was sent an invalid groupID :"..groupID) end
     return EmploymentGroup[groupID].ScriptCreated or false
 end exports('isGroupTemp', isGroupTemp)
-
 
 local function CreateGroup(src, name, password)
     if not src or not name then return end

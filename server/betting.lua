@@ -1,13 +1,7 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 local CasinoTable = {}
 local BetNumber = 0
-<<<<<<< Updated upstream
-RegisterNetEvent('qb-phone:server:CasinoAddBet', function(data)
-=======
 
 RegisterNetEvent('Renewed-Phone:server:CasinoAddBet', function(data)
->>>>>>> Stashed changes
     BetNumber += 1
     CasinoTable[BetNumber] = {['Name'] = data.name, ['chanse'] = data.chanse, ['id'] = BetNumber}
     TriggerClientEvent('Renewed-Phone:client:addbetForAll', -1, CasinoTable)
@@ -46,13 +40,8 @@ RegisterNetEvent('Renewed-Phone:server:DeleteAndClearTable', function()
     TriggerClientEvent('QBCore:Notify', src, "Done", "primary")
 end)
 
-<<<<<<< Updated upstream
-QBCore.Functions.CreateCallback('qb-phone:server:CheckHasBetTable', function(_, cb)
-    cb(CasinoTable)
-=======
 lib.callback.register('Renewed-Phone:server:CheckHasBetTable', function(_)
     return CasinoTable
->>>>>>> Stashed changes
 end)
 
 
@@ -60,13 +49,8 @@ RegisterNetEvent('Renewed-Phone:server:casino_status', function()
     casino_status = not casino_status
 end)
 
-<<<<<<< Updated upstream
-QBCore.Functions.CreateCallback('qb-phone:server:CheckHasBetStatus', function(_, cb)
-    cb(casino_status)
-=======
 lib.callback.register('Renewed-Phone:server:CheckHasBetStatus', function(_)
     return casino_status
->>>>>>> Stashed changes
 end)
 
 RegisterNetEvent('Renewed-Phone:server:WineridCasino', function(data)
@@ -76,11 +60,7 @@ RegisterNetEvent('Renewed-Phone:server:WineridCasino', function(data)
             local OtherPly = QBCore.Functions.GetPlayerByCitizenId(v.csn)
             if OtherPly then
                 local amount = v.amount * v.chanse
-<<<<<<< Updated upstream
-                OtherPly.Functions.AddMoney('bank', tonumber(amount), "casino winner")
-=======
                 OtherPly.Functions.AddMoney('casino', tonumber(amount), "Casino Winner")
->>>>>>> Stashed changes
             end
         end
     end

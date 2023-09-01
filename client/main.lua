@@ -1,5 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 --- Global Variables ---
 PlayerData = QBCore.Functions.GetPlayerData()
 
@@ -58,6 +56,10 @@ local function hasPhone()
     end
 end exports('hasPhone', hasPhone)
 
+local function IsPhoneOpen()
+    return PhoneData.isOpen
+end exports("IsPhoneOpen", IsPhoneOpen)
+
 local function CalculateTimeToDisplay()
 	local hour = GetClockHours()
     local minute = GetClockMinutes()
@@ -85,7 +87,7 @@ local function updateTime()
 end
 
 local function LoadPhone()
-    lib.callback('qb-phone:server:GetPhoneData', false, function(pData)
+    lib.callback('Renewed-Phone:server:GetPhoneData', false, function(pData)
 
         -- Should fix errors with phone not loading correctly --
         while pData == nil do Wait(25) end
@@ -176,9 +178,9 @@ local function LoadPhone()
             applications = Config.PhoneApplications,
             PlayerId = GetPlayerServerId(PlayerId())
         })
-
     end)
 end
+
 local function DisableDisplayControlActions()
     DisableControlAction(0, 1, true) -- disable mouse look
     DisableControlAction(0, 2, true) -- disable mouse look
@@ -204,8 +206,8 @@ local function OpenPhone()
     if hasPhone() then
         PhoneData.PlayerData = PlayerData
         SetNuiFocus(true, true)
-        
-        local hasVPN = QBCore.Functions.HasItem(Config.VPNItem)
+
+        local hasVPN = exports.ox_inventory:Search(1, Config.VPNItem)
 
         SendNUIMessage({
             action = "open",
@@ -260,7 +262,7 @@ local function CancelCall()
     PhoneData.CallData.CallId = nil
 
     if not PhoneData.isOpen then
-        StopAnimTask(PlayerPedId(), PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
+        StopAnimTask(PlayerPed, PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
         deletePhone()
     end
     PhoneData.AnimationData.lib = nil
@@ -279,7 +281,7 @@ local function CancelCall()
 
     TriggerEvent('Renewed-Phone:client:CustomNotification',
         "PHONE CALL",
-        "Disconnected...",
+        "Disconnected!",
         "fas fa-phone-square",
         "#e84118",
         5000
@@ -326,6 +328,7 @@ local function CallContact(CallData, AnonymousCall)
         end
     end
 end
+exports('CallContact', CallContact)
 
 local function AnswerCall()
     if (PhoneData.CallData.CallType == "incoming" or PhoneData.CallData.CallType == "outgoing") and PhoneData.CallData.InCall and not PhoneData.CallData.AnsweredCall then
@@ -411,7 +414,11 @@ local function OpenPhoneCommand()
             lib.notify({ description = "Action not available at the moment..", type = "error" })
         end
     end
-end, false) RegisterKeyMapping('phone', 'Open Phone', 'keyboard', 'M')
+end
+
+RegisterCommand('+generalPhone', OpenPhoneCommand, false)
+RegisterCommand('-generalPhone', function() end, false)
+RegisterKeyMapping('+generalPhone', 'Open Phone', 'keyboard', 'M')
 
 local function AnswerCallCommand()
     if (PhoneData.CallData.CallType == "incoming" or PhoneData.CallData.CallType == "outgoing" and not PhoneData.CallData.CallType == "ongoing") then
@@ -421,7 +428,10 @@ local function AnswerCallCommand()
             lib.notify({ description = "Action not available at the moment..", type = "error" })
         end
     end
-end, false) RegisterKeyMapping('+answer', 'Answer Phone Call', 'keyboard', 'Y')
+end
+RegisterCommand("+answer", AnswerCallCommand, false)
+RegisterCommand('-answer', function() end, false)
+RegisterKeyMapping('+answer', 'Answer Phone Call', 'keyboard', '')
 
 local function DeclineCallCommand()
     if (PhoneData.CallData.CallType == "incoming" or PhoneData.CallData.CallType == "outgoing" or PhoneData.CallData.CallType == "ongoing") then
@@ -431,7 +441,11 @@ local function DeclineCallCommand()
             lib.notify({ description = "Action not available at the moment..", type = "error" })
         end
     end
-end, false) RegisterKeyMapping('+decline', 'Decline Phone Call', 'keyboard', 'J')
+end
+
+RegisterCommand("+decline", DeclineCallCommand, false)
+RegisterCommand('-decline', function() end, false)
+RegisterKeyMapping('+decline', 'Decline Phone Call', 'keyboard', '')
 
 -- NUI Callbacks
 
@@ -487,7 +501,7 @@ RegisterNUICallback('Close', function()
     if not PhoneData.CallData.InCall then
         DoPhoneAnimation('cellphone_text_out')
         SetTimeout(400, function()
-            StopAnimTask(PlayerPedId(), PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
+            StopAnimTask(PlayerPed, PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
             deletePhone()
             PhoneData.AnimationData.lib = nil
             PhoneData.AnimationData.anim = nil
@@ -545,7 +559,7 @@ RegisterNUICallback('UpdateProfilePicture', function(data, cb)
 end)
 
 RegisterNUICallback('FetchSearchResults', function(data, cb)
-    lib.callback('qb-phone:server:FetchResult', false, function(result)
+    lib.callback('Renewed-Phone:server:FetchResult', false, function(result)
         cb(result)
     end, data.input)
 end)
@@ -590,7 +604,7 @@ RegisterNUICallback('ClearGeneralAlerts', function(data, cb)
 end)
 
 RegisterNUICallback('CallContact', function(data, cb)
-    lib.callback('qb-phone:server:GetCallState', false, function(CanCall, IsOnline)
+    lib.callback('Renewed-Phone:server:GetCallState', false, function(CanCall, IsOnline)
         local status = {
             CanCall = CanCall,
             IsOnline = IsOnline,
@@ -618,8 +632,8 @@ RegisterNUICallback("TakePhoto", function(_, cb)
             OpenPhone()
             break
         elseif IsControlJustPressed(1, 176) then
-            lib.callback("qb-phone:server:GetWebhook", false, function(hook)
-                QBCore.Functions.Notify('Touching up photo...', 'primary')
+            lib.callback("Renewed-Phone:server:GetWebhook", false, function(hook)
+                lib.notify({ title = 'Photos', description = 'Touching up photo...', type = 'info' })
                 exports['screenshot-basic']:requestScreenshotUpload(tostring(hook), "files[]", function(uploadData)
                     local image = json.decode(uploadData)
                     DestroyMobilePhone()
@@ -675,7 +689,7 @@ RegisterNetEvent('Renewed-Phone:client:CancelCall', function()
     PhoneData.CallData.TargetData = {}
 
     if not PhoneData.isOpen then
-        StopAnimTask(PlayerPedId(), PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
+        StopAnimTask(PlayerPed, PhoneData.AnimationData.lib, PhoneData.AnimationData.anim, 2.5)
         deletePhone()
     end
     PhoneData.AnimationData.lib = nil
@@ -694,7 +708,7 @@ RegisterNetEvent('Renewed-Phone:client:CancelCall', function()
 
     TriggerEvent('Renewed-Phone:client:CustomNotification',
         "PHONE CALL",
-        "Disconnected...",
+        "Disconnected!",
         "fas fa-phone-square",
         "#e84118",
         5000
@@ -743,7 +757,7 @@ RegisterNetEvent('Renewed-Phone:client:GetCalled', function(CallerNumber, CallId
                 if RepeatCount + 1 ~= Config.CallRepeats + 1 then
                     if PhoneData.CallData.InCall then
                         RepeatCount = RepeatCount + 1
-                        TriggerServerEvent("InteractSound_SV:PlayOnSource", "ringing", CallVolume)
+                        TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 2.5, "ringing", CallVolume)
 
                         if not PhoneData.isOpen then
                             SendNUIMessage({
@@ -899,13 +913,9 @@ end)
 
 -- Public Phone Shit
 
-RegisterNetEvent('qb-phone:client:publicphoneopen',function()
+function OpenPublicPhone()
     local input = lib.inputDialog("", {
-        {
-            type = 'number',
-            label = 'Phone Number',
-            icon = 'fas fa-phone-volume'
-        }
+        { type = 'number', label = 'Phone Number', icon = 'fas fa-phone-volume' }
     }, {
         allowCancel = false
     })
@@ -917,7 +927,7 @@ RegisterNetEvent('qb-phone:client:publicphoneopen',function()
     }
 
     CallContact(calldata, true)
-end)
+end
 
 --- SHIT THAT IS GONE
 
@@ -925,7 +935,7 @@ RegisterNUICallback('CanTransferMoney', function(data, cb)
     local amount = tonumber(data.amountOf)
     local iban = data.sendTo
     if (PlayerData.money.bank - amount) >= 0 then
-        lib.callback('qb-phone:server:CanTransferMoney', false, function(Transferd)
+        lib.callback('Renewed-Phone:server:CanTransferMoney', false, function(Transferd)
             if Transferd then
                 cb({TransferedMoney = true, NewBalance = (PlayerData.money.bank - amount)})
             else

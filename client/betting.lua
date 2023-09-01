@@ -1,5 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 -- NUI Callback
 
 RegisterNUICallback('CasinoAddBet', function(data, cb)
@@ -25,11 +23,7 @@ RegisterNUICallback('CasinoDeleteTable', function(_, cb)
 end)
 
 RegisterNUICallback('CheckHasBetTable', function(_, cb)
-<<<<<<< Updated upstream
-    QBCore.Functions.TriggerCallback('qb-phone:server:CheckHasBetTable', function(HasTable)
-=======
     lib.callback('Renewed-Phone:server:CheckHasBetTable', false, function(HasTable)
->>>>>>> Stashed changes
         cb(HasTable)
     end)
 end)
@@ -40,11 +34,7 @@ RegisterNUICallback('casino_status', function(_, cb)
 end)
 
 RegisterNUICallback('CheckHasBetStatus', function(_, cb)
-<<<<<<< Updated upstream
-    QBCore.Functions.TriggerCallback('qb-phone:server:CheckHasBetStatus', function(HasStatus)
-=======
     lib.callback('Renewed-Phone:server:CheckHasBetStatus', false, function(HasStatus)
->>>>>>> Stashed changes
         cb(HasStatus)
     end)
 end)

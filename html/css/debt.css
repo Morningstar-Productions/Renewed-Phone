@@ -144,7 +144,9 @@
     color: black;
     font-family: 'Roboto', sans-serif;
     font-size: 1.1vh;
-    margin-bottom: 4%;
+    margin-bottom: 0.6vh;
+    margin-top: 1.5vh;
+    margin-left: 0.8vw;
 }
 
 .send-all-box{

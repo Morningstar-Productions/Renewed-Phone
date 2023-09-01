@@ -1,4 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 local CachedJobs = {}
 local CachedPlayers = {}
 
@@ -283,11 +282,7 @@ RegisterNetEvent('Renewed-Phone:server:clockOnDuty', function(Job)
 end)
 
 ---- Gets the client side cache for players ----
-<<<<<<< Updated upstream
-QBCore.Functions.CreateCallback("qb-phone:server:GetMyJobs", function(source, cb)
-=======
 lib.callback.register("Renewed-Phone:server:GetMyJobs", function(source)
->>>>>>> Stashed changes
     if FirstStart then return end
     local Player = QBCore.Functions.GetPlayer(source)
 

@@ -1,12 +1,7 @@
 local LSBNTable = {}
 local LSBNTableID = 0
 
-<<<<<<< Updated upstream
-
-RegisterNetEvent('qb-phone:server:Send_lsbn_ToChat', function(data)
-=======
 RegisterNetEvent('Renewed-Phone:server:Send_lsbn_ToChat', function(data)
->>>>>>> Stashed changes
     LSBNTableID = LSBNTableID + 1
     if data.Type == "Text" then
         LSBNTable[LSBNTableID] = {['Text'] = data.Text, ['Image'] = "none", ['ID'] = LSBNTableID, ['Type'] = data.Type, ['Time'] = data.Time,}

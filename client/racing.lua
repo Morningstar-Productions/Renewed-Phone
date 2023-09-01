@@ -1,5 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 -- NUI Callback
 
 RegisterNUICallback('GetAvailableRaces', function(_, cb)
@@ -83,7 +81,7 @@ end)
 
 RegisterNUICallback('RaceDistanceCheck', function(data, cb)
     QBCore.Functions.TriggerCallback('qb-lapraces:server:GetRacingData', function(RaceData)
-        local ped = PlayerPedId()
+        local ped = PlayerPed
         local coords = GetEntityCoords(ped)
         local checkpointcoords = RaceData.Checkpoints[1].coords
         local dist = #(coords - vector3(checkpointcoords.x, checkpointcoords.y, checkpointcoords.z))

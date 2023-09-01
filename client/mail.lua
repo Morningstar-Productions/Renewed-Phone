@@ -63,7 +63,7 @@ RegisterNetEvent('Renewed-Phone:client:UpdateMails', function(NewMails)
 end)
 
 RegisterCommand('dumbmail', function()
-    TriggerServerEvent('qb-phone:server:sendNewMail', {
+    TriggerServerEvent('Renewed-Phone:server:sendNewMail', {
         sender = "Booya",
         subject = "I love Zoo",
         message = "This is an interesting email from yours truly, booya. I'm so mad you took my phone and made it better. Maybe I just take it all and upload it soon!",

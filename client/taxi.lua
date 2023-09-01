@@ -1,11 +1,4 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 RegisterNUICallback('GetAvailableTaxiDrivers', function(_, cb)
-<<<<<<< Updated upstream
-    QBCore.Functions.TriggerCallback('qb-phone:server:GetAvailableTaxiDrivers', function(drivers)
-        cb(drivers)
-    end)
-=======
     lib.callback('Renewed-Phone:server:GetAvailableTaxiDrivers', false, function(drivers)
         cb(drivers)
     end)
@@ -44,5 +37,4 @@ RegisterNetEvent('Renewed-Phone:OpenAvailableTaxi', function()
         options = taxiMenu
     })
     lib.showContext('taxi_call_menu')
->>>>>>> Stashed changes
 end)

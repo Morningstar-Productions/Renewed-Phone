@@ -1,4 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
 local Hashtags = {} -- Located in the Twitter File as well ??
 local Calls = {}
 local WebHook = Config.Webhook
@@ -22,35 +21,27 @@ end
 
 -- Callbacks
 
-<<<<<<< Updated upstream
-QBCore.Functions.CreateCallback('qb-phone:server:GetCallState', function(source, cb, ContactData)
-=======
 lib.callback.register('Renewed-Phone:server:GetCallState', function(source, ContactData)
->>>>>>> Stashed changes
     local number = tostring(ContactData.number)
     local Target = QBCore.Functions.GetPlayerByPhone(number)
     local Player = QBCore.Functions.GetPlayer(source)
 
-    if not Target then return cb(false, false) end
+    if not Target then return false, false end
 
-    if Target.PlayerData.citizenid == Player.PlayerData.citizenid then return cb(false, false) end
+    if Target.PlayerData.citizenid == Player.PlayerData.citizenid then return false, false end
 
     if Calls[Target.PlayerData.citizenid] then
         if Calls[Target.PlayerData.citizenid].inCall then
-            cb(false, true)
+            return false, true
         else
-            cb(true, true)
+            return true, true
         end
     else
-        cb(true, true)
+        return true, true
     end
 end)
 
-<<<<<<< Updated upstream
-QBCore.Functions.CreateCallback('qb-phone:server:GetPhoneData', function(source, cb)
-=======
 lib.callback.register('Renewed-Phone:server:GetPhoneData', function(source)
->>>>>>> Stashed changes
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player or not src then return end
@@ -110,16 +101,12 @@ lib.callback.register('Renewed-Phone:server:GetPhoneData', function(source)
         PhoneData.ChatRooms = chat_rooms
         ChatRooms = chat_rooms
     end
-    cb(PhoneData)
+    return PhoneData
 end)
 
 
 -- Can't even wrap my head around this lol diffently needs a good old rewrite
-<<<<<<< Updated upstream
-QBCore.Functions.CreateCallback('qb-phone:server:FetchResult', function(_, cb, input)
-=======
 lib.callback.register('Renewed-Phone:server:FetchResult', function(_, input)
->>>>>>> Stashed changes
     local search = escape_sqli(input)
     local searchData = {}
     local ApaData = {}
@@ -159,20 +146,15 @@ lib.callback.register('Renewed-Phone:server:FetchResult', function(_, input)
                 appartmentdata = appiepappie
             }
         end
-        cb(searchData)
+        return searchData
     else
-        cb(nil)
+        return nil
     end
 end)
 
 -- Webhook needs to get fixed, right now anyone can grab this and use it to spam dick pics in Discord servers
-<<<<<<< Updated upstream
-QBCore.Functions.CreateCallback("qb-phone:server:GetWebhook",function(_, cb)
-	cb(WebHook)
-=======
 lib.callback.register("Renewed-Phone:server:GetWebhook",function(_)
 	return WebHook
->>>>>>> Stashed changes
 end)
 
 -- Events

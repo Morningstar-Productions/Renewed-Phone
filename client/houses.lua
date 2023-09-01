@@ -1,5 +1,4 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
+---@todo Prep for qw_housing
 -- NUI Callback
 
 RegisterNUICallback('GetPlayerHouses', function(_, cb)

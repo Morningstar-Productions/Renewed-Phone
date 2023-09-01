@@ -1,18 +1,14 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 -- NUI Callback
 
-<<<<<<< Updated upstream
-=======
+
 -- WORK IN PROGRESS
 --[[
 RegisterNUICallback('SetupHousingDocuments', function(_, cb)
-    QBCore.Functions.TriggerCallback('Renewed-Phone:server:GetHousingLocations', function(houses)
+    lib.callback('Renewed-Phone:server:GetHousingLocations', false, function(houses)
         cb(houses)
     end)
 end)
 ]]
->>>>>>> Stashed changes
 
 RegisterNUICallback('documents_Save_Note_As', function(data, cb)
     TriggerServerEvent('Renewed-Phone:server:documents_Save_Note_As', data)

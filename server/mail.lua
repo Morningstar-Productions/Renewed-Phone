@@ -1,12 +1,8 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 -- Functions
 
 local function GenerateMailId()
     return math.random(111111, 999999)
 end
-
-
 
 RegisterNetEvent('Renewed-Phone:server:RemoveMail', function(MailId)
     local src = source
