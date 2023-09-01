@@ -31,15 +31,13 @@ PhoneData = {
     ChatRooms = {},
 }
 
-
-
-
 -- Localized Variables --
 local CallVolume = 0.2
 
-
 -- Functions
 
+---@param num number
+---@return string
 local function IsNumberInContacts(num)
     for _, v in pairs(PhoneData.Contacts) do
         if num == v.number then
@@ -86,34 +84,14 @@ local function updateTime()
     end
 end
 
-local PublicPhoneobject = {
-    -2103798695,1158960338,
-    1281992692,1511539537,
-    295857659,-78626473,
-    -1559354806
-}
-
-exports["qb-target"]:AddTargetModel(PublicPhoneobject, {
-    options = {
-        {
-            type = "client",
-            event = "qb-phone:client:publocphoneopen",
-            icon = "fas fa-phone-alt",
-            label = "Public Phone",
-        },
-    },
-    distance = 1.0
-})
-
-
 local function LoadPhone()
-    QBCore.Functions.TriggerCallback('qb-phone:server:GetPhoneData', function(pData)
+    lib.callback('qb-phone:server:GetPhoneData', false, function(pData)
 
         -- Should fix errors with phone not loading correctly --
         while pData == nil do Wait(25) end
 
         PhoneData.PlayerData = PlayerData
-        local PhoneMeta = PhoneData.PlayerData.metadata["phone"]
+        local PhoneMeta = PhoneData.PlayerData.metadata.phone
         PhoneData.MetaData = PhoneMeta
 
         PhoneData.MetaData.profilepicture = PhoneMeta.profilepicture or "default"
@@ -194,6 +172,7 @@ local function LoadPhone()
             PlayerData = PlayerData,
             PlayerJob = PlayerData,
             PhoneJobs = QBCore.Shared.Jobs,
+            --PhoneItems = exports.ox_inventory:Search,
             applications = Config.PhoneApplications,
             PlayerId = GetPlayerServerId(PlayerId())
         })
@@ -258,17 +237,19 @@ local function OpenPhone()
 
         updateTime()
     else
-        QBCore.Functions.Notify("You don't have a phone?", "error")
+        lib.notify({ description = "You don't have a phone?", type = "error" })
     end
 end
 
+---@param caller number
+---@param target number
 local function GenerateCallId(caller, target)
     local CallId = math.ceil(((tonumber(caller) + tonumber(target)) / 100 * 1))
     return CallId
 end
 
 local function CancelCall()
-    TriggerServerEvent('qb-phone:server:CancelCall', PhoneData.CallData)
+    TriggerServerEvent('Renewed-Phone:server:CancelCall', PhoneData.CallData)
     if PhoneData.CallData.CallType == "ongoing" then
         exports['pma-voice']:removePlayerFromCall(PhoneData.CallData.CallId)
     end
@@ -285,7 +266,7 @@ local function CancelCall()
     PhoneData.AnimationData.lib = nil
     PhoneData.AnimationData.anim = nil
 
-    TriggerServerEvent('qb-phone:server:SetCallState', false)
+    TriggerServerEvent('Renewed-Phone:server:SetCallState', false)
 
     SendNUIMessage({
         action = "SetupHomeCall",
@@ -296,7 +277,7 @@ local function CancelCall()
         action = "CancelOutgoingCall",
     })
 
-    TriggerEvent('qb-phone:client:CustomNotification',
+    TriggerEvent('Renewed-Phone:client:CustomNotification',
         "PHONE CALL",
         "Disconnected...",
         "fas fa-phone-square",
@@ -313,6 +294,8 @@ local function CallCheck()
     end
 end
 
+---@param CallData table | nil
+---@param AnonymousCall boolean
 local function CallContact(CallData, AnonymousCall)
     local RepeatCount = 0
     PhoneData.CallData.CallType = "outgoing"
@@ -321,8 +304,8 @@ local function CallContact(CallData, AnonymousCall)
     PhoneData.CallData.AnsweredCall = false
     PhoneData.CallData.CallId = GenerateCallId(PhoneData.PlayerData.charinfo.phone, CallData.number)
 
-    TriggerServerEvent('qb-phone:server:CallContact', PhoneData.CallData.TargetData, PhoneData.CallData.CallId, AnonymousCall)
-    TriggerServerEvent('qb-phone:server:SetCallState', true)
+    TriggerServerEvent('Renewed-Phone:server:CallContact', PhoneData.CallData.TargetData, PhoneData.CallData.CallId, AnonymousCall)
+    TriggerServerEvent('Renewed-Phone:server:SetCallState', true)
 
     for _ = 1, Config.CallRepeats, 1 do
         if not PhoneData.CallData.AnsweredCall then
@@ -353,7 +336,7 @@ local function AnswerCall()
         SendNUIMessage({ action = "AnswerCall", CallData = PhoneData.CallData})
         SendNUIMessage({ action = "SetupHomeCall", CallData = PhoneData.CallData})
 
-        TriggerServerEvent('qb-phone:server:SetCallState', true)
+        TriggerServerEvent('Renewed-Phone:server:SetCallState', true)
 
         if PhoneData.isOpen then
             DoPhoneAnimation('cellphone_text_to_call')
@@ -375,14 +358,14 @@ local function AnswerCall()
             end
         end)
 
-        TriggerServerEvent('qb-phone:server:AnswerCall', PhoneData.CallData)
+        TriggerServerEvent('Renewed-Phone:server:AnswerCall', PhoneData.CallData)
         exports['pma-voice']:addPlayerToCall(PhoneData.CallData.CallId)
     else
         PhoneData.CallData.InCall = false
         PhoneData.CallData.CallType = nil
         PhoneData.CallData.AnsweredCall = false
 
-        TriggerEvent('qb-phone:client:CustomNotification',
+        TriggerEvent('Renewed-Phone:client:CustomNotification',
             "Phone",
             "You don't have an incoming call...",
             "fas fa-phone",
@@ -392,41 +375,63 @@ local function AnswerCall()
     end
 end
 
+---@param activate boolean
 local function CellFrontCamActivate(activate)
 	return Citizen.InvokeNative(0x2491A93618B7D838, activate)
 end
 
+---@param player number
+---@param distance number
+---@param maxDistance? number
+---@return boolean
+function isPlayerTooFar(player, distance, maxDistance)
+    if not player or distance >= (maxDistance or 2.5) then
+        return true
+    end
+    return false
+end
+
+---@return boolean
+local function isPlayerCuffed()
+    return PlayerData.metadata.ishandcuffed
+end
+
+---@return boolean
+local function isPlayerDBNOs()
+    return PlayerData.metadata.inlaststand and PlayerData.metadata.isdead
+end
+
 -- Command
 
-RegisterCommand('phone', function()
+local function OpenPhoneCommand()
     if not PhoneData.isOpen then
-        if not PlayerData.metadata['ishandcuffed'] and not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] and not IsPauseMenuActive() then
+        if not isPlayerCuffed() and not isPlayerDBNOs() and not IsPauseMenuActive() then
             OpenPhone()
         else
-            QBCore.Functions.Notify("Action not available at the moment..", "error")
+            lib.notify({ description = "Action not available at the moment..", type = "error" })
         end
     end
-end) RegisterKeyMapping('phone', 'Open Phone', 'keyboard', 'M')
+end, false) RegisterKeyMapping('phone', 'Open Phone', 'keyboard', 'M')
 
-RegisterCommand("+answer", function()
+local function AnswerCallCommand()
     if (PhoneData.CallData.CallType == "incoming" or PhoneData.CallData.CallType == "outgoing" and not PhoneData.CallData.CallType == "ongoing") then
-        if not PlayerData.metadata['ishandcuffed'] and not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] and not IsPauseMenuActive() and hasPhone() then
+        if not isPlayerCuffed() and not isPlayerDBNOs() and not IsPauseMenuActive() and hasPhone() then
             AnswerCall()
         else
-            QBCore.Functions.Notify("Action not available at the moment..", "error")
+            lib.notify({ description = "Action not available at the moment..", type = "error" })
         end
     end
-end) RegisterKeyMapping('+answer', 'Answer Phone Call', 'keyboard', 'Y')
+end, false) RegisterKeyMapping('+answer', 'Answer Phone Call', 'keyboard', 'Y')
 
-RegisterCommand("+decline", function()
+local function DeclineCallCommand()
     if (PhoneData.CallData.CallType == "incoming" or PhoneData.CallData.CallType == "outgoing" or PhoneData.CallData.CallType == "ongoing") then
-        if not PlayerData.metadata['ishandcuffed'] and not PlayerData.metadata['inlaststand'] and not PlayerData.metadata['isdead'] and not IsPauseMenuActive() then
+        if not isPlayerCuffed() and not isPlayerDBNOs() and not IsPauseMenuActive() then
             CancelCall()
         else
-            QBCore.Functions.Notify("Action not available at the moment..", "error")
+            lib.notify({ description = "Action not available at the moment..", type = "error" })
         end
     end
-end) RegisterKeyMapping('+decline', 'Decline Phone Call', 'keyboard', 'J')
+end, false) RegisterKeyMapping('+decline', 'Decline Phone Call', 'keyboard', 'J')
 
 -- NUI Callbacks
 
@@ -466,7 +471,7 @@ end)
 RegisterNUICallback('SetBackground', function(data, cb)
     local background = data.background
     PhoneData.MetaData.background = background
-    TriggerServerEvent('qb-phone:server:SaveMetaData', PhoneData.MetaData)
+    TriggerServerEvent('Renewed-Phone:server:SaveMetaData', PhoneData.MetaData)
     cb('ok')
 end)
 
@@ -509,7 +514,7 @@ RegisterNUICallback('AddNewContact', function(data, cb)
     if PhoneData.Chats[data.ContactNumber] and next(PhoneData.Chats[data.ContactNumber]) then
         PhoneData.Chats[data.ContactNumber].name = data.ContactName
     end
-    TriggerServerEvent('qb-phone:server:AddNewContact', data.ContactName, data.ContactNumber)
+    TriggerServerEvent('Renewed-Phone:server:AddNewContact', data.ContactName, data.ContactNumber)
 end)
 
 RegisterNUICallback('EditContact', function(data, cb)
@@ -529,18 +534,18 @@ RegisterNUICallback('EditContact', function(data, cb)
     end
     Wait(100)
     cb(PhoneData.Contacts)
-    TriggerServerEvent('qb-phone:server:EditContact', NewName, NewNumber, OldName, OldNumber)
+    TriggerServerEvent('Renewed-Phone:server:EditContact', NewName, NewNumber, OldName, OldNumber)
 end)
 
 RegisterNUICallback('UpdateProfilePicture', function(data, cb)
     local pf = data.profilepicture
     PhoneData.MetaData.profilepicture = pf
-    TriggerServerEvent('qb-phone:server:SaveMetaData', PhoneData.MetaData)
+    TriggerServerEvent('Renewed-Phone:server:SaveMetaData', PhoneData.MetaData)
     cb('ok')
 end)
 
 RegisterNUICallback('FetchSearchResults', function(data, cb)
-    QBCore.Functions.TriggerCallback('qb-phone:server:FetchResult', function(result)
+    lib.callback('qb-phone:server:FetchResult', false, function(result)
         cb(result)
     end, data.input)
 end)
@@ -553,7 +558,7 @@ RegisterNUICallback('DeleteContact', function(data, cb)
         if v.name == Name and v.number == Number then
             table.remove(PhoneData.Contacts, k)
 
-            TriggerEvent('qb-phone:client:CustomNotification',
+            TriggerEvent('Renewed-Phone:client:CustomNotification',
                 "Phone",
                 "Contact deleted!",
                 "fa fa-phone-alt",
@@ -569,7 +574,7 @@ RegisterNUICallback('DeleteContact', function(data, cb)
     if PhoneData.Chats[Number] and next(PhoneData.Chats[Number]) then
         PhoneData.Chats[Number].name = Number
     end
-    TriggerServerEvent('qb-phone:server:RemoveContact', Name, Number)
+    TriggerServerEvent('Renewed-Phone:server:RemoveContact', Name, Number)
 end)
 
 RegisterNUICallback('ClearGeneralAlerts', function(data, cb)
@@ -585,7 +590,7 @@ RegisterNUICallback('ClearGeneralAlerts', function(data, cb)
 end)
 
 RegisterNUICallback('CallContact', function(data, cb)
-    QBCore.Functions.TriggerCallback('qb-phone:server:GetCallState', function(CanCall, IsOnline)
+    lib.callback('qb-phone:server:GetCallState', false, function(CanCall, IsOnline)
         local status = {
             CanCall = CanCall,
             IsOnline = IsOnline,
@@ -613,17 +618,17 @@ RegisterNUICallback("TakePhoto", function(_, cb)
             OpenPhone()
             break
         elseif IsControlJustPressed(1, 176) then
-            QBCore.Functions.TriggerCallback("qb-phone:server:GetWebhook",function(hook)
+            lib.callback("qb-phone:server:GetWebhook", false, function(hook)
                 QBCore.Functions.Notify('Touching up photo...', 'primary')
                 exports['screenshot-basic']:requestScreenshotUpload(tostring(hook), "files[]", function(uploadData)
                     local image = json.decode(uploadData)
                     DestroyMobilePhone()
                     CellCamActivate(false, false)
-                    TriggerServerEvent('qb-phone:server:addImageToGallery', image.attachments[1].proxy_url)
+                    TriggerServerEvent('Renewed-Phone:server:addImageToGallery', image.attachments[1].proxy_url)
                     Wait(400)
-                    TriggerServerEvent('qb-phone:server:getImageFromGallery')
+                    TriggerServerEvent('Renewed-Phone:server:getImageFromGallery')
                     cb(json.encode(image.attachments[1].proxy_url))
-                    QBCore.Functions.Notify('Photo saved!', "success")
+                    lib.notify({ title = 'Photos', description = 'Photo saved!', type = "success" })
                     OpenPhone()
                 end)
             end)
@@ -642,7 +647,7 @@ end)
 
 -- Events
 
-RegisterNetEvent('qb-phone:client:AddRecentCall', function(data, time, type)
+RegisterNetEvent('Renewed-Phone:client:AddRecentCall', function(data, time, type)
     PhoneData.RecentCalls[#PhoneData.RecentCalls+1] = {
         name = IsNumberInContacts(data.number),
         time = time,
@@ -657,7 +662,7 @@ RegisterNetEvent('qb-phone:client:AddRecentCall', function(data, time, type)
     })
 end)
 
-RegisterNetEvent('qb-phone:client:CancelCall', function()
+RegisterNetEvent('Renewed-Phone:client:CancelCall', function()
     if PhoneData.CallData.CallType == "ongoing" then
         SendNUIMessage({
             action = "CancelOngoingCall"
@@ -676,7 +681,7 @@ RegisterNetEvent('qb-phone:client:CancelCall', function()
     PhoneData.AnimationData.lib = nil
     PhoneData.AnimationData.anim = nil
 
-    TriggerServerEvent('qb-phone:server:SetCallState', false)
+    TriggerServerEvent('Renewed-Phone:server:SetCallState', false)
 
     SendNUIMessage({
         action = "SetupHomeCall",
@@ -687,7 +692,7 @@ RegisterNetEvent('qb-phone:client:CancelCall', function()
         action = "CancelOutgoingCall",
     })
 
-    TriggerEvent('qb-phone:client:CustomNotification',
+    TriggerEvent('Renewed-Phone:client:CustomNotification',
         "PHONE CALL",
         "Disconnected...",
         "fas fa-phone-square",
@@ -699,16 +704,16 @@ end)
 RegisterNUICallback('phone-silent-button', function(_, cb)
     if CallVolume == tonumber("0.2") then
         CallVolume = 0
-        QBCore.Functions.Notify("Silent Mode On", "success")
+        lib.notify({ title = 'Phone Settings', description = "Silent Mode On", type = "success" })
         cb(true)
     else
         CallVolume = 0.2
-        QBCore.Functions.Notify("Silent Mode Off", "error")
+        lib.notify({ title = 'Phone Settings', description = "Silent Mode Off", type = "error" })
         cb(false)
     end
 end)
 
-RegisterNetEvent('qb-phone:client:GetCalled', function(CallerNumber, CallId, AnonymousCall)
+RegisterNetEvent('Renewed-Phone:client:GetCalled', function(CallerNumber, CallId, AnonymousCall)
     local RepeatCount = 0
     local CallData = {
         number = CallerNumber,
@@ -726,7 +731,7 @@ RegisterNetEvent('qb-phone:client:GetCalled', function(CallerNumber, CallId, Ano
         PhoneData.CallData.TargetData = CallData
         PhoneData.CallData.CallId = CallId
 
-        TriggerServerEvent('qb-phone:server:SetCallState', true)
+        TriggerServerEvent('Renewed-Phone:server:SetCallState', true)
 
         SendNUIMessage({
             action = "SetupHomeCall",
@@ -755,7 +760,7 @@ RegisterNetEvent('qb-phone:client:GetCalled', function(CallerNumber, CallId, Ano
                             Canceled = true,
                             AnonymousCall = AnonymousCall,
                         })
-                        TriggerServerEvent('qb-phone:server:AddRecentCall', "missed", CallData)
+                        TriggerServerEvent('Renewed-Phone:server:AddRecentCall', "missed", CallData)
                         break
                     end
                     Wait(Config.RepeatTimeout)
@@ -766,11 +771,11 @@ RegisterNetEvent('qb-phone:client:GetCalled', function(CallerNumber, CallId, Ano
                         Canceled = true,
                         AnonymousCall = AnonymousCall,
                     })
-                    TriggerServerEvent('qb-phone:server:AddRecentCall', "missed", CallData)
+                    TriggerServerEvent('Renewed-Phone:server:AddRecentCall', "missed", CallData)
                     break
                 end
             else
-                TriggerServerEvent('qb-phone:server:AddRecentCall', "missed", CallData)
+                TriggerServerEvent('Renewed-Phone:server:AddRecentCall', "missed", CallData)
                 break
             end
         end
@@ -781,11 +786,11 @@ RegisterNetEvent('qb-phone:client:GetCalled', function(CallerNumber, CallId, Ano
             Canceled = true,
             AnonymousCall = AnonymousCall,
         })
-        TriggerServerEvent('qb-phone:server:AddRecentCall', "missed", CallData)
+        TriggerServerEvent('Renewed-Phone:server:AddRecentCall', "missed", CallData)
     end
 end)
 
-RegisterNetEvent('qb-phone:client:AnswerCall', function()
+RegisterNetEvent('Renewed-Phone:client:AnswerCall', function()
     if (PhoneData.CallData.CallType == "incoming" or PhoneData.CallData.CallType == "outgoing") and PhoneData.CallData.InCall and not PhoneData.CallData.AnsweredCall then
         PhoneData.CallData.CallType = "ongoing"
         PhoneData.CallData.AnsweredCall = true
@@ -794,7 +799,7 @@ RegisterNetEvent('qb-phone:client:AnswerCall', function()
         SendNUIMessage({ action = "AnswerCall", CallData = PhoneData.CallData})
         SendNUIMessage({ action = "SetupHomeCall", CallData = PhoneData.CallData})
 
-        TriggerServerEvent('qb-phone:server:SetCallState', true)
+        TriggerServerEvent('Renewed-Phone:server:SetCallState', true)
 
         if PhoneData.isOpen then
             DoPhoneAnimation('cellphone_text_to_call')
@@ -820,7 +825,7 @@ RegisterNetEvent('qb-phone:client:AnswerCall', function()
         PhoneData.CallData.CallType = nil
         PhoneData.CallData.AnsweredCall = false
 
-        TriggerEvent('qb-phone:client:CustomNotification',
+        TriggerEvent('Renewed-Phone:client:CustomNotification',
             "Phone",
             "You don't have an incoming call...",
             "fas fa-phone",
@@ -879,7 +884,7 @@ RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
     })
 end)
 
-RegisterNetEvent('qb-phone:client:clearAppAlerts', function()
+RegisterNetEvent('Renewed-Phone:client:clearAppAlerts', function()
     Config.PhoneApplications["phone"].Alerts = 0
     SendNUIMessage({ action = "RefreshAppAlerts", AppData = Config.PhoneApplications })
 end)
@@ -894,14 +899,24 @@ end)
 
 -- Public Phone Shit
 
-RegisterNetEvent('qb-phone:client:publocphoneopen',function()
-    SetNuiFocus(true, true)
-    SendNUIMessage({type = 'publicphoneopen'})
-end)
+RegisterNetEvent('qb-phone:client:publicphoneopen',function()
+    local input = lib.inputDialog("", {
+        {
+            type = 'number',
+            label = 'Phone Number',
+            icon = 'fas fa-phone-volume'
+        }
+    }, {
+        allowCancel = false
+    })
+    if not input or not next(input) then return end
 
-RegisterNUICallback('publicphoneclose', function(_, cb)
-    SetNuiFocus(false, false)
-    cb('ok')
+    local calldata = {
+        number = input[1],
+        name = input[1]
+    }
+
+    CallContact(calldata, true)
 end)
 
 --- SHIT THAT IS GONE
@@ -910,7 +925,7 @@ RegisterNUICallback('CanTransferMoney', function(data, cb)
     local amount = tonumber(data.amountOf)
     local iban = data.sendTo
     if (PlayerData.money.bank - amount) >= 0 then
-        QBCore.Functions.TriggerCallback('qb-phone:server:CanTransferMoney', function(Transferd)
+        lib.callback('qb-phone:server:CanTransferMoney', false, function(Transferd)
             if Transferd then
                 cb({TransferedMoney = true, NewBalance = (PlayerData.money.bank - amount)})
             else
@@ -923,13 +938,13 @@ RegisterNUICallback('CanTransferMoney', function(data, cb)
     end
 end)
 
-RegisterNetEvent('qb-phone:client:TransferMoney', function(amount, newmoney)
+RegisterNetEvent('Renewed-Phone:client:TransferMoney', function(amount, newmoney)
     PhoneData.PlayerData.money.bank = newmoney
     SendNUIMessage({ action = "PhoneNotification", PhoneNotify = { title = "Bank", text = "&#36;"..amount.." added to your account!", icon = "fas fa-university", color = "#8c7ae6", }, })
     SendNUIMessage({ action = "UpdateBank", NewBalance = PhoneData.PlayerData.money.bank })
 end)
 
-RegisterNetEvent("qb-phone-new:client:BankNotify", function(text)
+RegisterNetEvent("Renewed-Phone-new:client:BankNotify", function(text)
     SendNUIMessage({
         action = "PhoneNotification",
         NotifyData = {
@@ -942,7 +957,7 @@ RegisterNetEvent("qb-phone-new:client:BankNotify", function(text)
     })
 end)
 
-RegisterNetEvent('qb-phone:client:RemoveBankMoney', function(amount)
+RegisterNetEvent('Renewed-Phone:client:RemoveBankMoney', function(amount)
     if amount > 0 then
         SendNUIMessage({
             action = "PhoneNotification",
@@ -957,24 +972,24 @@ RegisterNetEvent('qb-phone:client:RemoveBankMoney', function(amount)
     end
 end)
 
-RegisterNetEvent('qb-phone:client:GiveContactDetails', function()
+RegisterNetEvent('Renewed-Phone:client:GiveContactDetails', function()
     local player, distance = QBCore.Functions.GetClosestPlayer()
-    if player ~= -1 and distance < 2.5 then
+    if not isPlayerTooFar(player, distance) then
         local PlayerId = GetPlayerServerId(player)
-        TriggerServerEvent('qb-phone:server:GiveContactDetails', PlayerId)
+        TriggerServerEvent('Renewed-Phone:server:GiveContactDetails', PlayerId)
     else
-        QBCore.Functions.Notify("No one nearby!", "error")
+        lib.notify({ description = "No one nearby!", type = "error" })
     end
 end)
 
-RegisterNetEvent("qb-phone:client:giveContactRequest", function(contactInfo)
-    local success = exports['qb-phone']:PhoneNotification("CONTACT REQUEST", contactInfo.name..' contact request', 'fas fa-phone', '#b3e0f2', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
+RegisterNetEvent("Renewed-Phone:client:giveContactRequest", function(contactInfo)
+    local success = exports['Renewed-Phone']:PhoneNotification("CONTACT REQUEST", contactInfo.name..' contact request', 'fas fa-phone', '#b3e0f2', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
     if success then
-        TriggerServerEvent('qb-phone:server:acceptContactRequest', contactInfo)
+        TriggerServerEvent('Renewed-Phone:server:acceptContactRequest', contactInfo)
     end
 end)
 
-RegisterNetEvent('qb-phone:client:updateContactInfo', function(contactInfo)
+RegisterNetEvent('Renewed-Phone:client:updateContactInfo', function(contactInfo)
     PhoneData.Contacts[#PhoneData.Contacts+1] = {
         name = contactInfo.name,
         number = contactInfo.number,
@@ -986,7 +1001,7 @@ RegisterNetEvent('qb-phone:client:updateContactInfo', function(contactInfo)
     })
 end)
 
-RegisterNetEvent('qb-phone:RefreshPhone', function()
+RegisterNetEvent('Renewed-Phone:RefreshPhone', function()
     LoadPhone()
     SetTimeout(250, function()
         SendNUIMessage({

@@ -30,7 +30,7 @@ end)
 RegisterNUICallback('SendEmployeePayment', function(data, cb)
     if not data.job or not data.cid or not data.amount then return end
 
-    TriggerServerEvent('qb-phone:server:SendEmploymentPayment', data.job, data.cid, data.amount)
+    TriggerServerEvent('Renewed-Phone:server:SendEmploymentPayment', data.job, data.cid, data.amount)
     cb("ok")
 end)
 
@@ -39,7 +39,7 @@ RegisterNUICallback('RemoveEmployee', function(data, cb)
 
 
 
-    TriggerServerEvent('qb-phone:server:fireUser', data.job, data.cid)
+    TriggerServerEvent('Renewed-Phone:server:fireUser', data.job, data.cid)
 
     cb("ok")
 end)
@@ -47,14 +47,14 @@ end)
 RegisterNUICallback('ChangeRole', function(data, cb)
     if not data then return end
 
-    TriggerServerEvent('qb-phone:server:gradesHandler', data.job, tostring(data.cid), data.grade)
+    TriggerServerEvent('Renewed-Phone:server:gradesHandler', data.job, tostring(data.cid), data.grade)
     cb("ok")
 end)
 
 RegisterNUICallback('ClockIn', function(data, cb)
     if not data or not data.job then return end
 
-    TriggerServerEvent('qb-phone:server:clockOnDuty', data.job)
+    TriggerServerEvent('Renewed-Phone:server:clockOnDuty', data.job)
     cb("ok")
 end)
 
@@ -62,7 +62,7 @@ RegisterNUICallback('HireFucker', function(data, cb)
     if not data then return end
     if not data.job or not data.stateid or not data.grade then return end
 
-    TriggerServerEvent('qb-phone:server:hireUser', data.job, data.stateid, data.grade)
+    TriggerServerEvent('Renewed-Phone:server:hireUser', data.job, data.stateid, data.grade)
 
     cb("ok")
 end)
@@ -70,11 +70,11 @@ end)
 RegisterNUICallback('ChargeMF', function(data, cb)
     if not data or not data.stateid or not data.amount or not data.job then return end
 
-    TriggerServerEvent('qb-phone:server:ChargeCustomer', data.stateid, data.amount, data.note, data.job)
+    TriggerServerEvent('Renewed-Phone:server:ChargeCustomer', data.stateid, data.amount, data.note, data.job)
     cb("ok")
 end)
 
-RegisterNetEvent('qb-phone:client:JobsHandler', function(job, employees)
+RegisterNetEvent('Renewed-Phone:client:JobsHandler', function(job, employees)
     if not job or not employees then return end
     if not cachedEmployees[job] then return end
 
@@ -92,7 +92,7 @@ RegisterNetEvent('qb-phone:client:JobsHandler', function(job, employees)
 end)
 
 
-RegisterNetEvent('qb-phone:client:MyJobsHandler', function(job, jobTable, employees)
+RegisterNetEvent('Renewed-Phone:client:MyJobsHandler', function(job, jobTable, employees)
     if not QBCore.Shared.Jobs[job] then return end
 
     myJobs[job] = jobTable
@@ -117,7 +117,11 @@ end)
 AddEventHandler('onResourceStart', function(resource)
     if resource == GetCurrentResourceName() then
         Wait(300)
+<<<<<<< Updated upstream
         QBCore.Functions.TriggerCallback('qb-phone:server:GetMyJobs', function(employees, myShit)
+=======
+        lib.callback('Renewed-Phone:server:GetMyJobs', false, function(employees, myShit)
+>>>>>>> Stashed changes
             for k, _ in pairs(employees) do
                 for _, v in pairs(employees[k]) do
                     if not cachedEmployees[k] then cachedEmployees[k] = {} end
@@ -145,7 +149,11 @@ end)
 
 
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+<<<<<<< Updated upstream
     QBCore.Functions.TriggerCallback('qb-phone:server:GetMyJobs', function(employees, myShit)
+=======
+    lib.callback('Renewed-Phone:server:GetMyJobs', false, function(employees, myShit)
+>>>>>>> Stashed changes
         for k, _ in pairs(employees) do
             for _, v in pairs(employees[k]) do
                 if not cachedEmployees[k] then cachedEmployees[k] = {} end

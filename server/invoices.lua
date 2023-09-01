@@ -2,12 +2,12 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 -- Events
 
-RegisterNetEvent('qb-phone:server:InvoiceHandler')
+RegisterNetEvent('Renewed-Phone:server:InvoiceHandler')
 
 -- EVENT HANDLER(S) --
 
 -- Has player paid something this --
---[[AddEventHandler('qb-phone:server:InvoiceHandler', function(paid, amount, source, resource)
+--[[AddEventHandler('Renewed-Phone:server:InvoiceHandler', function(paid, amount, source, resource)
 
     if paid and resource == GetCurrentResourceName() then
         if amount >= config.minPayment then
@@ -21,10 +21,14 @@ RegisterNetEvent('qb-phone:server:InvoiceHandler')
     end
 end)]]
 
+<<<<<<< Updated upstream
 
 
 
 RegisterNetEvent('qb-phone:server:PayMyInvoice', function(society, amount, invoiceId, sendercitizenid, resource)
+=======
+RegisterNetEvent('Renewed-Phone:server:PayMyInvoice', function(society, amount, invoiceId, sendercitizenid, resource)
+>>>>>>> Stashed changes
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local SenderPly = QBCore.Functions.GetPlayerByCitizenId(sendercitizenid)
@@ -36,7 +40,7 @@ RegisterNetEvent('qb-phone:server:PayMyInvoice', function(society, amount, invoi
         end
 
         if SenderPly then
-            TriggerClientEvent('qb-phone:client:CustomNotification', SenderPly.PlayerData.source,
+            TriggerClientEvent('Renewed-Phone:client:CustomNotification', SenderPly.PlayerData.source,
                 "Invoice Paid off by " .. SenderPly.PlayerData.charinfo.firstname .. ".",
                 "Recent Invoice of $" .. amount .. " has been paid.",
                 "fas fa-file-invoice-dollar",
@@ -45,21 +49,21 @@ RegisterNetEvent('qb-phone:server:PayMyInvoice', function(society, amount, invoi
             )
         end
 
-        TriggerClientEvent('qb-phone:client:RemoveInvoiceFromTable', src, invoiceId)
-        TriggerEvent("qb-phone:server:InvoiceHandler", true, amount, src, resource)
+        TriggerClientEvent('Renewed-Phone:client:RemoveInvoiceFromTable', src, invoiceId)
+        TriggerEvent("Renewed-Phone:server:InvoiceHandler", true, amount, src, resource)
 
         exports.oxmysql:execute('DELETE FROM phone_invoices WHERE id = ?', {invoiceId})
     end
 end)
 
-RegisterNetEvent('qb-phone:server:DeclineMyInvoice', function(amount, invoiceId, sendercitizenid, resource)
+RegisterNetEvent('Renewed-Phone:server:DeclineMyInvoice', function(amount, invoiceId, sendercitizenid, resource)
     local Ply = QBCore.Functions.GetPlayer(source)
     local SenderPly = QBCore.Functions.GetPlayerByCitizenId(sendercitizenid)
     if not Ply then return end
 
     exports.oxmysql:execute('DELETE FROM phone_invoices WHERE id = ?', {invoiceId})
     if SenderPly then
-        TriggerClientEvent('qb-phone:client:CustomNotification', SenderPly.PlayerData.source,
+        TriggerClientEvent('Renewed-Phone:client:CustomNotification', SenderPly.PlayerData.source,
             "Invoice Declined by " .. SenderPly.PlayerData.charinfo.firstname .. ".",
             "Recent invoice of $" .. amount .. " has been declined.",
             "fas fa-file-invoice-dollar",
@@ -68,12 +72,12 @@ RegisterNetEvent('qb-phone:server:DeclineMyInvoice', function(amount, invoiceId,
         )
     end
 
-    TriggerClientEvent('qb-phone:client:RemoveInvoiceFromTable', source, invoiceId)
-    TriggerEvent("qb-phone:server:InvoiceHandler", false, amount, source, resource)
+    TriggerClientEvent('Renewed-Phone:client:RemoveInvoiceFromTable', source, invoiceId)
+    TriggerEvent("Renewed-Phone:server:InvoiceHandler", false, amount, source, resource)
 end)
 
 
-RegisterNetEvent('qb-phone:server:CreateInvoice', function(billed, biller, amount)
+RegisterNetEvent('Renewed-Phone:server:CreateInvoice', function(billed, biller, amount)
     local billedID = tonumber(billed)
     local cash = tonumber(amount)
     local billedCID = QBCore.Functions.GetPlayer(billedID)
@@ -90,12 +94,16 @@ RegisterNetEvent('qb-phone:server:CreateInvoice', function(billed, biller, amoun
         billerInfo.PlayerData.citizenid
     }, function(id)
         if id then
-            TriggerClientEvent('qb-phone:client:AcceptorDenyInvoice', billedCID.PlayerData.source, id, billerInfo.PlayerData.charinfo.firstname, billerInfo.PlayerData.job.name, billerInfo.PlayerData.citizenid, cash, resource)
+            TriggerClientEvent('Renewed-Phone:client:AcceptorDenyInvoice', billedCID.PlayerData.source, id, billerInfo.PlayerData.charinfo.firstname, billerInfo.PlayerData.job.name, billerInfo.PlayerData.citizenid, cash, resource)
         end
     end)
 end)
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:GetInvoices', function(source, cb)
+=======
+lib.callback.register('Renewed-Phone:server:GetInvoices', function(source)
+>>>>>>> Stashed changes
     local Player = QBCore.Functions.GetPlayer(source)
     local invoices = exports.oxmysql:executeSync('SELECT * FROM phone_invoices WHERE citizenid = ?', {Player.PlayerData.citizenid})
     cb(invoices)

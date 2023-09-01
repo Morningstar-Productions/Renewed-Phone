@@ -19,17 +19,45 @@ end
 -- NUI Callback
 
 RegisterNUICallback('SetupGarageVehicles', function(_, cb)
+<<<<<<< Updated upstream
     QBCore.Functions.TriggerCallback('qb-phone:server:GetGarageVehicles', function(vehicles)
+=======
+    lib.callback('Renewed-Phone:server:GetGarageVehicles', false, function(vehicles)
+>>>>>>> Stashed changes
         cb(vehicles)
     end)
 end)
 
 RegisterNUICallback('gps-vehicle-garage', function(data, cb)
     local veh = data.veh
+<<<<<<< Updated upstream
     if veh.state == 'In' then
         if veh.parkingspot then
             SetNewWaypoint(veh.parkingspot.x, veh.parkingspot.y)
             QBCore.Functions.Notify("Your vehicle has been marked", "success")
+=======
+    if Config.Garage == 'jdev' then
+        exports['qb-garages']:TrackVehicleByPlate(veh.plate)
+        TriggerEvent('Renewed-Phone:client:CustomNotification',
+            "GARAGE",
+            "GPS Marker Set!",
+            "fas fa-car",
+            "#e84118",
+            5000
+        )
+        cb("ok")
+    elseif Config.Garage == 'qbcore' then
+        --Deprecated
+        if veh.state == 'In' then
+            if veh.parkingspot then
+                SetNewWaypoint(veh.parkingspot.x, veh.parkingspot.y)
+                lib.notify({ title = 'Valet', description = "Your vehicle has been marked", type = "success" })
+            end
+        elseif veh.state == 'Out' and findVehFromPlateAndLocate(veh.plate) then
+            lib.notify({ title = 'Valet', description = "Your vehicle has been marked", type = "success" })
+        else
+            lib.notify({ title = 'Valet', description = "This vehicle cannot be located", type = "error" })
+>>>>>>> Stashed changes
         end
     elseif veh.state == 'Out' and findVehFromPlateAndLocate(veh.plate) then
         QBCore.Functions.Notify("Your vehicle has been marked", "success")
@@ -40,22 +68,22 @@ RegisterNUICallback('gps-vehicle-garage', function(data, cb)
 end)
 
 RegisterNUICallback('sellVehicle', function(data, cb)
-    TriggerServerEvent('qb-phone:server:sendVehicleRequest', data)
+    TriggerServerEvent('Renewed-Phone:server:sendVehicleRequest', data)
     cb("ok")
 end)
 
 -- Events
 
-RegisterNetEvent('qb-phone:client:sendVehicleRequest', function(data, seller)
-    local success = exports['qb-phone']:PhoneNotification("VEHICLE SALE", 'Purchase '..data.plate..' for $'..data.price, 'fas fa-map-pin', '#b3e0f2', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
+RegisterNetEvent('Renewed-Phone:client:sendVehicleRequest', function(data, seller)
+    local success = exports['Renewed-Phone']:PhoneNotification("VEHICLE SALE", 'Purchase '..data.plate..' for $'..data.price, 'fas fa-map-pin', '#b3e0f2', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
     if success then
-        TriggerServerEvent("qb-phone:server:sellVehicle", data, seller, 'accepted')
+        TriggerServerEvent("Renewed-Phone:server:sellVehicle", data, seller, 'accepted')
     else
-        TriggerServerEvent("qb-phone:server:sellVehicle", data, seller, 'denied')
+        TriggerServerEvent("Renewed-Phone:server:sellVehicle", data, seller, 'denied')
     end
 end)
 
-RegisterNetEvent('qb-phone:client:updateGarages', function()
+RegisterNetEvent('Renewed-Phone:client:updateGarages', function()
     SendNUIMessage({
         action = "UpdateGarages",
     })

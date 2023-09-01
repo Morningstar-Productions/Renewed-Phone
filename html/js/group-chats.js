@@ -389,7 +389,7 @@ $('#leave-room').on('click', e => {
 
     let cid = QB.Phone.Data.PlayerData.citizenid
 
-    $.post("https://qb-phone/LeaveGroupChat", JSON.stringify({roomID: currentRoom, citizenid: cid}), function(status) {
+    $.post("https://Renewed-Phone/LeaveGroupChat", JSON.stringify({roomID: currentRoom, citizenid: cid}), function(status) {
         if(status) {
             $('.chat-room-leave').hide()
             $('.chat-room-join').show()
@@ -404,7 +404,7 @@ $('#leave-room').on('click', e => {
 
 $('#join-room').on('click', e => {
     e.preventDefault()
-    $.post("https://qb-phone/JoinGroupChat", JSON.stringify({roomID: currentRoom}), function(status) {
+    $.post("https://Renewed-Phone/JoinGroupChat", JSON.stringify({roomID: currentRoom}), function(status) {
         if(status) {
             $('.chat-room-join').hide()
             $('.chat-room-leave').show()
@@ -470,7 +470,7 @@ $('#search-message').keypress(e => {
         if(keyword !== previousSearch && keyword !== "" && keyword.length >= 3) {
             $("#search-messages-content").html("")
 
-            $.post("https://qb-phone/SearchGroupChatMessages", JSON.stringify({roomID: currentRoom, searchTerm: keyword}), function(messages) {
+            $.post("https://Renewed-Phone/SearchGroupChatMessages", JSON.stringify({roomID: currentRoom, searchTerm: keyword}), function(messages) {
                 if( ! messages) {
                     $("#no-search-notice").show()
                     $("#search-messages-content").html("")
@@ -531,7 +531,7 @@ $('#pinned-messages').on('click', e => {
         })  
         pinnedOpen = true
 
-        $.post("https://qb-phone/GetPinnedMessages", JSON.stringify({roomID: currentRoom}), function(results) {
+        $.post("https://Renewed-Phone/GetPinnedMessages", JSON.stringify({roomID: currentRoom}), function(results) {
             if( ! results) {
                 $('#no-pinned-notice').show()
             } else {
@@ -615,7 +615,7 @@ function openChatRoom(id) {
         $('.chat-room-join').hide()
     }
 
-    $.post("https://qb-phone/GetGroupChatMessages", JSON.stringify({roomID: currentRoom}), function(messages) {
+    $.post("https://Renewed-Phone/GetGroupChatMessages", JSON.stringify({roomID: currentRoom}), function(messages) {
         RenderChatMessages(messages)  
     }) 
     $("#submit-message").prop('placeholder', 'Press [ENTER] to chat!')
@@ -674,7 +674,7 @@ $("#submit-message").on('keypress', (e) => {
             message: messageContent
         }
 
-        $.post("https://qb-phone/SendGroupChatMessage", JSON.stringify(messageData), function() {
+        $.post("https://Renewed-Phone/SendGroupChatMessage", JSON.stringify(messageData), function() {
             $("#submit-message").val("")
         })
     }
@@ -697,7 +697,7 @@ $("#send-message").on('click', () => {
             message: messageContent
         }
 
-        $.post("https://qb-phone/SendGroupChatMessage", JSON.stringify(messageData), function(status) {
+        $.post("https://Renewed-Phone/SendGroupChatMessage", JSON.stringify(messageData), function(status) {
             $("#submit-message").val("")
         })
     }
@@ -829,7 +829,7 @@ $(document).on('click', '.confirm', function(e) {
     if( ! isUserAnOwner(room)) {
         QB.Phone.Notifications.Add("fa fa-times", "Not Owner", "You don't have permission for that.", "#1DA1F2", 4000);   
     } else {
-        $.post("https://qb-phone/DeactivateRoom", JSON.stringify({roomID: room}), function(status) {
+        $.post("https://Renewed-Phone/DeactivateRoom", JSON.stringify({roomID: room}), function(status) {
             if(status) {
                 $('#owned-rooms-list-close').trigger('click')
                 $('#confirm-deactivation-close').trigger('click')
@@ -865,7 +865,7 @@ $(document).on('keypress', '#change-pin', function(e) {
         })
 
         if(pinOk) {
-            $.post("https://qb-phone/ChangeRoomPin", JSON.stringify({pinCode: pin, roomID: id}), function(status) {
+            $.post("https://Renewed-Phone/ChangeRoomPin", JSON.stringify({pinCode: pin, roomID: id}), function(status) {
                 if(status) {
                     $('#change-pin').val(pin)
                     $('#owned-rooms-list-close').trigger('click')
@@ -935,7 +935,7 @@ $("#create-room-cancel").on('click', function(e) {
 $("#create-room-confirm").on('click', function(e) {
     let channelName = $('.create-room-name').val()
     let channelPass = $('.create-room-passcode').val()
-    $.post("https://qb-phone/CreateDiscordRoom", JSON.stringify({name: channelName, pass: channelPass}), function(status) {
+    $.post("https://Renewed-Phone/CreateDiscordRoom", JSON.stringify({name: channelName, pass: channelPass}), function(status) {
         if(status) {
             QB.Phone.Notifications.Add("fab fa-discord", "Discord", "You have sucsesfully purchased a room!", "#1DA1F2", 2500)
         } else {
@@ -996,7 +996,7 @@ $('.room-input-code').keypress((e) => {
             } else {
                 let id = chatroom.id
                 $("#join-room-code-close").trigger('click')
-                $.post('https://qb-phone/JoinGroupChat', JSON.stringify({roomID: id}), () => {
+                $.post('https://Renewed-Phone/JoinGroupChat', JSON.stringify({roomID: id}), () => {
                     openChatRoom(chatroom.id)
                     QB.Phone.Notifications.Add("fa fa-check", "Discord", "You are now a member of #" + slug(chatroom.room_name), "#1DA1F2", 4000)
                     
@@ -1029,7 +1029,7 @@ $('#room-pin-input').keypress(e => {
         
         currentRoom = id
         let chatroom = getChatRoomData()
-        $.post('https://qb-phone/JoinGroupChat', JSON.stringify({roomID: id, roomPin: pin}), (status) => {
+        $.post('https://Renewed-Phone/JoinGroupChat', JSON.stringify({roomID: id, roomPin: pin}), (status) => {
             if(status) {
                 $("#enter-room-pin-close").trigger('click')
 
@@ -1065,7 +1065,7 @@ $(document).on('click', '.pin-message', function(e) {
     let message = $(this).attr('data-messageid')
     let $this = $(this)
 
-    $.post("https://qb-phone/ToggleMessagePin", JSON.stringify({roomID: room, messageID: message}), function(status) {
+    $.post("https://Renewed-Phone/ToggleMessagePin", JSON.stringify({roomID: room, messageID: message}), function(status) {
         if( ! status) {
             QB.Phone.Notifications.Add("fa fa-times", "Discord", "You don't have permission to do that.", "#1DA1F2", 4000)
         } else {
@@ -1092,7 +1092,7 @@ $(document).on('click', '#remove-member', function(e){
     let room = $(this).attr('data-roomid')
     let cid = $(this).attr('data-cid')
 
-    $.post("https://qb-phone/LeaveGroupChat", JSON.stringify({roomID: room, citizenid: cid}), function(status) {
+    $.post("https://Renewed-Phone/LeaveGroupChat", JSON.stringify({roomID: room, citizenid: cid}), function(status) {
         if(status) {
             $(this).remove();
 

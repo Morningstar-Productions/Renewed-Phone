@@ -17,10 +17,9 @@ end
 
 -- Check if a citizen id is a member of a room.
 --
--- @param cid string
--- @param roomid int
---
--- @returns boolean
+---@param citizenid string
+---@param roomID integer
+---@return boolean
 local function isMemberOfRoom(citizenid, roomID)
     for _, room in pairs(ChatRooms) do
         if room.id == roomID then
@@ -41,10 +40,9 @@ end
 
 -- Check if a citizen id is an owner of a room.
 --
--- @param cid string
--- @param roomid int
---
--- @returns boolean
+---@param citizenid string
+---@param roomID integer
+---@return boolean
 local function isOwnerOfRoom(citizenid, roomID)
     for _, room in pairs(ChatRooms) do
         if (room.id == roomID) and (citizenid == room.room_owner_id) then
@@ -89,7 +87,11 @@ AddEventHandler('onResourceStart', function(resource)
     end
 end)
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:GetGroupChatMessages', function(_, cb, roomID)
+=======
+lib.callback.register('Renewed-Phone:server:GetGroupChatMessages', function(_, roomID)
+>>>>>>> Stashed changes
     local messages = MySQL.query.await("SELECT * FROM phone_chatroom_messages WHERE room_id=@roomID ORDER BY created DESC LIMIT 40", {['@roomID'] = roomID})
     if messages[1] then
         cb(messages)
@@ -98,7 +100,11 @@ QBCore.Functions.CreateCallback('qb-phone:server:GetGroupChatMessages', function
     end
 end)
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:SearchGroupChatMessages', function(source, cb, roomID, searchTerm)
+=======
+lib.callback.register('Renewed-Phone:server:SearchGroupChatMessages', function(source, roomID, searchTerm)
+>>>>>>> Stashed changes
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local search = escape_sqli(searchTerm)
@@ -115,12 +121,21 @@ QBCore.Functions.CreateCallback('qb-phone:server:SearchGroupChatMessages', funct
             cb(false)
         end
     else
+<<<<<<< Updated upstream
         TriggerClientEvent('qb-phone:client:notification', src, 'Discord', 'You must be a member or room owner to search.')
         cb(false)
     end
 end)
 
 QBCore.Functions.CreateCallback('qb-phone:server:GetPinnedMessages', function(source, cb, roomID)
+=======
+        TriggerClientEvent('Renewed-Phone:client:notification', src, 'Discord', 'You must be a member or room owner to search.')
+        return false
+    end
+end)
+
+lib.callback.register('Renewed-Phone:server:GetPinnedMessages', function(source, roomID)
+>>>>>>> Stashed changes
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
 
@@ -133,18 +148,31 @@ QBCore.Functions.CreateCallback('qb-phone:server:GetPinnedMessages', function(so
             cb(false)
         end
     else
+<<<<<<< Updated upstream
         TriggerClientEvent('qb-phone:client:notification', src, 'Discord', 'You must be a member or room owner to fetch that.')
         cb(false)
+=======
+        TriggerClientEvent('Renewed-Phone:client:notification', src, 'Discord', 'You must be a member or room owner to fetch that.')
+        return false
+>>>>>>> Stashed changes
     end
 end)
 
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:TryPinCode', function(_, cb, pinCode, roomID)
+=======
+lib.callback.register('Renewed-Phone:server:TryPinCode', function(_, pinCode, roomID)
+>>>>>>> Stashed changes
     local room = MySQL.scalar.await("SELECT 1 FROM phone_chatrooms WHERE id=@roomID AND room_pin=@roomPin", {['@roomID'] = roomID, ['roomPin'] = pinCode})
     cb(room)
 end)
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:IsRoomOwner', function(source, cb, roomID)
+=======
+lib.callback.register('Renewed-Phone:server:IsRoomOwner', function(source, roomID)
+>>>>>>> Stashed changes
     local Player = QBCore.Functions.GetPlayer(source)
     local room = MySQL.scalar.await("SELECT 1 FROM phone_chatrooms WHERE id=@roomID AND room_owner_id=@owner", {['@roomID'] = roomID, ['owner'] = Player.PlayerData.citizenid})
 
@@ -155,7 +183,7 @@ QBCore.Functions.CreateCallback('qb-phone:server:IsRoomOwner', function(source, 
     end
 end)
 
-RegisterNetEvent('qb-phone:server:SendGroupChatMessage', function(messageData, systemMessage, roomID)
+RegisterNetEvent('Renewed-Phone:server:SendGroupChatMessage', function(messageData, systemMessage, roomID)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if messageData and not systemMessage then
@@ -168,10 +196,10 @@ RegisterNetEvent('qb-phone:server:SendGroupChatMessage', function(messageData, s
                 messageData.memberName
             })
             messageData.messageID = msg
-            TriggerClientEvent('qb-phone:client:RefreshGroupChat', -1, src, messageData)
+            TriggerClientEvent('Renewed-Phone:client:RefreshGroupChat', -1, src, messageData)
             TriggerEvent("qb-log:server:CreateLog", "discord", "Message Posted (room: ".. messageData.room_id .. ", from: ".. Player.PlayerData.citizenid ..")", "blue", messageData.message)
         else
-            TriggerClientEvent('qb-phone:client:notification', src, 'Discord', 'You must be a member or room owner to send messages.')
+            TriggerClientEvent('Renewed-Phone:client:notification', src, 'Discord', 'You must be a member or room owner to send messages.')
         end
     else
         local message = escape_sqli(systemMessage.message)
@@ -182,11 +210,15 @@ RegisterNetEvent('qb-phone:server:SendGroupChatMessage', function(messageData, s
             message,
             systemMessage.name
         })
-        TriggerClientEvent('qb-phone:client:RefreshGroupChat', -1, src, systemMessage)
+        TriggerClientEvent('Renewed-Phone:client:RefreshGroupChat', -1, src, systemMessage)
     end
 end)
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:JoinGroupChat', function(source, cb, updatedRooms, roomID)
+=======
+lib.callback.register('Renewed-Phone:server:JoinGroupChat', function(source, updatedRooms, roomID)
+>>>>>>> Stashed changes
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not isMemberOfRoom(Player.PlayerData.citizenid, roomID) then
@@ -204,12 +236,17 @@ QBCore.Functions.CreateCallback('qb-phone:server:JoinGroupChat', function(source
                 roomID
             })
         end
+<<<<<<< Updated upstream
         TriggerClientEvent('qb-phone:client:RefreshChatRooms', -1, ChatRooms)
         cb(true)
+=======
+        TriggerClientEvent('Renewed-Phone:client:RefreshChatRooms', -1, ChatRooms)
+        return true
+>>>>>>> Stashed changes
     end
 end)
 
-RegisterNetEvent('qb-phone:server:LeaveGroupChat', function(updatedRooms, roomID)
+RegisterNetEvent('Renewed-Phone:server:LeaveGroupChat', function(updatedRooms, roomID)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local members = {}
@@ -231,11 +268,11 @@ RegisterNetEvent('qb-phone:server:LeaveGroupChat', function(updatedRooms, roomID
             })
         end
 
-        TriggerClientEvent('qb-phone:client:RefreshChatRooms', -1, ChatRooms)
+        TriggerClientEvent('Renewed-Phone:client:RefreshChatRooms', -1, ChatRooms)
     end
 end)
 
-RegisterNetEvent('qb-phone:server:ChangeRoomPin', function(updatedRooms, roomID, pin)
+RegisterNetEvent('Renewed-Phone:server:ChangeRoomPin', function(updatedRooms, roomID, pin)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
 
@@ -246,11 +283,11 @@ RegisterNetEvent('qb-phone:server:ChangeRoomPin', function(updatedRooms, roomID,
         })
 
         ChatRooms = updatedRooms
-        TriggerClientEvent('qb-phone:client:RefreshChatRooms', -1, ChatRooms)
+        TriggerClientEvent('Renewed-Phone:client:RefreshChatRooms', -1, ChatRooms)
     end
 end)
 
-RegisterNetEvent('qb-phone:server:DeactivateRoom', function(updatedRooms, roomID)
+RegisterNetEvent('Renewed-Phone:server:DeactivateRoom', function(updatedRooms, roomID)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
 
@@ -260,12 +297,16 @@ RegisterNetEvent('qb-phone:server:DeactivateRoom', function(updatedRooms, roomID
         })
 
         ChatRooms = updatedRooms
-        TriggerClientEvent('qb-phone:client:RefreshChatRooms', -1, ChatRooms)
+        TriggerClientEvent('Renewed-Phone:client:RefreshChatRooms', -1, ChatRooms)
     end
 end)
 
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:PurchaseRoom', function(source, cb, price, roomData)
+=======
+lib.callback.register('Renewed-Phone:server:PurchaseRoom', function(source, price, roomData)
+>>>>>>> Stashed changes
 	local Player = QBCore.Functions.GetPlayer(source)
     if Player.PlayerData.money.bank >= price then
         Player.Functions.RemoveMoney('bank', price, 'Discord Channel Purchase')
@@ -302,7 +343,7 @@ QBCore.Functions.CreateCallback('qb-phone:server:PurchaseRoom', function(source,
 
         ChatRooms[#ChatRooms + 1] = ChatRoom
 
-        TriggerClientEvent('qb-phone:client:RefreshChatRooms', -1, ChatRooms)
+        TriggerClientEvent('Renewed-Phone:client:RefreshChatRooms', -1, ChatRooms)
         TriggerEvent("qb-log:server:CreateLog", "discord", "Channel Created:  ".. roomData.room_name .."(id: ".. roomID.. ", by: "..Player.PlayerData.citizenid..")", "blue")
 		cb(true)
 	else
@@ -310,7 +351,7 @@ QBCore.Functions.CreateCallback('qb-phone:server:PurchaseRoom', function(source,
 	end
 end)
 
-RegisterNetEvent('qb-phone:server:ToggleMessagePin', function(messageID, roomID)
+RegisterNetEvent('Renewed-Phone:server:ToggleMessagePin', function(messageID, roomID)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
 

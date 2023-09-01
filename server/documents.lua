@@ -1,12 +1,16 @@
+<<<<<<< Updated upstream
 local QBCore = exports['qb-core']:GetCoreObject()
 
 RegisterNetEvent("qb-phone:server:sendDocument", function(data)
+=======
+RegisterNetEvent("Renewed-Phone:server:sendDocument", function(data)
+>>>>>>> Stashed changes
     local src = source
     local Ply = QBCore.Functions.GetPlayer(src)
     local Receiver = QBCore.Functions.GetPlayer(tonumber(data.StateID))
     local SenderName = Ply.PlayerData.charinfo.firstname..' '..Ply.PlayerData.charinfo.lastname
     if not Receiver then
-        TriggerClientEvent('qb-phone:client:CustomNotification', src,
+        TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
             "Documents",
             "Invalid State ID",
             "fas fa-folder",
@@ -17,16 +21,16 @@ RegisterNetEvent("qb-phone:server:sendDocument", function(data)
     end
 
     if Ply.PlayerData.citizenid ~= Receiver.PlayerData.citizenid then
-        TriggerClientEvent('qb-phone:client:CustomNotification', src,
+        TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
             "Documents",
             "Document Sent",
             "fas fa-folder",
             "#d9d9d9",
             5000
         )
-        TriggerClientEvent("qb-phone:client:sendingDocumentRequest", data.StateID, data, Receiver, Ply, SenderName)
+        TriggerClientEvent("Renewed-Phone:client:sendingDocumentRequest", data.StateID, data, Receiver, Ply, SenderName)
     else
-        TriggerClientEvent('qb-phone:client:CustomNotification', src,
+        TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
             "Documents",
             "You can't send a document to yourself!",
             "fas fa-folder",
@@ -36,20 +40,20 @@ RegisterNetEvent("qb-phone:server:sendDocument", function(data)
     end
 end)
 
-RegisterNetEvent("qb-phone:server:sendDocumentLocal", function(data, playerId)
+RegisterNetEvent("Renewed-Phone:server:sendDocumentLocal", function(data, playerId)
     local src = source
     local Ply = QBCore.Functions.GetPlayer(src)
     local Receiver = QBCore.Functions.GetPlayer(playerId)
     local SenderName = Ply.PlayerData.charinfo.firstname..' '..Ply.PlayerData.charinfo.lastname
 
-    TriggerClientEvent('qb-phone:client:CustomNotification', src,
+    TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
         "Documents",
         "Document Sent",
         "fas fa-folder",
         "#d9d9d9",
         5000
     )
-    TriggerClientEvent("qb-phone:client:sendingDocumentRequest", playerId, data, Receiver, Ply, SenderName)
+    TriggerClientEvent("Renewed-Phone:client:sendingDocumentRequest", playerId, data, Receiver, Ply, SenderName)
 end)
 
 local function saveNote(data, CID, src)
@@ -57,7 +61,7 @@ local function saveNote(data, CID, src)
 
     exports.oxmysql:insert('INSERT INTO phone_note (citizenid, title,  text, lastupdate) VALUES (?, ?, ?, ?)',{CID, data.Title, data.Text, data.Time})
 
-    TriggerClientEvent('qb-phone:client:CustomNotification', src,
+    TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
         "Documents",
         "Created new Document",
         "fas fa-folder",
@@ -76,7 +80,7 @@ local function updateNote(data, ID, src)
     })
 
 
-    TriggerClientEvent('qb-phone:client:CustomNotification', src,
+    TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
         "Documents",
         "Document Saved",
         "fas fa-folder",
@@ -89,7 +93,7 @@ local function deleteNote(ID, src)
     if not ID or not src then return end
 
     exports.oxmysql:execute('DELETE FROM phone_note WHERE id = ?', {ID})
-    TriggerClientEvent('qb-phone:client:CustomNotification', src,
+    TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
         "Documents",
         "Document Deleted",
         "fas fa-folder",
@@ -98,7 +102,7 @@ local function deleteNote(ID, src)
     )
 end
 
-RegisterNetEvent('qb-phone:server:documents_Save_Note_As', function(data, Receiver)
+RegisterNetEvent('Renewed-Phone:server:documents_Save_Note_As', function(data, Receiver)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not data or not Player then return end
@@ -125,11 +129,11 @@ RegisterNetEvent('qb-phone:server:documents_Save_Note_As', function(data, Receiv
         if Note[1] then
             Wait(400)
             exports.oxmysql:insert('INSERT INTO phone_note (citizenid, title,  text, lastupdate) VALUES (?, ?, ?, ?)',{Receiver.PlayerData.citizenid, data.Title, data.Text, data.Time})
-            TriggerClientEvent('qb-phone:client:CustomNotification', tonumber(data.StateID), 'DOCUMENTS', 'New Document', 'fas fa-folder', '#d9d9d9', 5000)
+            TriggerClientEvent('Renewed-Phone:client:CustomNotification', tonumber(data.StateID), 'DOCUMENTS', 'New Document', 'fas fa-folder', '#d9d9d9', 5000)
         end
     end
 
     local Notes = exports.oxmysql:executeSync('SELECT * FROM phone_note WHERE citizenid = ?', {CID})
     Wait(100)
-    TriggerClientEvent('qb-phone:RefReshNotes_Free_Documents', src, Notes)
+    TriggerClientEvent('Renewed-Phone:RefReshNotes_Free_Documents', src, Notes)
 end)

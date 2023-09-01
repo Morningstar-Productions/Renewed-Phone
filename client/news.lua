@@ -1,20 +1,20 @@
 -- NUI Callback
 
 RegisterNUICallback('Send_lsbn_ToChat', function(data, cb)
-    TriggerServerEvent('qb-phone:server:Send_lsbn_ToChat', data)
+    TriggerServerEvent('Renewed-Phone:server:Send_lsbn_ToChat', data)
     cb("ok")
 end)
 
 RegisterNUICallback('GetLSBNchats', function(data, cb)
-    TriggerServerEvent('qb-phone:server:GetLSBNchats', data)
+    TriggerServerEvent('Renewed-Phone:server:GetLSBNchats', data)
     cb("ok")
 end)
 
 -- Events
 
-RegisterNetEvent('qb-phone:LSBN-reafy-for-add', function(data, toggle, text)
+RegisterNetEvent('Renewed-Phone:LSBN-reafy-for-add', function(data, toggle, text)
     if toggle then
-        TriggerEvent('qb-phone:client:CustomNotification',
+        TriggerEvent('Renewed-Phone:client:CustomNotification',
             "LSBN",
             text,
             "fas fa-bullhorn",

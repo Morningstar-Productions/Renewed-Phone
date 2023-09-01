@@ -1,7 +1,11 @@
+<<<<<<< Updated upstream
 local QBCore = exports['qb-core']:GetCoreObject()
 
 
 RegisterNetEvent('qb-phone:server:UpdateMessages', function(ChatMessages, ChatNumber)
+=======
+RegisterNetEvent('Renewed-Phone:server:UpdateMessages', function(ChatMessages, ChatNumber)
+>>>>>>> Stashed changes
     if not ChatNumber or not ChatMessages then return end
 
     local src = source
@@ -13,11 +17,11 @@ RegisterNetEvent('qb-phone:server:UpdateMessages', function(ChatMessages, ChatNu
         if Chat[1] then
             MySQL.update('UPDATE phone_messages SET messages = ? WHERE citizenid = ? AND number = ?', {json.encode(ChatMessages), TargetData.PlayerData.citizenid, SenderData.PlayerData.charinfo.phone})
             MySQL.update('UPDATE phone_messages SET messages = ? WHERE citizenid = ? AND number = ?', {json.encode(ChatMessages), SenderData.PlayerData.citizenid, TargetData.PlayerData.charinfo.phone})
-            TriggerClientEvent('qb-phone:client:UpdateMessages', TargetData.PlayerData.source, ChatMessages, SenderData.PlayerData.charinfo.phone, false)
+            TriggerClientEvent('Renewed-Phone:client:UpdateMessages', TargetData.PlayerData.source, ChatMessages, SenderData.PlayerData.charinfo.phone, false)
         else
             MySQL.insert('INSERT INTO phone_messages (citizenid, number, messages) VALUES (?, ?, ?)', {TargetData.PlayerData.citizenid, SenderData.PlayerData.charinfo.phone, json.encode(ChatMessages)})
             MySQL.insert('INSERT INTO phone_messages (citizenid, number, messages) VALUES (?, ?, ?)', {SenderData.PlayerData.citizenid, TargetData.PlayerData.charinfo.phone, json.encode(ChatMessages)})
-            TriggerClientEvent('qb-phone:client:UpdateMessages', TargetData.PlayerData.source, ChatMessages, SenderData.PlayerData.charinfo.phone, true)
+            TriggerClientEvent('Renewed-Phone:client:UpdateMessages', TargetData.PlayerData.source, ChatMessages, SenderData.PlayerData.charinfo.phone, true)
         end
     else
         local query = '%' .. ChatNumber .. '%'

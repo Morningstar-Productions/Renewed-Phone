@@ -6,14 +6,14 @@ RegisterNUICallback('GetGalleryData', function(_, cb)
 end)
 
 RegisterNUICallback('DeleteImage', function(image,cb)
-    TriggerServerEvent('qb-phone:server:RemoveImageFromGallery',image)
+    TriggerServerEvent('Renewed-Phone:server:RemoveImageFromGallery',image)
     Wait(400)
-    TriggerServerEvent('qb-phone:server:getImageFromGallery')
+    TriggerServerEvent('Renewed-Phone:server:getImageFromGallery')
     cb(true)
 end)
 
 -- Events
 
-RegisterNetEvent('qb-phone:refreshImages', function(images)
+RegisterNetEvent('Renewed-Phone:refreshImages', function(images)
     PhoneData.Images = images
 end)

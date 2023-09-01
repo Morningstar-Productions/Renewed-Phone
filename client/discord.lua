@@ -2,10 +2,9 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 
 -- Find a room loaded in memory by room id or by room code.
--- @params int id
--- @params string code
---
--- @returns boolean | table
+---@param id integer
+---@param code string
+---@return boolean | table
 local function doesRoomExist(id, code)
     if id and not code then
         -- Find a room based on the room id
@@ -27,10 +26,9 @@ local function doesRoomExist(id, code)
 end
 
 -- Checks if a citizen id is a member of a room.
--- @params string citizenid
--- @params int roomID
---
--- @returns boolean
+---@param citizenid string
+---@param roomID integer
+---@return boolean
 local function isMemberOfRoom(citizenid, roomID)
     for _, room in pairs(PhoneData.ChatRooms) do
         if room.id == roomID then
@@ -63,12 +61,12 @@ local function slugCase(s)
     return string.lower(s):gsub(" ", "-")
 end
 
-RegisterNetEvent('qb-phone:client:notification', function(app, message)
+RegisterNetEvent('Renewed-Phone:client:notification', function(app, message)
     SendNUIMessage({
         action = "PhoneNotification",
         PhoneNotify = {
             title = app,
-            text =message,
+            text = message,
             icon = "fab fa-discord",
             color = "rgb(183 183 181)",
             timeout = 5500
@@ -76,12 +74,12 @@ RegisterNetEvent('qb-phone:client:notification', function(app, message)
     })
 end)
 
-RegisterNetEvent('qb-phone:client:RefreshChatRooms', function(ChatRooms)
+RegisterNetEvent('Renewed-Phone:client:RefreshChatRooms', function(ChatRooms)
     PhoneData.ChatRooms = ChatRooms
     SendNUIMessage({action = "RefreshChatRooms", Rooms = PhoneData.ChatRooms})
 end)
 
-RegisterNetEvent('qb-phone:client:RefreshGroupChat', function(src, message)
+RegisterNetEvent('Renewed-Phone:client:RefreshGroupChat', function(src, message)
     SendNUIMessage({action = "RefreshGroupChat", messageData  = message})
     local MyPlayerId = PhoneData.PlayerData.source
 
@@ -91,7 +89,7 @@ RegisterNetEvent('qb-phone:client:RefreshGroupChat', function(src, message)
                 action = "PhoneNotification",
                 PhoneNotify = {
                     title = "New post in #" .. slugCase(getChatRoomData(message.room_id).room_name),
-                    text =message.message,
+                    text = message.message,
                     icon = "fab fa-discord",
                     color = "rgb(183 183 181)",
                     timeout = 5500
@@ -109,14 +107,22 @@ RegisterNUICallback('GetGroupChatMessages', function(data, cb)
             local memberList = json.decode(room.room_members)
 
             if not room.room_pin then
+<<<<<<< Updated upstream
                 QBCore.Functions.TriggerCallback('qb-phone:server:GetGroupChatMessages', function(messages)
+=======
+                lib.callback('Renewed-Phone:server:GetGroupChatMessages', false, function(messages)
+>>>>>>> Stashed changes
                     cb(messages)
                 end, data.roomID)
             else
                 if next(memberList) then
                     for _, memberData in pairs(memberList) do
                         if Player == memberData.cid or Player == room.room_owner_id then
+<<<<<<< Updated upstream
                             QBCore.Functions.TriggerCallback('qb-phone:server:GetGroupChatMessages', function(messages)
+=======
+                            lib.callback('Renewed-Phone:server:GetGroupChatMessages', false, function(messages)
+>>>>>>> Stashed changes
                                 cb(messages)
                             end, data.roomID)
                             break
@@ -124,7 +130,11 @@ RegisterNUICallback('GetGroupChatMessages', function(data, cb)
                     end
                 else
                     if Player == room.room_owner_id then
+<<<<<<< Updated upstream
                         QBCore.Functions.TriggerCallback('qb-phone:server:GetGroupChatMessages', function(messages)
+=======
+                        lib.callback('Renewed-Phone:server:GetGroupChatMessages', false, function(messages)
+>>>>>>> Stashed changes
                             cb(messages)
                         end, data.roomID)
                     end
@@ -145,7 +155,11 @@ RegisterNUICallback('SearchGroupChatMessages', function(data, cb)
             if next(memberList) then
                 for _, memberData in pairs(memberList) do
                     if Player == memberData.cid or Player == room.room_owner_id then
+<<<<<<< Updated upstream
                         QBCore.Functions.TriggerCallback('qb-phone:server:SearchGroupChatMessages', function(messages)
+=======
+                        lib.callback('Renewed-Phone:server:SearchGroupChatMessages', false, function(messages)
+>>>>>>> Stashed changes
                             cb(messages)
                         end, Room, SearchTerm)
                         break
@@ -153,7 +167,11 @@ RegisterNUICallback('SearchGroupChatMessages', function(data, cb)
                 end
             else
                 if Player == room.room_owner_id then
+<<<<<<< Updated upstream
                     QBCore.Functions.TriggerCallback('qb-phone:server:SearchGroupChatMessages', function(messages)
+=======
+                    lib.callback('Renewed-Phone:server:SearchGroupChatMessages', false, function(messages)
+>>>>>>> Stashed changes
                         cb(messages)
                     end, Room, SearchTerm)
                 end
@@ -174,7 +192,11 @@ RegisterNUICallback('GetPinnedMessages', function(data, cb)
                 -- luacheck: ignore
                 for _, memberData in pairs(memberList) do
                     if Player == memberData.cid or Player == room.room_owner_id then
+<<<<<<< Updated upstream
                         QBCore.Functions.TriggerCallback('qb-phone:server:GetPinnedMessages', function(messages)
+=======
+                        lib.callback('Renewed-Phone:server:GetPinnedMessages', false, function(messages)
+>>>>>>> Stashed changes
                             cb(messages)
                         end, Room)
                     end
@@ -182,7 +204,11 @@ RegisterNUICallback('GetPinnedMessages', function(data, cb)
                 end
             else
                 if Player == room.room_owner_id then
+<<<<<<< Updated upstream
                     QBCore.Functions.TriggerCallback('qb-phone:server:GetPinnedMessages', function(messages)
+=======
+                    lib.callback('Renewed-Phone:server:GetPinnedMessages', false, function(messages)
+>>>>>>> Stashed changes
                         cb(messages)
                     end, Room)
                 end
@@ -206,7 +232,7 @@ RegisterNUICallback('SendGroupChatMessage', function(data, cb)
             if next(memberList) then
                 for _, memberData in pairs(memberList) do
                     if Player == memberData.cid or Player == room.room_owner_id then
-                        TriggerServerEvent("qb-phone:server:SendGroupChatMessage", Message, nil, data.roomID)
+                        TriggerServerEvent("Renewed-Phone:server:SendGroupChatMessage", Message, nil, data.roomID)
 
                         cb(true)
                         break
@@ -214,7 +240,7 @@ RegisterNUICallback('SendGroupChatMessage', function(data, cb)
                 end
             else
                 if Player == room.room_owner_id then
-                    TriggerServerEvent("qb-phone:server:SendGroupChatMessage", Message, nil, data.roomID)
+                    TriggerServerEvent("Renewed-Phone:server:SendGroupChatMessage", Message, nil, data.roomID)
                     cb(true)
                 end
             end
@@ -237,7 +263,11 @@ RegisterNUICallback('JoinGroupChat', function(data, cb)
             cb(false)
         else
             if roomPin then
+<<<<<<< Updated upstream
                 QBCore.Functions.TriggerCallback('qb-phone:server:TryPinCode', function(result)
+=======
+                lib.callback('Renewed-Phone:server:TryPinCode', false, function(result)
+>>>>>>> Stashed changes
                     if result then
                         members = json.decode(room.room_members)
 
@@ -259,9 +289,13 @@ RegisterNUICallback('JoinGroupChat', function(data, cb)
                                     break
                                 end
                             end
+<<<<<<< Updated upstream
                             QBCore.Functions.TriggerCallback("qb-phone:server:JoinGroupChat",function(success)
+=======
+                            lib.callback("Renewed-Phone:server:JoinGroupChat", false, function(success)
+>>>>>>> Stashed changes
                                 if success then
-                                    TriggerServerEvent("qb-phone:server:SendGroupChatMessage", nil, {
+                                    TriggerServerEvent("Renewed-Phone:server:SendGroupChatMessage", nil, {
                                         room_id = roomID,
                                         messageType = "SYSTEM",
                                         message = playerName .. " has joined the channel, welcome!",
@@ -284,9 +318,13 @@ RegisterNUICallback('JoinGroupChat', function(data, cb)
                                     break
                                 end
                             end
+<<<<<<< Updated upstream
                             QBCore.Functions.TriggerCallback("qb-phone:server:JoinGroupChat",function(success)
+=======
+                            lib.callback("Renewed-Phone:server:JoinGroupChat", false, function(success)
+>>>>>>> Stashed changes
                                 if success then
-                                    TriggerServerEvent("qb-phone:server:SendGroupChatMessage", nil, {
+                                    TriggerServerEvent("Renewed-Phone:server:SendGroupChatMessage", nil, {
                                         room_id = roomID,
                                         messageType = "SYSTEM",
                                         message = playerName .. " has joined the channel, welcome!",
@@ -323,9 +361,13 @@ RegisterNUICallback('JoinGroupChat', function(data, cb)
                         end
                     end
 
+<<<<<<< Updated upstream
                     QBCore.Functions.TriggerCallback("qb-phone:server:JoinGroupChat",function(success)
+=======
+                    lib.callback("Renewed-Phone:server:JoinGroupChat", false, function(success)
+>>>>>>> Stashed changes
                         if success then
-                            TriggerServerEvent("qb-phone:server:SendGroupChatMessage", nil, {
+                            TriggerServerEvent("Renewed-Phone:server:SendGroupChatMessage", nil, {
                                 room_id = roomID,
                                 messageType = "SYSTEM",
                                 message = playerName .. " has joined the channel, welcome!",
@@ -351,9 +393,13 @@ RegisterNUICallback('JoinGroupChat', function(data, cb)
                         end
                     end
 
+<<<<<<< Updated upstream
                     QBCore.Functions.TriggerCallback("qb-phone:server:JoinGroupChat",function(success)
+=======
+                    lib.callback("Renewed-Phone:server:JoinGroupChat", false, function(success)
+>>>>>>> Stashed changes
                         if success then
-                            TriggerServerEvent("qb-phone:server:SendGroupChatMessage", nil, {
+                            TriggerServerEvent("Renewed-Phone:server:SendGroupChatMessage", nil, {
                                 room_id = roomID,
                                 messageType = "SYSTEM",
                                 message = playerName .. " has joined the channel, welcome!",
@@ -395,7 +441,7 @@ RegisterNUICallback('LeaveGroupChat', function(data, cb)
                 end
             end
 
-            TriggerServerEvent("qb-phone:server:SendGroupChatMessage", nil, {
+            TriggerServerEvent("Renewed-Phone:server:SendGroupChatMessage", nil, {
                 room_id = roomID,
                 messageType = "SYSTEM",
                 message = memberName .. " has left the channel, goodbye lad.",
@@ -403,7 +449,7 @@ RegisterNUICallback('LeaveGroupChat', function(data, cb)
                 name = "Member Activity"
             })
 
-            TriggerServerEvent('qb-phone:server:LeaveGroupChat', PhoneData.ChatRooms, roomID)
+            TriggerServerEvent('Renewed-Phone:server:LeaveGroupChat', PhoneData.ChatRooms, roomID)
             cb(true)
         else
             cb(false)
@@ -420,7 +466,11 @@ RegisterNUICallback('ChangeRoomPin', function(data, cb)
         cb(false)
     else
         if pin then
+<<<<<<< Updated upstream
             QBCore.Functions.TriggerCallback('qb-phone:server:IsRoomOwner', function(isOwner)
+=======
+            lib.callback('Renewed-Phone:server:IsRoomOwner', false, function(isOwner)
+>>>>>>> Stashed changes
                 if isOwner then
                     for k, v in pairs(PhoneData.ChatRooms) do
                         if(v.id == roomID) then
@@ -433,7 +483,7 @@ RegisterNUICallback('ChangeRoomPin', function(data, cb)
                         end
                     end
 
-                    TriggerServerEvent('qb-phone:server:ChangeRoomPin', PhoneData.ChatRooms, roomID, pin)
+                    TriggerServerEvent('Renewed-Phone:server:ChangeRoomPin', PhoneData.ChatRooms, roomID, pin)
                     cb(true)
                 else
                     cb(false)
@@ -450,10 +500,14 @@ end)
 RegisterNUICallback('DeactivateRoom', function(data, cb)
     for k, room in pairs(PhoneData.ChatRooms) do
         if room.id == data.roomID then
+<<<<<<< Updated upstream
             QBCore.Functions.TriggerCallback('qb-phone:server:IsRoomOwner', function(isOwner)
+=======
+            lib.callback('Renewed-Phone:server:IsRoomOwner', false, function(isOwner)
+>>>>>>> Stashed changes
                 if isOwner then
                     PhoneData.ChatRooms[k] = nil
-                    TriggerServerEvent('qb-phone:server:DeactivateRoom', PhoneData.ChatRooms, data.roomID)
+                    TriggerServerEvent('Renewed-Phone:server:DeactivateRoom', PhoneData.ChatRooms, data.roomID)
                     cb(true)
                 else
                     cb(false)
@@ -470,9 +524,13 @@ RegisterNUICallback('ToggleMessagePin', function(data, cb)
 
     for _, room in pairs(PhoneData.ChatRooms) do
         if room.id == roomID then
+<<<<<<< Updated upstream
             QBCore.Functions.TriggerCallback('qb-phone:server:IsRoomOwner', function(isOwner)
+=======
+            lib.callback('Renewed-Phone:server:IsRoomOwner', false, function(isOwner)
+>>>>>>> Stashed changes
                 if isOwner then
-                    TriggerServerEvent('qb-phone:server:ToggleMessagePin', messageID, roomID)
+                    TriggerServerEvent('Renewed-Phone:server:ToggleMessagePin', messageID, roomID)
                     cb(true)
                 else
                     cb(false)
@@ -490,7 +548,11 @@ RegisterNUICallback('CreateDiscordRoom', function(data, cb)
         room_pin = data.pass and data.pass ~= '' and data.pass or false,
     }
 
+<<<<<<< Updated upstream
     QBCore.Functions.TriggerCallback("qb-phone:server:PurchaseRoom",function(status)
+=======
+    lib.callback("Renewed-Phone:server:PurchaseRoom", false, function(status)
+>>>>>>> Stashed changes
         cb(status)
     end, 250, roomData)
 end)

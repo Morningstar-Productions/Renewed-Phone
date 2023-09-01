@@ -14,7 +14,7 @@ end
 -- NUI Callback
 
 RegisterNUICallback('GetTweets', function(_, cb)
-    local hasVPN = QBCore.Functions.HasItem(Config.VPNItem)
+    local hasVPN = exports.ox_inventory:Search(1, Config.VPNItem)
 
     cb({
         TweetData = PhoneData.Tweets,
@@ -44,22 +44,22 @@ RegisterNUICallback('PostNewTweet', function(data, cb)
         showAnonymous = data.anonymous
     }
 
-    TriggerServerEvent('qb-phone:server:UpdateTweets', TweetMessage)
+    TriggerServerEvent('Renewed-Phone:server:UpdateTweets', TweetMessage)
     cb("ok")
 end)
 
 RegisterNUICallback('DeleteTweet',function(data)
-    TriggerServerEvent('qb-phone:server:DeleteTweet', data.id)
+    TriggerServerEvent('Renewed-Phone:server:DeleteTweet', data.id)
 end)
 
 RegisterNUICallback('FlagTweet',function(data, cb)
-    QBCore.Functions.Notify(data.name..' was reported for saying '..data.message, "error")
+    lib.notify({ description = data.name..' was reported for saying '..data.message, type = "error" })
     cb('ok')
 end)
 
 -- Events
 
-RegisterNetEvent('qb-phone:client:UpdateTweets', function(src, Tweets, delete)
+RegisterNetEvent('Renewed-Phone:client:UpdateTweets', function(src, Tweets, delete)
     if not PhoneData or not FullyLoaded then return end
     PhoneData.Tweets = Tweets
     local MyPlayerId = PlayerData.source or -1
@@ -78,7 +78,7 @@ RegisterNetEvent('qb-phone:client:UpdateTweets', function(src, Tweets, delete)
         })
     end
 
-    local hasVPN = QBCore.Functions.HasItem(Config.VPNItem)
+    local hasVPN = exports.ox_inventory:Search(1, Config.VPNItem)
 
     SendNUIMessage({
         action = "UpdateTweets",

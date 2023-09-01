@@ -116,8 +116,8 @@ end)
 
 -- Events
 
-RegisterNetEvent('qb-phone:client:RaceNotify', function(message)
-    TriggerEvent('qb-phone:client:CustomNotification',
+RegisterNetEvent('Renewed-Phone:client:RaceNotify', function(message)
+    TriggerEvent('Renewed-Phone:client:CustomNotification',
         "Racing",
         message,
         "fas fa-flag-checkered",
@@ -126,7 +126,7 @@ RegisterNetEvent('qb-phone:client:RaceNotify', function(message)
     )
 end)
 
-RegisterNetEvent('qb-phone:client:UpdateLapraces', function()
+RegisterNetEvent('Renewed-Phone:client:UpdateLapraces', function()
     SendNUIMessage({
         action = "UpdateRacingApp",
     })

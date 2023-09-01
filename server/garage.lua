@@ -1,6 +1,10 @@
+<<<<<<< Updated upstream
 local QBCore = exports['qb-core']:GetCoreObject()
 
 RegisterNetEvent('qb-phone:server:sendVehicleRequest', function(data)
+=======
+RegisterNetEvent('Renewed-Phone:server:sendVehicleRequest', function(data)
+>>>>>>> Stashed changes
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local Asshole = tonumber(data.id)
@@ -10,31 +14,38 @@ RegisterNetEvent('qb-phone:server:sendVehicleRequest', function(data)
     if not data.price or not data.plate then return end
     if Player.PlayerData.citizenid == OtherAsshole.PlayerData.citizenid then return TriggerClientEvent("QBCore:Notify", src, 'You cannot sell a vehicle to yourself!', "error") end
 
-    TriggerClientEvent('qb-phone:client:sendVehicleRequest', Asshole, data, Player)
+    TriggerClientEvent('Renewed-Phone:client:sendVehicleRequest', Asshole, data, Player)
 end)
 
-RegisterNetEvent('qb-phone:server:sellVehicle', function(data, Seller, type)
+RegisterNetEvent('Renewed-Phone:server:sellVehicle', function(data, Seller, type)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local SellerData = QBCore.Functions.GetPlayerByCitizenId(Seller.PlayerData.citizenid)
 
     if type == 'accepted' then
         if Player.PlayerData.money.bank and Player.PlayerData.money.bank >= tonumber(data.price) then
+<<<<<<< Updated upstream
             Player.Functions.RemoveMoney('bank', data.price, "vehicle sale")
             SellerData.Functions.AddMoney('bank', data.price)
             TriggerClientEvent('qb-phone:client:CustomNotification', src, "VEHICLE SALE", "You purchased the vehicle for $"..data.price, "fas fa-chart-line", "#D3B300", 5500)
             TriggerClientEvent('qb-phone:client:CustomNotification', Seller.PlayerData.source, "VEHICLE SALE", "Your vehicle was successfully purchased!", "fas fa-chart-line", "#D3B300", 5500)
+=======
+            Player.Functions.RemoveMoney('bank', data.price, "Bought Used Vehicle")
+            SellerData.Functions.AddMoney('bank', data.price, "Sold Used Vehicle")
+            TriggerClientEvent('Renewed-Phone:client:CustomNotification', src, "VEHICLE SALE", "You purchased the vehicle for $"..data.price, "fas fa-chart-line", "#D3B300", 5500)
+            TriggerClientEvent('Renewed-Phone:client:CustomNotification', Seller.PlayerData.source, "VEHICLE SALE", "Your vehicle was successfully purchased!", "fas fa-chart-line", "#D3B300", 5500)
+>>>>>>> Stashed changes
             MySQL.update('UPDATE player_vehicles SET citizenid = ?, garage = ?, state = ? WHERE plate = ?',{Player.PlayerData.citizenid, Config.SellGarage, 1, data.plate})
             -- Update Garages
-            TriggerClientEvent('qb-phone:client:updateGarages', src)
-            TriggerClientEvent('qb-phone:client:updateGarages', Seller.PlayerData.source)
+            TriggerClientEvent('Renewed-Phone:client:updateGarages', src)
+            TriggerClientEvent('Renewed-Phone:client:updateGarages', Seller.PlayerData.source)
         else
-            TriggerClientEvent('qb-phone:client:CustomNotification', src, "VEHICLE SALE", "Insufficient Funds", "fas fa-chart-line", "#D3B300", 5500)
-            TriggerClientEvent('qb-phone:client:CustomNotification', Seller.PlayerData.source, "VEHICLE SALE", "Your vehicle was not purchased!", "fas fa-chart-line", "#D3B300", 5500)
+            TriggerClientEvent('Renewed-Phone:client:CustomNotification', src, "VEHICLE SALE", "Insufficient Funds", "fas fa-chart-line", "#D3B300", 5500)
+            TriggerClientEvent('Renewed-Phone:client:CustomNotification', Seller.PlayerData.source, "VEHICLE SALE", "Your vehicle was not purchased!", "fas fa-chart-line", "#D3B300", 5500)
         end
     elseif type == 'denied' then
-        TriggerClientEvent('qb-phone:client:CustomNotification', src, "VEHICLE SALE", "Request denied", "fas fa-chart-line", "#D3B300", 5500)
-        TriggerClientEvent('qb-phone:client:CustomNotification', Seller.PlayerData.source, "VEHICLE SALE", "Your sale request was denied!", "fas fa-chart-line", "#D3B300", 5500)
+        TriggerClientEvent('Renewed-Phone:client:CustomNotification', src, "VEHICLE SALE", "Request denied", "fas fa-chart-line", "#D3B300", 5500)
+        TriggerClientEvent('Renewed-Phone:client:CustomNotification', Seller.PlayerData.source, "VEHICLE SALE", "Your sale request was denied!", "fas fa-chart-line", "#D3B300", 5500)
     end
 end)
 
@@ -42,8 +53,14 @@ local function round(num, numDecimalPlaces)
     return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:GetGarageVehicles', function(source, cb)
     local Player = QBCore.Functions.GetPlayer(source)
+=======
+lib.callback.register('Renewed-Phone:server:GetGarageVehicles', function(source)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
+>>>>>>> Stashed changes
     local Vehicles = {}
     local vehdata
     local result = exports.oxmysql:executeSync('SELECT * FROM player_vehicles WHERE citizenid = ?', {Player.PlayerData.citizenid})

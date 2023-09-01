@@ -63,7 +63,7 @@ function getDocuments(){
         '<div class="casino-text-clear" style="font-size: 500%;color: #FFFFFF;"><i class="fas fa-frown"></i></div>'
     $('.documents-list').append(AddOption);
 
-    $.post('https://qb-phone/GetNote_for_Documents_app', JSON.stringify({}), function(HasNote){
+    $.post('https://Renewed-Phone/GetNote_for_Documents_app', JSON.stringify({}), function(HasNote){
         if(HasNote){
             AddDocuments(HasNote)
         }
@@ -137,6 +137,37 @@ function SendDocument(title, text){
 
 // Clicks
 
+<<<<<<< Updated upstream
+=======
+$(document).on('click', '#documents-notes', function(e) {
+    QB.Phone.Notifications.Add("fas fa-triange-exclamation", "Documents", "This feature is still unavailable", "rgb(255, 165, 0)", 1250);
+})
+
+$(document).on('click', '#documents-housing', function(e) {
+    QB.Phone.Notifications.Add("fas fa-triange-exclamation", "Documents", "This feature is still unavailable", "rgb(255, 165, 0)", 1250);
+    /*
+    $(this).parents('.documents-dropdown').find('span').text($(this).text());
+    $(this).parents('.documents-dropdown').find('input').attr('value', $(this).attr('id'));
+    $.post('https://Renewed-Phone/SetupHousingDocuments', JSON.stringify({}), function(Houses){
+        if (Houses != null) {
+            $.each(Houses, function(i, vehicle){
+                var firstLetter = houses.fullname.substring(0, 1);
+                var Fulltext = firstLetter.toUpperCase()+(houses.fullname).replace(firstLetter,'')
+            })
+        } else {
+            var AddOption = '<div class="casino-text-clear">Nothing Here!</div>'+
+            '<div class="casino-text-clear" style="font-size: 500%;color: #0d1218c0;"><i class="fas fa-frown"></i></div>'
+        $('.documents-list').append(AddOption);
+        }
+    })
+    */
+})
+
+$(document).on('click', '#documents-contracts', function(e) {
+    QB.Phone.Notifications.Add("fas fa-triange-exclamation", "Documents", "This feature is still unavailable", "rgb(255, 165, 0)", 1250);
+})
+
+>>>>>>> Stashed changes
 $(document).on('click', '#documents-docs', function(e) {
     $(this).parents('.documents-dropdown').find('span').text($(this).text());
     $(this).parents('.documents-dropdown').find('input').attr('value', $(this).attr('id'));
@@ -147,7 +178,7 @@ $(document).on('click', '#documents-vehicle', function(e) {
     $(this).parents('.documents-dropdown').find('span').text($(this).text());
     $(this).parents('.documents-dropdown').find('input').attr('value', $(this).attr('id'));
     $(".documents-list").html("");
-    $.post('https://qb-phone/SetupGarageVehicles', JSON.stringify({}), function(Vehicles){
+    $.post('https://Renewed-Phone/SetupGarageVehicles', JSON.stringify({}), function(Vehicles){
         if(Vehicles != null){
             $.each(Vehicles, function(i, vehicle){
                 if (vehicle.vinscratched != 'false'){
@@ -228,7 +259,7 @@ $(document).on('click', '#documents-send-perm', function(e){
     var StateID = $(".documents-input-stateid").val();
     var NewText = $("#documents-textarea-new").val();
     if(NewText != ""){
-        $.post('https://qb-phone/document_Send_Note', JSON.stringify({
+        $.post('https://Renewed-Phone/document_Send_Note', JSON.stringify({
             Title: DocEndtitle,
             Text: NewText,
             Time: Times,
@@ -250,7 +281,7 @@ $(document).on('click', '#documents-save-note-for-doc', function(e){
     var Times = date.getDay()+" "+MonthFormatting[date.getMonth()]+" "+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes();
 
     if ((Title && Text) != ""){
-        $.post('https://qb-phone/documents_Save_Note_As', JSON.stringify({
+        $.post('https://Renewed-Phone/documents_Save_Note_As', JSON.stringify({
             Title: Title,
             Text: Text,
             Time: Times,
@@ -384,7 +415,7 @@ $(document).on('click', '.documents-extras-button', function(e) {
 $(document).on('click', '#documents-share-local', function(e){
     e.preventDefault();
 
-    $.post('https://qb-phone/document_Send_Note', JSON.stringify({
+    $.post('https://Renewed-Phone/document_Send_Note', JSON.stringify({
         Title: DocEndtitle,
         Text: DocEndtext,
         ID: DocEndid,
@@ -398,7 +429,7 @@ $(document).on('click', '#documents-save', function(e){
     var Times = date.getDay()+" "+MonthFormatting[date.getMonth()]+" "+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes();
     var NewText = $("#documents-textarea-new").val();
     if(NewText != ""){
-        $.post('https://qb-phone/documents_Save_Note_As', JSON.stringify({
+        $.post('https://Renewed-Phone/documents_Save_Note_As', JSON.stringify({
             Title: DocEndtitle,
             Text: NewText,
             Time: Times,
@@ -412,7 +443,7 @@ $(document).on('click', '#documents-save', function(e){
 $(document).on('click', '#documents-delete', function(e){
     e.preventDefault();
 
-    $.post('https://qb-phone/documents_Save_Note_As', JSON.stringify({
+    $.post('https://Renewed-Phone/documents_Save_Note_As', JSON.stringify({
         ID: DocEndid,
         Type: "Delete",
     }));

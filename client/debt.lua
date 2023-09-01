@@ -24,7 +24,7 @@ end)
 
 -- refresh the shit
 
-RegisterNetEvent('qb-phone:client:refreshDebt', function()
+RegisterNetEvent('Renewed-Phone:client:refreshDebt', function()
     local debtData = Config.RenewedFinances and exports['qb-finances']:getDebt() or {}
     SendNUIMessage({
         action = "refreshDebt",

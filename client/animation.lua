@@ -1,3 +1,13 @@
+<<<<<<< Updated upstream:client/animation.lua
+=======
+Shared = Shared or {}
+
+QBCore = GetResourceState('qb-core') == 'started' and exports['qb-core']:GetCoreObject()
+
+---@todo ESX Compatible Work
+-- ESX = GetResourceState('es_extended') == 'started' and exports.es_extended:getSharedObject()
+
+>>>>>>> Stashed changes:shared/shared.lua
 local phoneProp = 0
 local phoneModel = joaat("prop_npc_phone_02")
 

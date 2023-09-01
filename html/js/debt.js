@@ -49,7 +49,7 @@ $(document).on('click', '.send-all-box', function(e){
     setTimeout(function(){
         ConfirmationFrame()
     }, 150);
-    $.post('https://qb-phone/SendAllPayment', JSON.stringify({
+    $.post('https://Renewed-Phone/SendAllPayment', JSON.stringify({
         id: Id,
     }));
 });
@@ -63,7 +63,7 @@ $(document).on('click', '.send-minimum-box', function(e){
     setTimeout(function(){
         ConfirmationFrame()
     }, 150);
-    $.post('https://qb-phone/SendMinimumPayment', JSON.stringify({
+    $.post('https://Renewed-Phone/SendMinimumPayment', JSON.stringify({
         id: Id,
     }));
 });

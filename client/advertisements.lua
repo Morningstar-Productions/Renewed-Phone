@@ -1,5 +1,7 @@
 -- Functions
 
+---@param Number number
+---@return any
 local function GetKeyByNumber(Number)
     if PhoneData.Chats then
         for k, v in pairs(PhoneData.Chats) do
@@ -19,18 +21,18 @@ RegisterNUICallback('PostAdvert', function(data, cb)
         url = data.url
     end
 
-    TriggerServerEvent('qb-phone:server:AddAdvert', data.message, url)
+    TriggerServerEvent('Renewed-Phone:server:AddAdvert', data.message, url)
     cb("ok")
 end)
 
 
 RegisterNUICallback('FlagAdvert', function(data, cb)
-    TriggerServerEvent('qb-phone:server:flagAdvert', data.number)
+    TriggerServerEvent('Renewed-Phone:server:flagAdvert', data.number)
     cb("ok")
 end)
 
 RegisterNUICallback("DeleteAdvert", function(_, cb)
-    TriggerServerEvent("qb-phone:server:DeleteAdvert")
+    TriggerServerEvent("Renewed-Phone:server:DeleteAdvert")
     cb("ok")
 end)
 
@@ -60,7 +62,7 @@ end)
 
 -- Events
 
-RegisterNetEvent('qb-phone:client:UpdateAdverts', function(Adverts, LastAd, src)
+RegisterNetEvent('Renewed-Phone:client:UpdateAdverts', function(Adverts, LastAd, src)
     if not FullyLoaded or not Adverts then return end
     PhoneData.Adverts = Adverts
 
@@ -72,7 +74,7 @@ RegisterNetEvent('qb-phone:client:UpdateAdverts', function(Adverts, LastAd, src)
     if not LastAd or not src then return end
     if GetPlayerServerId(PlayerId()) == src then return end
 
-    TriggerEvent('qb-phone:client:CustomNotification',
+    TriggerEvent('Renewed-Phone:client:CustomNotification',
         "Advertisement",
         "New Ad Posted: "..LastAd,
         "fas fa-ad",

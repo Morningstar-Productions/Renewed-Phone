@@ -138,7 +138,7 @@ $(document).on('click', '#twt-sendmessage-chat', function(e){ // Submit Button F
                 ConfirmationFrame()
             }, 150);
         }
-        $.post('https://qb-phone/PostNewTweet', JSON.stringify({
+        $.post('https://Renewed-Phone/PostNewTweet', JSON.stringify({
             Message: TweetMessage,
             Date: CurrentDate,
             url: imageURL,
@@ -200,7 +200,7 @@ $(document).on('click', '.tweet-retweet', function(e){
         setTimeout(function(){
             ConfirmationFrame()
         }, 150);
-        $.post('https://qb-phone/PostNewTweet', JSON.stringify({
+        $.post('https://Renewed-Phone/PostNewTweet', JSON.stringify({
             Message: CompleteRetweet,
             Date: CurrentDate,
             url: imageURL,
@@ -215,7 +215,7 @@ $(document).on('click', '.tweet-flag', function(e){
     e.preventDefault();
     var TwtName = $(this).parent().parent().data('twthandler');
     var TwtMessage = $(this).parent().data('twtmessage');
-    $.post('https://qb-phone/FlagTweet', JSON.stringify({
+    $.post('https://Renewed-Phone/FlagTweet', JSON.stringify({
         name: TwtName,
         message: TwtMessage,
     }))
@@ -224,5 +224,5 @@ $(document).on('click', '.tweet-flag', function(e){
 $(document).on('click','.tweet-trash',function(e){
     e.preventDefault();
     var source = $(this).parent().parent().data('twtid');
-    $.post('https://qb-phone/DeleteTweet', JSON.stringify({id: source}))
+    $.post('https://Renewed-Phone/DeleteTweet', JSON.stringify({id: source}))
 })

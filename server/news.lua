@@ -1,8 +1,12 @@
 local LSBNTable = {}
 local LSBNTableID = 0
 
+<<<<<<< Updated upstream
 
 RegisterNetEvent('qb-phone:server:Send_lsbn_ToChat', function(data)
+=======
+RegisterNetEvent('Renewed-Phone:server:Send_lsbn_ToChat', function(data)
+>>>>>>> Stashed changes
     LSBNTableID = LSBNTableID + 1
     if data.Type == "Text" then
         LSBNTable[LSBNTableID] = {['Text'] = data.Text, ['Image'] = "none", ['ID'] = LSBNTableID, ['Type'] = data.Type, ['Time'] = data.Time,}
@@ -14,10 +18,10 @@ RegisterNetEvent('qb-phone:server:Send_lsbn_ToChat', function(data)
             ['Text'] = data.Text, ['Image'] = data.Image, ['ID'] = LSBNTableID, ['Type'] = data.Type, ['Time'] = data.Time,
         },
     }
-    TriggerClientEvent('qb-phone:LSBN-reafy-for-add', -1, Tables, true, data.Text)
+    TriggerClientEvent('Renewed-Phone:LSBN-reafy-for-add', -1, Tables, true, data.Text)
 end)
 
-RegisterNetEvent('qb-phone:server:GetLSBNchats', function()
+RegisterNetEvent('Renewed-Phone:server:GetLSBNchats', function()
     local src = source
-    TriggerClientEvent('qb-phone:LSBN-reafy-for-add', src, LSBNTable, false, nil)
+    TriggerClientEvent('Renewed-Phone:LSBN-reafy-for-add', src, LSBNTable, false, nil)
 end)

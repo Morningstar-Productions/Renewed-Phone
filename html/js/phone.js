@@ -6,12 +6,12 @@ var keyPadHTML;
 
 $( "input[type=text], textarea, input[type=number]" ).focusin(function(e) {
     e.preventDefault();
-    $.post('https://qb-phone/DissalowMoving');
+    $.post('https://Renewed-Phone/DissalowMoving');
 });
 
 $( "input[type=text], textarea, input[type=number]" ).focusout(function(e) {
     e.preventDefault();
-    $.post('https://qb-phone/AllowMoving');
+    $.post('https://Renewed-Phone/AllowMoving');
 });
 
 $(document).ready(function(){
@@ -58,7 +58,7 @@ $(document).on('click', '#phone-recent-chat', function(e){
     var RecentData = $("[data-recentid='"+RecentId+"']").data('recentData');
 
     if (RecentData.number !== QB.Phone.Data.PlayerData.charinfo.phone) {
-        $.post('https://qb-phone/GetWhatsappChats', JSON.stringify({}), function(chats){
+        $.post('https://Renewed-Phone/GetWhatsappChats', JSON.stringify({}), function(chats){
             QB.Phone.Functions.LoadWhatsappChats(chats);
         });
 
@@ -75,7 +75,7 @@ $(document).on('click', '#phone-recent-chat', function(e){
             QB.Phone.Functions.ToggleApp("whatsapp", "block");
             QB.Phone.Data.currentApplication = "whatsapp";
 
-            $.post('https://qb-phone/GetWhatsappChat', JSON.stringify({phone: RecentData.number}), function(chat){
+            $.post('https://Renewed-Phone/GetWhatsappChat', JSON.stringify({phone: RecentData.number}), function(chat){
                 QB.Phone.Functions.SetupChatMessages(chat, {
                     name: RecentData.name,
                     number: RecentData.number
@@ -118,7 +118,7 @@ $(document).on('click', '#phone-recent-start-call', function(e){
         name: RecentData.name
     }
 
-    $.post('https://qb-phone/CallContact', JSON.stringify({
+    $.post('https://Renewed-Phone/CallContact', JSON.stringify({
         ContactData: cData,
         Anonymous: QB.Phone.Data.AnonymousCall,
     }), function(status){
@@ -178,7 +178,7 @@ $(document).on('click', "#phone-number-call-free-btn", function(e){
             name: InputNum,
         }
 
-        $.post('https://qb-phone/CallContact', JSON.stringify({
+        $.post('https://Renewed-Phone/CallContact', JSON.stringify({
             ContactData: cData,
             Anonymous: QB.Phone.Data.AnonymousCall,
         }), function(status){
@@ -262,7 +262,7 @@ $(document).on('click', '#new-chat-phone', function(e){
     var ContactData = $("[data-contactid='"+ContactId+"']").data('contactData');
 
     if (ContactData.number !== QB.Phone.Data.PlayerData.charinfo.phone) {
-        $.post('https://qb-phone/GetWhatsappChats', JSON.stringify({}), function(chats){
+        $.post('https://Renewed-Phone/GetWhatsappChats', JSON.stringify({}), function(chats){
             QB.Phone.Functions.LoadWhatsappChats(chats);
         });
 
@@ -279,7 +279,7 @@ $(document).on('click', '#new-chat-phone', function(e){
             QB.Phone.Functions.ToggleApp("whatsapp", "block");
             QB.Phone.Data.currentApplication = "whatsapp";
 
-            $.post('https://qb-phone/GetWhatsappChat', JSON.stringify({phone: ContactData.number}), function(chat){
+            $.post('https://Renewed-Phone/GetWhatsappChat', JSON.stringify({phone: ContactData.number}), function(chat){
                 QB.Phone.Functions.SetupChatMessages(chat, {
                     name: ContactData.name,
                     number: ContactData.number
@@ -348,7 +348,7 @@ $(document).on('click', '#phone-number-savecontact-edit', function(e){
 
     if (ContactName != "" && ContactNumber != "" && !regExp.test(ContactNumber)) {
         ConfirmationFrame()
-        $.post('https://qb-phone/EditContact', JSON.stringify({
+        $.post('https://Renewed-Phone/EditContact', JSON.stringify({
             CurrentContactName: ContactName,
             CurrentContactNumber: ContactNumber,
             OldContactName: CurrentEditContactData.name,
@@ -376,7 +376,7 @@ $(document).on('click', '#delete-contact', function(e){
     var ContactName = ContactData.name;
     var ContactNumber = ContactData.number;
 
-    $.post('https://qb-phone/DeleteContact', JSON.stringify({
+    $.post('https://Renewed-Phone/DeleteContact', JSON.stringify({
         CurrentContactName: ContactName,
         CurrentContactNumber: ContactNumber,
     }), function(PhoneContacts){
@@ -419,7 +419,7 @@ $(document).on('click', '#phone-number-savecontact', function(e){
 
     if (ContactName != "" && ContactNumber != "" && !regExp.test(ContactNumber)) {
         ConfirmationFrame()
-        $.post('https://qb-phone/AddNewContact', JSON.stringify({
+        $.post('https://Renewed-Phone/AddNewContact', JSON.stringify({
             ContactName: ContactName,
             ContactNumber: ContactNumber,
         }), function(PhoneContacts){
@@ -455,7 +455,7 @@ $(document).on('click', '#phone-start-call', function(e){
 });
 
 SetupCall = function(cData) {
-    $.post('https://qb-phone/CallContact', JSON.stringify({
+    $.post('https://Renewed-Phone/CallContact', JSON.stringify({
         ContactData: cData,
         Anonymous: QB.Phone.Data.AnonymousCall,
     }), function(status){
@@ -514,18 +514,18 @@ CancelOutgoingCall = function() {
 $(document).on('click', '#outgoing-cancel', function(e){
     e.preventDefault();
 
-    $.post('https://qb-phone/CancelOutgoingCall');
+    $.post('https://Renewed-Phone/CancelOutgoingCall');
 });
 
 $(document).on('click', '#incoming-deny', function(e){
     e.preventDefault();
-    $.post('https://qb-phone/DenyIncomingCall');
+    $.post('https://Renewed-Phone/DenyIncomingCall');
 });
 
 $(document).on('click', '#ongoing-cancel', function(e){
     e.preventDefault();
 
-    $.post('https://qb-phone/CancelOngoingCall');
+    $.post('https://Renewed-Phone/CancelOngoingCall');
 });
 
 IncomingCallAlert = function(CallData, Canceled, AnonymousCall) {
@@ -612,7 +612,7 @@ QB.Phone.Functions.SetupCurrentCall = function(cData) {
 $(document).on('click', '#incoming-answer', function(e){
     e.preventDefault();
 
-    $.post('https://qb-phone/AnswerCall');
+    $.post('https://Renewed-Phone/AnswerCall');
     $("#incoming-answer").css({"display":"none"});
 });
 

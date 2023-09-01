@@ -154,54 +154,54 @@ $(document).on('click', '.phone-application', function(e){
 
                 if (PressedApplication == "twitter") {
                     if (QB.Phone.Data.IsOpen) {
-                        $.post('https://qb-phone/GetTweets', JSON.stringify({}), function(Tweets){
+                        $.post('https://Renewed-Phone/GetTweets', JSON.stringify({}), function(Tweets){
                             QB.Phone.Notifications.LoadTweets(Tweets.TweetData, Tweets.hasVPN);
                         });
                     }
                 } else if (PressedApplication == "bank") {
                     QB.Phone.Functions.DoBankOpen();
                     $('.bank-app-header-button').click();
-                    $.post('https://qb-phone/GetBankContacts', JSON.stringify({}), function(contacts){
+                    $.post('https://Renewed-Phone/GetBankContacts', JSON.stringify({}), function(contacts){
                         QB.Phone.Functions.LoadContactsWithNumber(contacts);
                     });
-                    $.post('https://qb-phone/GetInvoices', JSON.stringify({}), function(invoices){
+                    $.post('https://Renewed-Phone/GetInvoices', JSON.stringify({}), function(invoices){
                         QB.Phone.Functions.LoadBankInvoices(invoices);
                     });
                 } else if (PressedApplication == "whatsapp") {
-                    $.post('https://qb-phone/GetWhatsappChats', JSON.stringify({}), function(chats){
+                    $.post('https://Renewed-Phone/GetWhatsappChats', JSON.stringify({}), function(chats){
                         QB.Phone.Functions.LoadWhatsappChats(chats);
                     });
                 } else if (PressedApplication == "phone") {
-                    $.post('https://qb-phone/GetMissedCalls', JSON.stringify({}), function(recent){
+                    $.post('https://Renewed-Phone/GetMissedCalls', JSON.stringify({}), function(recent){
                         QB.Phone.Functions.SetupRecentCalls(recent);
                     });
-                    $.post('https://qb-phone/ClearGeneralAlerts', JSON.stringify({
+                    $.post('https://Renewed-Phone/ClearGeneralAlerts', JSON.stringify({
                         app: "phone"
                     }));
                 } else if (PressedApplication == "mail") {
-                    $.post('https://qb-phone/GetMails', JSON.stringify({}), function(mails){
+                    $.post('https://Renewed-Phone/GetMails', JSON.stringify({}), function(mails){
                         QB.Phone.Functions.SetupMails(mails);
                     });
-                    $.post('https://qb-phone/ClearGeneralAlerts', JSON.stringify({
+                    $.post('https://Renewed-Phone/ClearGeneralAlerts', JSON.stringify({
                         app: "mail"
                     }));
                 } else if (PressedApplication == "advert") {
-                    $.post('https://qb-phone/LoadAdverts', JSON.stringify({}), function(Adverts){
+                    $.post('https://Renewed-Phone/LoadAdverts', JSON.stringify({}), function(Adverts){
                         QB.Phone.Functions.RefreshAdverts(Adverts);
                     })
                 } else if (PressedApplication == "garage") {
-                    $.post('https://qb-phone/SetupGarageVehicles', JSON.stringify({}), function(Vehicles){
+                    $.post('https://Renewed-Phone/SetupGarageVehicles', JSON.stringify({}), function(Vehicles){
                         SetupGarageVehicles(Vehicles);
                     })
                 } else if (PressedApplication == "racing") {
-                    $.post('https://qb-phone/GetAvailableRaces', JSON.stringify({}), function(Races){
+                    $.post('https://Renewed-Phone/GetAvailableRaces', JSON.stringify({}), function(Races){
                         SetupRaces(Races);
                     });
                 } else if (PressedApplication == "houses") {
-                    $.post('https://qb-phone/GetPlayerHouses', JSON.stringify({}), function(Houses){
+                    $.post('https://Renewed-Phone/GetPlayerHouses', JSON.stringify({}), function(Houses){
                         SetupPlayerHouses(Houses);
                     });
-                    $.post('https://qb-phone/GetPlayerKeys', JSON.stringify({}), function(Keys){
+                    $.post('https://Renewed-Phone/GetPlayerKeys', JSON.stringify({}), function(Keys){
                         $(".house-app-mykeys-container").html("");
                         if (Keys.length > 0) {
                             $.each(Keys, function(i, key){
@@ -214,12 +214,12 @@ $(document).on('click', '.phone-application', function(e){
                 } else if (PressedApplication == "meos") {
                     SetupMeosHome();
                 } else if (PressedApplication == "taxi") {
-                    $.post('https://qb-phone/GetAvailableTaxiDrivers', JSON.stringify({}), function(data){
+                    $.post('https://Renewed-Phone/GetAvailableTaxiDrivers', JSON.stringify({}), function(data){
                         SetupTaxiDrivers(data);
                     });
                 }
                 else if (PressedApplication == "gallery") {
-                    $.post('https://qb-phone/GetGalleryData', JSON.stringify({}), function(data){
+                    $.post('https://Renewed-Phone/GetGalleryData', JSON.stringify({}), function(data){
                         setUpGalleryData(data);
                     });
                 }
@@ -236,16 +236,16 @@ $(document).on('click', '.phone-application', function(e){
                     LoadCryptoCoins();
                 }
                 else if (PressedApplication == "employment") {
-                    $.post('https://qb-phone/GetJobs', JSON.stringify({}), function(data){
+                    $.post('https://Renewed-Phone/GetJobs', JSON.stringify({}), function(data){
                         LoadEmploymentApp(data)
                     });
                 } else if (PressedApplication == "debt") {
-                    $.post('https://qb-phone/GetPlayersDebt', JSON.stringify({}), function(data){
+                    $.post('https://Renewed-Phone/GetPlayersDebt', JSON.stringify({}), function(data){
                         LoadDebtJob(data);
                     });
                 }
                 else if (PressedApplication == "gopro") {
-                    $.post('https://qb-phone/SetupGoPros', JSON.stringify({}), function(Cams){
+                    $.post('https://Renewed-Phone/SetupGoPros', JSON.stringify({}), function(Cams){
                         SetupGoPros(Cams);
                     })
                 }
@@ -256,11 +256,11 @@ $(document).on('click', '.phone-application', function(e){
                     LoadLSBNEvent();
                 } else if (PressedApplication == "contacts") {
                     $("#phone-contact-search").show();
-                    $.post('https://qb-phone/ClearGeneralAlerts', JSON.stringify({
+                    $.post('https://Renewed-Phone/ClearGeneralAlerts', JSON.stringify({
                         app: "contacts"
                     }));
                 } else if(PressedApplication == "group-chats") {
-                    $.post('https://qb-phone/GetChatRooms', JSON.stringify({}), function(ChatRooms){
+                    $.post('https://Renewed-Phone/GetChatRooms', JSON.stringify({}), function(ChatRooms){
                         QB.Phone.Functions.HeaderTextColor("white", 100);
                         QB.Phone.Functions.LoadChatRooms(ChatRooms)
                     })
@@ -279,14 +279,14 @@ $(document).on('click', '.mykeys-key', function(e){
 
     var KeyData = $(this).data('KeyData');
 
-    $.post('https://qb-phone/SetHouseLocation', JSON.stringify({
+    $.post('https://Renewed-Phone/SetHouseLocation', JSON.stringify({
         HouseData: KeyData
     }))
 });
 
 $(document).on('click', '.phone-take-camera-button', function(event){
     event.preventDefault();
-    $.post('https://qb-phone/TakePhoto', JSON.stringify({}),function(url){
+    $.post('https://Renewed-Phone/TakePhoto', JSON.stringify({}),function(url){
         // setUpCameraApp(url)
     })
     QB.Phone.Functions.Close();
@@ -294,7 +294,7 @@ $(document).on('click', '.phone-take-camera-button', function(event){
 
 $(document).on('click', '.phone-silent-button', function(event){
     event.preventDefault();
-    $.post('https://qb-phone/phone-silent-button', JSON.stringify({}),function(Data){
+    $.post('https://Renewed-Phone/phone-silent-button', JSON.stringify({}),function(Data){
         if(Data){
             $(".silent-mode-two").css({"display":"block"});
             $(".silent-mode-one").css({"display":"none"});
@@ -407,7 +407,7 @@ QB.Phone.Functions.Close = function() {
     }
     $('.publicphonebase').css('display', 'none')
     QB.Phone.Animations.BottomSlideDown('.container', 500, -70);
-    $.post('https://qb-phone/Close');
+    $.post('https://Renewed-Phone/Close');
     QB.Phone.Data.IsOpen = false;
 }
 
@@ -444,7 +444,7 @@ QB.Phone.Animations.TopSlideUp = function(Object, Timeout, Percentage, cb) {
 }
 
 QB.Phone.Notifications.Custom.Add = function(icon, title, text, color, timeout, accept, deny) {
-    $.post('https://qb-phone/HasPhone', JSON.stringify({}), function(HasPhone){
+    $.post('https://Renewed-Phone/HasPhone', JSON.stringify({}), function(HasPhone){
         if (HasPhone) {
             if (timeout == null && timeout == undefined) {
                 timeout = 1500;
@@ -505,7 +505,7 @@ QB.Phone.Notifications.Custom.Add = function(icon, title, text, color, timeout, 
 }
 
 QB.Phone.Notifications.Add = function(icon, title, text, color, timeout) {
-    $.post('https://qb-phone/HasPhone', JSON.stringify({}), function(HasPhone){
+    $.post('https://Renewed-Phone/HasPhone', JSON.stringify({}), function(HasPhone){
         if (HasPhone) {
             if (timeout == null && timeout == undefined) {
                 timeout = 1500;
@@ -586,7 +586,7 @@ $(document).on('click', ".phone-notification-container", function() {
 
 
 $(document).on('click', ".notification-accept", function() {
-    $.post('https://qb-phone/AcceptNotification', JSON.stringify({})),
+    $.post('https://Renewed-Phone/AcceptNotification', JSON.stringify({})),
     QB.Phone.Animations.TopSlideUp(".phone-notification-container-new", 150, -8);
     QB.Phone.Notifications.Timeout = null
 
@@ -596,7 +596,7 @@ $(document).on('click', ".notification-accept", function() {
 })
 
 $(document).on('click', ".notification-deny", function() {
-    $.post('https://qb-phone/DenyNotification', JSON.stringify({})),
+    $.post('https://Renewed-Phone/DenyNotification', JSON.stringify({})),
     QB.Phone.Notifications.Timeout = null
 
     QB.Phone.Animations.TopSlideUp(".phone-notification-container-new", 150, -8);
@@ -638,7 +638,7 @@ QB.Phone.Functions.UpdateTime = function(data) {
 var NotificationTimeout = null;
 
 QB.Screen.Notification = function(title, content, icon, timeout, color) {
-    $.post('https://qb-phone/HasPhone', JSON.stringify({}), function(HasPhone){
+    $.post('https://Renewed-Phone/HasPhone', JSON.stringify({}), function(HasPhone){
         if (HasPhone) {
             if (color != null && color != undefined) {
                 $(".screen-notifications-container").css({"background-color":color});
@@ -747,14 +747,14 @@ $(document).ready(function(){
                 QB.Phone.Functions.ReloadWhatsappAlerts(event.data.Chats);
                 break;
             case "CancelOutgoingCall":
-                $.post('https://qb-phone/HasPhone', JSON.stringify({}), function(HasPhone){
+                $.post('https://Renewed-Phone/HasPhone', JSON.stringify({}), function(HasPhone){
                     if (HasPhone) {
                         CancelOutgoingCall();
                     }
                 });
                 break;
             case "IncomingCallAlert":
-                $.post('https://qb-phone/HasPhone', JSON.stringify({}), function(HasPhone){
+                $.post('https://Renewed-Phone/HasPhone', JSON.stringify({}), function(HasPhone){
                     if (HasPhone) {
                         IncomingCallAlert(event.data.CallData, event.data.Canceled, event.data.AnonymousCall);
                     }
@@ -847,12 +847,12 @@ $(document).ready(function(){
                 }
                 break;
             case "UpdateGarages":
-                $.post('https://qb-phone/SetupGarageVehicles', JSON.stringify({}), function(Vehicles){
+                $.post('https://Renewed-Phone/SetupGarageVehicles', JSON.stringify({}), function(Vehicles){
                     SetupGarageVehicles(Vehicles);
                 })
                 break;
             case "UpdateRacingApp":
-                $.post('https://qb-phone/GetAvailableRaces', JSON.stringify({}), function(Races){
+                $.post('https://Renewed-Phone/GetAvailableRaces', JSON.stringify({}), function(Races){
                     SetupRaces(Races);
                 });
                 break;

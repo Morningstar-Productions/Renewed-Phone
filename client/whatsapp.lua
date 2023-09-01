@@ -82,7 +82,7 @@ RegisterNUICallback('SendMessage', function(data, cb)
         }
     end
 
-    TriggerServerEvent('qb-phone:server:UpdateMessages', PhoneData.Chats[ChatNumber].messages, ChatNumber)
+    TriggerServerEvent('Renewed-Phone:server:UpdateMessages', PhoneData.Chats[ChatNumber].messages, ChatNumber)
     SendNUIMessage({
         action = "UpdateChat",
         chatData = PhoneData.Chats[ChatNumber],
@@ -95,7 +95,7 @@ end)
 
 -- Events
 
-RegisterNetEvent('qb-phone:client:UpdateMessages', function(ChatMessages, SenderNumber, New)
+RegisterNetEvent('Renewed-Phone:client:UpdateMessages', function(ChatMessages, SenderNumber, New)
     if not ChatMessages or not SenderNumber then return end
 
     local NumberKey = type(SenderNumber) ~= "string" and tostring(SenderNumber) or SenderNumber

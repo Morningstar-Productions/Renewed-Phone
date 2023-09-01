@@ -9,7 +9,7 @@ local function GetAdvertFromNumb(src)
     end
 end
 
-RegisterNetEvent('qb-phone:server:AddAdvert', function(msg, url)
+RegisterNetEvent('Renewed-Phone:server:AddAdvert', function(msg, url)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
@@ -34,17 +34,17 @@ RegisterNetEvent('qb-phone:server:AddAdvert', function(msg, url)
         }
     end
 
-    TriggerClientEvent('qb-phone:client:UpdateAdverts', -1, Adverts, name, src)
+    TriggerClientEvent('Renewed-Phone:client:UpdateAdverts', -1, Adverts, name, src)
 end)
 
-RegisterNetEvent('qb-phone:server:DeleteAdvert', function()
+RegisterNetEvent('Renewed-Phone:server:DeleteAdvert', function()
     local k = GetAdvertFromNumb(source)
     if not k then return end
     table.remove(Adverts, k)
-    TriggerClientEvent('qb-phone:client:UpdateAdverts', -1, Adverts)
+    TriggerClientEvent('Renewed-Phone:client:UpdateAdverts', -1, Adverts)
 end)
 
-RegisterNetEvent('qb-phone:server:flagAdvert', function(number)
+RegisterNetEvent('Renewed-Phone:server:flagAdvert', function(number)
     local src = source
     local Player = QBCore.Functions.GetPlayerByPhone(number)
     local citizenid = Player.PlayerData.citizenid

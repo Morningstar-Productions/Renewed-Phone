@@ -20,20 +20,20 @@ RegisterNUICallback('PayInvoice', function(data, cb)
     local amount = data.amount
     local invoiceId = data.invoiceId
 
-    TriggerServerEvent('qb-phone:server:PayMyInvoice', society, amount, invoiceId, senderCitizenId)
+    TriggerServerEvent('Renewed-Phone:server:PayMyInvoice', society, amount, invoiceId, senderCitizenId)
     cb("ok")
 end)
 
 RegisterNUICallback('DeclineInvoice', function(data, cb)
     local amount = data.amount
     local invoiceId = data.invoiceId
-    TriggerServerEvent('qb-phone:server:DeclineMyInvoice', amount, invoiceId)
+    TriggerServerEvent('Renewed-Phone:server:DeclineMyInvoice', amount, invoiceId)
     cb("ok")
 end)
 
 -- Events
 
-RegisterNetEvent('qb-phone:client:AcceptorDenyInvoice', function(id, name, job, senderCID, amount, resource)
+RegisterNetEvent('Renewed-Phone:client:AcceptorDenyInvoice', function(id, name, job, senderCID, amount, resource)
     PhoneData.Invoices[#PhoneData.Invoices+1] = {
         id = id,
         citizenid = QBCore.Functions.GetPlayerData().citizenid,
@@ -43,21 +43,21 @@ RegisterNetEvent('qb-phone:client:AcceptorDenyInvoice', function(id, name, job, 
         amount = amount
     }
 
-    local success = exports['qb-phone']:PhoneNotification("Invoice", 'Invoice of $'..amount.." Sent from "..name, 'fas fa-file-invoice-dollar', '#b3e0f2', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
+    local success = exports['Renewed-Phone']:PhoneNotification("Invoice", 'Invoice of $'..amount.." Sent from "..name, 'fas fa-file-invoice-dollar', '#b3e0f2', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
     if success then
         local table = GetInvoiceFromID(id)
         if table then
-            TriggerServerEvent('qb-phone:server:PayMyInvoice', job, amount, id, senderCID, resource)
+            TriggerServerEvent('Renewed-Phone:server:PayMyInvoice', job, amount, id, senderCID, resource)
         end
     else
         local table = GetInvoiceFromID(id)
         if table then
-            TriggerServerEvent('qb-phone:server:DeclineMyInvoice', amount, id, senderCID, resource)
+            TriggerServerEvent('Renewed-Phone:server:DeclineMyInvoice', amount, id, senderCID, resource)
         end
     end
 end)
 
-RegisterNetEvent('qb-phone:client:RemoveInvoiceFromTable', function(id)
+RegisterNetEvent('Renewed-Phone:client:RemoveInvoiceFromTable', function(id)
     local table = GetInvoiceFromID(id)
     if table then
         PhoneData.Invoices[table] = nil

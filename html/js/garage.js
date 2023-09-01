@@ -22,7 +22,7 @@ $(document).on('click', '.garage-vehicle', function(e){
 
 $(document).on('click', '.box-track', function(e){
     e.preventDefault()
-    $.post("https://qb-phone/gps-vehicle-garage", JSON.stringify({
+    $.post("https://Renewed-Phone/gps-vehicle-garage", JSON.stringify({
         veh: veh,
     }));
 });
@@ -38,7 +38,7 @@ $(document).on('click', '#garage-sellvehicle', function(e){
     var stateid = $(".garage-sellvehicle-stateid").val();
     var price = $(".garage-sellvehicle-price").val();
     if(price != "" && stateid != ""){
-        $.post("https://qb-phone/sellVehicle", JSON.stringify({
+        $.post("https://Renewed-Phone/sellVehicle", JSON.stringify({
             plate: plate,
             id: stateid,
             price: price

@@ -1,10 +1,10 @@
 # Installation steps
 
 ## General Setup
-General setup is quite easy, delete your OLD qb-phone
+General setup is quite easy, delete your OLD Renewed-Phone
 if you server havent been running previously then go ahead and run the provided SQL file in your database.
 
-If your server has been running qb-phone previously please update your sql while being carefull and take a backup so you have no data lost.
+If your server has been running Renewed-Phone previously please update your sql while being carefull and take a backup so you have no data lost.
 
 After the SQL setup you can now drop the resource into your server and start it up while you conduct the next steps.
 
@@ -13,15 +13,15 @@ Setting up employment and multijob can be quite tricky so make sure to reread th
 If you already have a multijob system and you do not wish to use this then you can skip this step.
 
 
-1. Head over to qb-phone/server/employment.lua and change local FirstStart from false to true like shown below
+1. Head over to Renewed-Phone/server/employment.lua and change local FirstStart from false to true like shown below
 
 ```lua
     local FirstStart = true
 ```
 
-2. Start the script and make sure it's fully done, it can take a while depending on your current playerbase (ensure qb-phone in console or f8)
+2. Start the script and make sure it's fully done, it can take a while depending on your current playerbase (ensure Renewed-Phone in console or f8)
 
-3. Head over to qb-phone/server/employment.lua again and change the FirstStart to false
+3. Head over to Renewed-Phone/server/employment.lua again and change the FirstStart to false
 
 Like so:
 ```lua
@@ -42,7 +42,7 @@ QBCore.Commands.Add('setjob', 'Set A Players Job (Admin Only)', { { name = 'id',
         if jobInfo then
             if jobInfo["grades"][sgrade] then
                 Player.Functions.SetJob(job, grade)
-                exports['qb-phone']:hireUser(job, Player.PlayerData.citizenid, grade)
+                exports['Renewed-Phone']:hireUser(job, Player.PlayerData.citizenid, grade)
             else
                 TriggerClientEvent('QBCore:Notify', source, "Not a valid grade", 'error')
             end
@@ -64,7 +64,7 @@ QBCore.Commands.Add('removejob', 'Removes A Players Job (Admin Only)', { { name 
         if Player.PlayerData.job.name == tostring(args[2]) then
             Player.Functions.SetJob("unemployed", 0)
         end
-        exports['qb-phone']:fireUser(tostring(args[2]), Player.PlayerData.citizenid)
+        exports['Renewed-Phone']:fireUser(tostring(args[2]), Player.PlayerData.citizenid)
     else
         TriggerClientEvent('QBCore:Notify', source, Lang:t('error.not_online'), 'error')
     end
@@ -85,7 +85,7 @@ RegisterNetEvent('qb-cityhall:server:ApplyJob', function(job, cityhallCoords)
         return DropPlayer(source, "Attempted exploit abuse")
     end
     Player.Functions.SetJob(job, 0)
-    exports['qb-phone']:hireUser(job, Player.PlayerData.citizenid, 0)
+    exports['Renewed-Phone']:hireUser(job, Player.PlayerData.citizenid, 0)
 TriggerClientEvent('QBCore:Notify', src, Lang:t('info.new_job', {job = JobInfo.label}))
 end)
 ```

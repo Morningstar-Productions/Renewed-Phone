@@ -22,7 +22,11 @@ end
 
 -- Callbacks
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:GetCallState', function(source, cb, ContactData)
+=======
+lib.callback.register('Renewed-Phone:server:GetCallState', function(source, ContactData)
+>>>>>>> Stashed changes
     local number = tostring(ContactData.number)
     local Target = QBCore.Functions.GetPlayerByPhone(number)
     local Player = QBCore.Functions.GetPlayer(source)
@@ -42,7 +46,11 @@ QBCore.Functions.CreateCallback('qb-phone:server:GetCallState', function(source,
     end
 end)
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:GetPhoneData', function(source, cb)
+=======
+lib.callback.register('Renewed-Phone:server:GetPhoneData', function(source)
+>>>>>>> Stashed changes
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player or not src then return end
@@ -107,7 +115,11 @@ end)
 
 
 -- Can't even wrap my head around this lol diffently needs a good old rewrite
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:FetchResult', function(_, cb, input)
+=======
+lib.callback.register('Renewed-Phone:server:FetchResult', function(_, input)
+>>>>>>> Stashed changes
     local search = escape_sqli(input)
     local searchData = {}
     local ApaData = {}
@@ -154,12 +166,17 @@ QBCore.Functions.CreateCallback('qb-phone:server:FetchResult', function(_, cb, i
 end)
 
 -- Webhook needs to get fixed, right now anyone can grab this and use it to spam dick pics in Discord servers
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback("qb-phone:server:GetWebhook",function(_, cb)
 	cb(WebHook)
+=======
+lib.callback.register("Renewed-Phone:server:GetWebhook",function(_)
+	return WebHook
+>>>>>>> Stashed changes
 end)
 
 -- Events
-RegisterNetEvent('qb-phone:server:SetCallState', function(bool)
+RegisterNetEvent('Renewed-Phone:server:SetCallState', function(bool)
     local src = source
     local Ply = QBCore.Functions.GetPlayer(src)
 
@@ -169,16 +186,16 @@ RegisterNetEvent('qb-phone:server:SetCallState', function(bool)
     Calls[Ply.PlayerData.citizenid].inCall = bool
 end)
 
-RegisterNetEvent('qb-phone:server:CallContact', function(TargetData, CallId, AnonymousCall)
+RegisterNetEvent('Renewed-Phone:server:CallContact', function(TargetData, CallId, AnonymousCall)
     local src = source
     local Ply = QBCore.Functions.GetPlayer(src)
     local Target = QBCore.Functions.GetPlayerByPhone(tostring(TargetData.number))
     if not Target or not Ply then return end
 
-    TriggerClientEvent('qb-phone:client:GetCalled', Target.PlayerData.source, Ply.PlayerData.charinfo.phone, CallId, AnonymousCall)
+    TriggerClientEvent('Renewed-Phone:client:GetCalled', Target.PlayerData.source, Ply.PlayerData.charinfo.phone, CallId, AnonymousCall)
 end)
 
-RegisterNetEvent('qb-phone:server:EditContact', function(newName, newNumber, oldName, oldNumber)
+RegisterNetEvent('Renewed-Phone:server:EditContact', function(newName, newNumber, oldName, oldNumber)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
 
@@ -189,7 +206,7 @@ RegisterNetEvent('qb-phone:server:EditContact', function(newName, newNumber, old
         {newName, newNumber, Player.PlayerData.citizenid, oldName, oldNumber})
 end)
 
-RegisterNetEvent('qb-phone:server:RemoveContact', function(Name, Number)
+RegisterNetEvent('Renewed-Phone:server:RemoveContact', function(Name, Number)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
 
@@ -199,7 +216,7 @@ RegisterNetEvent('qb-phone:server:RemoveContact', function(Name, Number)
         {Name, Number, Player.PlayerData.citizenid})
 end)
 
-RegisterNetEvent('qb-phone:server:AddNewContact', function(name, number)
+RegisterNetEvent('Renewed-Phone:server:AddNewContact', function(name, number)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
 
@@ -208,26 +225,26 @@ RegisterNetEvent('qb-phone:server:AddNewContact', function(name, number)
     exports.oxmysql:insert('INSERT INTO player_contacts (citizenid, name, number) VALUES (?, ?, ?)', {Player.PlayerData.citizenid, tostring(name), number})
 end)
 
-RegisterNetEvent('qb-phone:server:AddRecentCall', function(type, data)
+RegisterNetEvent('Renewed-Phone:server:AddRecentCall', function(type, data)
     local src = source
     local Ply = QBCore.Functions.GetPlayer(src)
     local Hour = os.date("%H")
     local Minute = os.date("%M")
     local label = Hour .. ":" .. Minute
 
-    TriggerClientEvent('qb-phone:client:AddRecentCall', src, data, label, type)
+    TriggerClientEvent('Renewed-Phone:client:AddRecentCall', src, data, label, type)
 
     local Target = QBCore.Functions.GetPlayerByPhone(data.number)
     if not Target then return end
 
-    TriggerClientEvent('qb-phone:client:AddRecentCall', Target.PlayerData.source, {
+    TriggerClientEvent('Renewed-Phone:client:AddRecentCall', Target.PlayerData.source, {
         name = Ply.PlayerData.charinfo.firstname .. " " .. Ply.PlayerData.charinfo.lastname,
         number = Ply.PlayerData.charinfo.phone,
         anonymous = data.anonymous
     }, label, "outgoing")
 end)
 
-RegisterNetEvent('qb-phone:server:GiveContactDetails', function(PlayerId)
+RegisterNetEvent('Renewed-Phone:server:GiveContactDetails', function(PlayerId)
     if not PlayerId then return end
     local src = source
     if not src then return end
@@ -240,10 +257,10 @@ RegisterNetEvent('qb-phone:server:GiveContactDetails', function(PlayerId)
         bank = Sender.PlayerData.charinfo.account,
     }
 
-    TriggerClientEvent('qb-phone:client:giveContactRequest', PlayerId, contactInfo)
+    TriggerClientEvent('Renewed-Phone:client:giveContactRequest', PlayerId, contactInfo)
 end)
 
-RegisterNetEvent('qb-phone:server:acceptContactRequest', function(contactInfo)
+RegisterNetEvent('Renewed-Phone:server:acceptContactRequest', function(contactInfo)
     if not contactInfo then return end
     local src = source
     if not src then return end
@@ -254,23 +271,23 @@ RegisterNetEvent('qb-phone:server:acceptContactRequest', function(contactInfo)
     if result[1] then return TriggerClientEvent('QBCore:Notify', src, 'You already have this number added!', "error") end
 
     exports.oxmysql:insert('INSERT INTO player_contacts (citizenid, name, number) VALUES (?, ?, ?)', {cid, tostring(contactInfo.name), contactInfo.number})
-    TriggerClientEvent('qb-phone:client:updateContactInfo', src, contactInfo)
+    TriggerClientEvent('Renewed-Phone:client:updateContactInfo', src, contactInfo)
 end)
 
-RegisterNetEvent('qb-phone:server:CancelCall', function(ContactData)
+RegisterNetEvent('Renewed-Phone:server:CancelCall', function(ContactData)
     local Ply = QBCore.Functions.GetPlayerByPhone(tostring(ContactData.TargetData.number))
     if not Ply then return end
-    TriggerClientEvent('qb-phone:client:CancelCall', Ply.PlayerData.source)
+    TriggerClientEvent('Renewed-Phone:client:CancelCall', Ply.PlayerData.source)
 end)
 
-RegisterNetEvent('qb-phone:server:AnswerCall', function(CallData)
+RegisterNetEvent('Renewed-Phone:server:AnswerCall', function(CallData)
     local Ply = QBCore.Functions.GetPlayerByPhone(CallData.TargetData.number)
     if not Ply then return end
 
-    TriggerClientEvent('qb-phone:client:AnswerCall', Ply.PlayerData.source)
+    TriggerClientEvent('Renewed-Phone:client:AnswerCall', Ply.PlayerData.source)
 end)
 
-RegisterNetEvent('qb-phone:server:SaveMetaData', function(MData)
+RegisterNetEvent('Renewed-Phone:server:SaveMetaData', function(MData)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end

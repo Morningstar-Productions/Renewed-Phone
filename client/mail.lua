@@ -9,7 +9,7 @@ RegisterNUICallback('AcceptMailButton', function(data, cb)
         end
     end
 
-    TriggerServerEvent('qb-phone:server:ClearButtonData', data.mailId)
+    TriggerServerEvent('Renewed-Phone:server:ClearButtonData', data.mailId)
     cb('ok')
 end)
 
@@ -19,14 +19,14 @@ end)
 
 RegisterNUICallback('RemoveMail', function(data, cb)
     local MailId = data.mailId
-    TriggerServerEvent('qb-phone:server:RemoveMail', MailId)
+    TriggerServerEvent('Renewed-Phone:server:RemoveMail', MailId)
     cb('ok')
 end)
 
 -- Events
 
-RegisterNetEvent('qb-phone:client:NewMailNotify', function(MailData)
-    TriggerEvent('qb-phone:client:CustomNotification',
+RegisterNetEvent('Renewed-Phone:client:NewMailNotify', function(MailData)
+    TriggerEvent('Renewed-Phone:client:CustomNotification',
         "Mail",
         "New E-Mail from: "..MailData.sender,
         "fas fa-envelope",
@@ -37,7 +37,7 @@ RegisterNetEvent('qb-phone:client:NewMailNotify', function(MailData)
     Config.PhoneApplications['mail'].Alerts = Config.PhoneApplications['mail'].Alerts + 1
 end)
 
-RegisterNetEvent('qb-phone:client:UpdateMails', function(NewMails)
+RegisterNetEvent('Renewed-Phone:client:UpdateMails', function(NewMails)
 
     PhoneData.Mails = {}
 

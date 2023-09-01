@@ -19,7 +19,7 @@ end)
 
 -- Events
 
-RegisterNetEvent("qb-phone:client:CustomNotification", function(title, text, icon, color, timeout) -- Send a PhoneNotification to the phone from anywhere
+RegisterNetEvent("Renewed-Phone:client:CustomNotification", function(title, text, icon, color, timeout) -- Send a PhoneNotification to the phone from anywhere
     SendNUIMessage({
         action = "PhoneNotification",
         PhoneNotify = {
@@ -32,9 +32,9 @@ RegisterNetEvent("qb-phone:client:CustomNotification", function(title, text, ico
     })
 end)
 
--- ex. local success = exports['qb-phone']:PhoneNotification("PING", info.Name..' Incoming Ping', 'fas fa-map-pin', '#b3e0f2', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
+-- ex. local success = exports['Renewed-Phone']:PhoneNotification("PING", info.Name..' Incoming Ping', 'fas fa-map-pin', '#b3e0f2', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
 
-RegisterNetEvent("qb-phone:client:CustomNotification2", function(title, text, icon, color, timeout, accept, deny) -- Send a PhoneNotification to the phone from anywhere
+RegisterNetEvent("Renewed-Phone:client:CustomNotification2", function(title, text, icon, color, timeout, accept, deny) -- Send a PhoneNotification to the phone from anywhere
     SendNUIMessage({
         action = "PhoneNotificationCustom",
         PhoneNotify = {
@@ -51,6 +51,13 @@ end)
 
 -- Functions
 
+---@param title string
+---@param text string
+---@param icon string
+---@param color string
+---@param timeout number
+---@param accept string
+---@param deny string
 local function PhoneNotification(title, text, icon, color, timeout, accept, deny)
     Result = nil
     test = true

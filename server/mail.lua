@@ -8,7 +8,7 @@ end
 
 
 
-RegisterNetEvent('qb-phone:server:RemoveMail', function(MailId)
+RegisterNetEvent('Renewed-Phone:server:RemoveMail', function(MailId)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not MailId or not Player then return end
@@ -19,12 +19,12 @@ RegisterNetEvent('qb-phone:server:RemoveMail', function(MailId)
     MySQL.query('DELETE FROM player_mails WHERE mailid = ? AND citizenid = ?', {MailId, CID})
     SetTimeout(100, function()
         local mails = MySQL.query.await('SELECT * FROM player_mails WHERE citizenid = ? ORDER BY `date` ASC', {CID})
-        TriggerClientEvent('qb-phone:client:UpdateMails', src, mails)
+        TriggerClientEvent('Renewed-Phone:client:UpdateMails', src, mails)
     end)
 end)
 
 
-RegisterNetEvent('qb-phone:server:sendNewMail', function(mailData, citizenID)
+RegisterNetEvent('Renewed-Phone:server:sendNewMail', function(mailData, citizenID)
 
     if not mailData or not mailData.sender or not mailData.subject or not mailData.message then return end
     local Player
@@ -43,7 +43,7 @@ RegisterNetEvent('qb-phone:server:sendNewMail', function(mailData, citizenID)
             MySQL.insert('INSERT INTO player_mails (`citizenid`, `sender`, `subject`, `message`, `mailid`, `read`) VALUES (?, ?, ?, ?, ?, ?)', {CID, mailData.sender, mailData.subject, mailData.message, GenerateMailId(), 0})
         end
 
-        TriggerClientEvent('qb-phone:client:NewMailNotify', Player.PlayerData.source, mailData)
+        TriggerClientEvent('Renewed-Phone:client:NewMailNotify', Player.PlayerData.source, mailData)
 
         SetTimeout(200, function()
             local mails = MySQL.query.await('SELECT * FROM player_mails WHERE citizenid = ? ORDER BY `date` ASC', {CID})
@@ -55,7 +55,7 @@ RegisterNetEvent('qb-phone:server:sendNewMail', function(mailData, citizenID)
                 end
             end
 
-            TriggerClientEvent('qb-phone:client:UpdateMails', Player.PlayerData.source, mails)
+            TriggerClientEvent('Renewed-Phone:client:UpdateMails', Player.PlayerData.source, mails)
         end)
     elseif citizenID then
         if mailData.button then
@@ -72,10 +72,10 @@ function sendNewMailToOffline(citizenid, mailData)
         local src = Player.PlayerData.source
         if mailData.button == nil then
             MySQL.insert('INSERT INTO player_mails (`citizenid`, `sender`, `subject`, `message`, `mailid`, `read`) VALUES (?, ?, ?, ?, ?, ?)', {Player.PlayerData.citizenid, mailData.sender, mailData.subject, mailData.message, GenerateMailId(), 0})
-            TriggerClientEvent('qb-phone:client:NewMailNotify', src, mailData)
+            TriggerClientEvent('Renewed-Phone:client:NewMailNotify', src, mailData)
         else
             MySQL.insert('INSERT INTO player_mails (`citizenid`, `sender`, `subject`, `message`, `mailid`, `read`, `button`) VALUES (?, ?, ?, ?, ?, ?, ?)', {Player.PlayerData.citizenid, mailData.sender, mailData.subject, mailData.message, GenerateMailId(), 0, json.encode(mailData.button)})
-            TriggerClientEvent('qb-phone:client:NewMailNotify', src, mailData)
+            TriggerClientEvent('Renewed-Phone:client:NewMailNotify', src, mailData)
         end
         SetTimeout(200, function()
             local mails = MySQL.query.await(
@@ -88,7 +88,7 @@ function sendNewMailToOffline(citizenid, mailData)
                 end
             end
 
-            TriggerClientEvent('qb-phone:client:UpdateMails', src, mails)
+            TriggerClientEvent('Renewed-Phone:client:UpdateMails', src, mails)
         end)
     else
         if mailData.button == nil then

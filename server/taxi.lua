@@ -1,6 +1,10 @@
+<<<<<<< Updated upstream
 local QBCore = exports['qb-core']:GetCoreObject()
 
 QBCore.Functions.CreateCallback('qb-phone:server:GetAvailableTaxiDrivers', function(_, cb)
+=======
+lib.callback.register('Renewed-Phone:server:GetAvailableTaxiDrivers', function(_)
+>>>>>>> Stashed changes
     local TaxiDrivers = {}
 
     for i = 1, #Config.TaxiJob do

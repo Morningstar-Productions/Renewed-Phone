@@ -1,14 +1,14 @@
-qb-phone exports
+Renewed-Phone exports
 
 # Crypto (Server side)
 
 ```
 
-exports['qb-phone']:RemoveCrypto(src, type, amount)
+exports['Renewed-Phone']:RemoveCrypto(src, type, amount)
 
-exports['qb-phone']:hasEnough(src, type, amount)
+exports['Renewed-Phone']:hasEnough(src, type, amount)
 
-exports['qb-phone']:AddCrypto(src, type, amount)
+exports['Renewed-Phone']:AddCrypto(src, type, amount)
 
 ```
 
@@ -16,48 +16,48 @@ exports['qb-phone']:AddCrypto(src, type, amount)
 
 ```
 
-exports['qb-phone']:hireUser(Job, CID, grade)
+exports['Renewed-Phone']:hireUser(Job, CID, grade)
 
-exports['qb-phone']:fireUser(Job, CID)
+exports['Renewed-Phone']:fireUser(Job, CID)
 
 ```
 
 # Groups (Server Side)
 ```
 
-exports['qb-phone']:NotifyGroup(group, msg, type)
+exports['Renewed-Phone']:NotifyGroup(group, msg, type)
 
-exports['qb-phone']:pNotifyGroup(group, header, msg, icon, colour, length)
+exports['Renewed-Phone']:pNotifyGroup(group, header, msg, icon, colour, length)
 
-exports['qb-phone']:CreateBlipForGroup(groupID, name, data)
+exports['Renewed-Phone']:CreateBlipForGroup(groupID, name, data)
 
-exports['qb-phone']:RemoveBlipForGroup(groupID, name)
+exports['Renewed-Phone']:RemoveBlipForGroup(groupID, name)
 
-exports['qb-phone']:GetGroupByMembers(src)
+exports['Renewed-Phone']:GetGroupByMembers(src)
 
-exports['qb-phone']:getGroupMembers(groupID)
+exports['Renewed-Phone']:getGroupMembers(groupID)
 
-exports['qb-phone']:getGroupSize(groupID)
+exports['Renewed-Phone']:getGroupSize(groupID)
 
-exports['qb-phone']:GetGroupLeader(groupID)
+exports['Renewed-Phone']:GetGroupLeader(groupID)
 
-exports['qb-phone']:DestroyGroup(groupID)
+exports['Renewed-Phone']:DestroyGroup(groupID)
 
-exports['qb-phone']:isGroupLeader(src, groupID)
-
---------------------------------------------------
-
-exports['qb-phone']:setJobStatus(groupID, status, stages)
-
-exports['qb-phone']:getJobStatus(groupID)
-
-exports['qb-phone']:resetJobStatus(groupID)
+exports['Renewed-Phone']:isGroupLeader(src, groupID)
 
 --------------------------------------------------
 
-exports['qb-phone']:isGroupTemp(groupID)
+exports['Renewed-Phone']:setJobStatus(groupID, status, stages)
 
-exports['qb-phone']:CreateGroup(src, name, password)
+exports['Renewed-Phone']:getJobStatus(groupID)
+
+exports['Renewed-Phone']:resetJobStatus(groupID)
+
+--------------------------------------------------
+
+exports['Renewed-Phone']:isGroupTemp(groupID)
+
+exports['Renewed-Phone']:CreateGroup(src, name, password)
 
 ```
 
@@ -65,7 +65,7 @@ exports['qb-phone']:CreateGroup(src, name, password)
 
 ```
 
-exports['qb-phone']:PhoneNotification(title, text, icon, color, timeout, accept, deny)
+exports['Renewed-Phone']:PhoneNotification(title, text, icon, color, timeout, accept, deny)
 
 ```
 
@@ -88,6 +88,6 @@ local TweetData = {
     url = URL
 }
 
-exports['qb-phone']:AddNewTweet(TweetData)
+exports['Renewed-Phone']:AddNewTweet(TweetData)
 
 ```

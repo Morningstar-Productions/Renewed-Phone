@@ -1,7 +1,14 @@
+<<<<<<< Updated upstream
 local QBCore = exports['qb-core']:GetCoreObject()
 
 
 -- exports['qb-phone']:RemoveCrypto(Player, type, amount)
+=======
+-- exports['Renewed-Phone']:RemoveCrypto(Player, type, amount)
+---@param src any
+---@param type string
+---@param amount? number
+>>>>>>> Stashed changes
 local function RemoveCrypto(src, type, amount)
     if not src then return end
     local Player = QBCore.Functions.GetPlayer(src)
@@ -15,7 +22,7 @@ local function RemoveCrypto(src, type, amount)
     if (Crypto[type] - amount) >= 0 then
         Crypto[type] -= amount
         Player.Functions.SetMetaData("crypto", Crypto)
-        TriggerClientEvent('qb-phone:client:UpdateCrypto', src)
+        TriggerClientEvent('Renewed-Phone:client:UpdateCrypto', src)
         return true
     else
         return false
@@ -23,7 +30,10 @@ local function RemoveCrypto(src, type, amount)
 end exports("RemoveCrypto", RemoveCrypto)
 
 
--- exports['qb-phone']:hasEnough(Player, type, amount)
+-- exports['Renewed-Phone']:hasEnough(Player, type, amount)
+---@param src any
+---@param type string
+---@param amount number
 local function hasEnough(src, type, amount)
     if not src then return end
     local Player = QBCore.Functions.GetPlayer(src)
@@ -41,7 +51,10 @@ local function hasEnough(src, type, amount)
 end exports("hasEnough", hasEnough)
 
 
--- exports['qb-phone']:AddCrypto(Player, type, amount)
+-- exports['Renewed-Phone']:AddCrypto(Player, type, amount)
+---@param src any
+---@param type string
+---@param amount number
 local function AddCrypto(src, type, amount)
     if not src then return end
     local Player = QBCore.Functions.GetPlayer(src)
@@ -53,7 +66,7 @@ local function AddCrypto(src, type, amount)
     if not Crypto then return false end
     Crypto[type] = Crypto[type] + tonumber(amount)
     Player.Functions.SetMetaData("crypto", Crypto)
-    TriggerClientEvent('qb-phone:client:UpdateCrypto', src)
+    TriggerClientEvent('Renewed-Phone:client:UpdateCrypto', src)
 
     return true
 end exports("AddCrypto", AddCrypto)
@@ -66,7 +79,7 @@ local function GetConfig(metadata)
     end
 end
 
-RegisterNetEvent('qb-phone:server:PurchaseCrypto', function(type, amount)
+RegisterNetEvent('Renewed-Phone:server:PurchaseCrypto', function(type, amount)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player or not Player.PlayerData.metadata.crypto[type] then return end -- if the crypto dosnt exist
@@ -79,7 +92,7 @@ RegisterNetEvent('qb-phone:server:PurchaseCrypto', function(type, amount)
 
     if Player.PlayerData.money.bank >= cashAmount then
         Player.Functions.RemoveMoney('bank', cashAmount, txt)
-        TriggerClientEvent('qb-phone:client:CustomNotification', src,
+        TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
             "WALLET",
             "You Purchased "..amount.." "..type.."!",
             "fas fa-chart-line",
@@ -95,7 +108,7 @@ RegisterNetEvent('qb-phone:server:PurchaseCrypto', function(type, amount)
 
         AddCrypto(src, type, amount)
     else
-        TriggerClientEvent('qb-phone:client:CustomNotification', src,
+        TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
             "WALLET",
             "Not Enough Money",
             "fas fa-chart-line",
@@ -105,7 +118,7 @@ RegisterNetEvent('qb-phone:server:PurchaseCrypto', function(type, amount)
     end
 end)
 
-RegisterNetEvent('qb-phone:server:SellCrypto', function(type, amount)
+RegisterNetEvent('Renewed-Phone:server:SellCrypto', function(type, amount)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player or not Player.PlayerData.metadata.crypto[type] then return end -- if the crypto dosnt exist
@@ -119,7 +132,7 @@ RegisterNetEvent('qb-phone:server:SellCrypto', function(type, amount)
     if not RemoveCrypto(src, type, amount) then return end
 
         Player.Functions.AddMoney('bank', cryptoAmount, txt)
-        TriggerClientEvent('qb-phone:client:CustomNotification', src,
+        TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
             "WALLET",
             "You Sold "..amount.." "..type.."!",
             "fas fa-chart-line",
@@ -134,7 +147,7 @@ RegisterNetEvent('qb-phone:server:SellCrypto', function(type, amount)
         end
 end)
 
-RegisterNetEvent('qb-phone:server:ExchangeCrypto', function(type, amount, stateid)
+RegisterNetEvent('Renewed-Phone:server:ExchangeCrypto', function(type, amount, stateid)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local Receiver = QBCore.Functions.GetPlayer(tonumber(stateid))
@@ -143,7 +156,7 @@ RegisterNetEvent('qb-phone:server:ExchangeCrypto', function(type, amount, statei
 
     if Player.PlayerData.citizenid ~= Receiver.PlayerData.citizenid then
         if RemoveCrypto(src, type, amount) then
-            TriggerClientEvent('qb-phone:client:CustomNotification', src,
+            TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
                 "WALLET",
                 "You sent "..amount.." "..type.."!",
                 "fas fa-chart-line",
@@ -152,7 +165,7 @@ RegisterNetEvent('qb-phone:server:ExchangeCrypto', function(type, amount, statei
             )
 
             AddCrypto(Receiver.PlayerData.source, type, amount)
-            TriggerClientEvent('qb-phone:client:CustomNotification', Receiver.PlayerData.source,
+            TriggerClientEvent('Renewed-Phone:client:CustomNotification', Receiver.PlayerData.source,
                 "WALLET",
                 "You received "..amount.." "..type.."!",
                 "fas fa-chart-line",
@@ -160,7 +173,7 @@ RegisterNetEvent('qb-phone:server:ExchangeCrypto', function(type, amount, statei
                 7500
             )
         else
-            TriggerClientEvent('qb-phone:client:CustomNotification', src,
+            TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
                 "WALLET",
                 "Cannot transfer crypto!",
                 "fas fa-chart-line",
@@ -170,7 +183,7 @@ RegisterNetEvent('qb-phone:server:ExchangeCrypto', function(type, amount, statei
 
         end
     else
-        TriggerClientEvent('qb-phone:client:CustomNotification', src,
+        TriggerClientEvent('Renewed-Phone:client:CustomNotification', src,
             "WALLET",
             "Cannot send crypto to yourself!",
             "fas fa-chart-line",

@@ -1,7 +1,7 @@
 -- NUI Callback
 
 RegisterNUICallback('wenmo_givemoney_toID', function(data)
-    TriggerServerEvent('qb-phone:server:wenmo_givemoney_toID', data)
+    TriggerServerEvent('Renewed-Phone:server:wenmo_givemoney_toID', data)
 end)
 
 RegisterNetEvent('hud:client:OnMoneyChange', function(type, amount, isMinus, reason)

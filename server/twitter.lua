@@ -9,7 +9,7 @@ CreateThread(function()
     Tweets = tweetsSelected
 end)
 
-RegisterNetEvent('qb-phone:server:DeleteTweet', function(tweetId)
+RegisterNetEvent('Renewed-Phone:server:DeleteTweet', function(tweetId)
     local src = source
     local CID = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
     local delete = false
@@ -21,10 +21,10 @@ RegisterNetEvent('qb-phone:server:DeleteTweet', function(tweetId)
         end
     end
     if not delete then return end
-    TriggerClientEvent('qb-phone:client:UpdateTweets', -1, src, Tweets, true)
+    TriggerClientEvent('Renewed-Phone:client:UpdateTweets', -1, src, Tweets, true)
 end)
 
-RegisterNetEvent('qb-phone:server:UpdateTweets', function(TweetData)
+RegisterNetEvent('Renewed-Phone:server:UpdateTweets', function(TweetData)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local HasVPN = Player.Functions.GetItemByName(Config.VPNItem)
@@ -57,7 +57,7 @@ RegisterNetEvent('qb-phone:server:UpdateTweets', function(TweetData)
                 date = os.date('%Y-%m-%d %H:%M:%S')
             }
 
-            TriggerClientEvent('qb-phone:client:UpdateTweets', -1, src, Tweets, false)
+            TriggerClientEvent('Renewed-Phone:client:UpdateTweets', -1, src, Tweets, false)
         end
     end)
 end)
@@ -88,7 +88,7 @@ local function AddNewTweet(TweetData)
                 date = os.date('%Y-%m-%d %H:%M:%S')
             }
 
-            TriggerClientEvent('qb-phone:client:UpdateTweets', -1, 0, Tweets, false)
+            TriggerClientEvent('Renewed-Phone:client:UpdateTweets', -1, 0, Tweets, false)
         end
     end)
 end exports("AddNewTweet", AddNewTweet)

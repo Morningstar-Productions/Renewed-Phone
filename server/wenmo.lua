@@ -1,6 +1,10 @@
+<<<<<<< Updated upstream
 local QBCore = exports['qb-core']:GetCoreObject()
 
 RegisterNetEvent('qb-phone:server:wenmo_givemoney_toID', function(data)
+=======
+RegisterNetEvent('Renewed-Phone:server:wenmo_givemoney_toID', function(data)
+>>>>>>> Stashed changes
     local src = source
     local Ply = QBCore.Functions.GetPlayer(src)
     local OtherPly = QBCore.Functions.GetPlayer(tonumber(data.ID))

@@ -21,7 +21,7 @@ end exports("NotifyGroup", NotifyGroup)
 local function pNotifyGroup(group, header, msg, icon, colour, length)
     if not group or not EmploymentGroup[group] then return print("Group not found...") end
     for _, v in pairs(EmploymentGroup[group].members) do
-        TriggerClientEvent('qb-phone:client:CustomNotification', v.Player,
+        TriggerClientEvent('Renewed-Phone:client:CustomNotification', v.Player,
             header or "NO HEADER",
             msg or "NO MSG",
             icon or "fas fa-phone-square",
@@ -91,11 +91,11 @@ local function DestroyGroup(groupID)
         end
     end
 
-    exports['qb-phone']:resetJobStatus(groupID)
-    TriggerEvent("qb-phone:server:GroupDeleted", groupID, members)
+    exports['Renewed-Phone']:resetJobStatus(groupID)
+    TriggerEvent("Renewed-Phone:server:GroupDeleted", groupID, members)
 
     EmploymentGroup[groupID] = nil
-    TriggerClientEvent('qb-phone:client:RefreshGroupsApp', -1, EmploymentGroup)
+    TriggerClientEvent('Renewed-Phone:client:RefreshGroupsApp', -1, EmploymentGroup)
 
 end exports("DestroyGroup", DestroyGroup)
 
@@ -108,7 +108,7 @@ local function RemovePlayerFromGroup(src, groupID, disconnected)
             EmploymentGroup[groupID].Users -= 1
             Players[src] = false
             pNotifyGroup(groupID, "Job Center", v.name.." Has left the group", "fas fa-users", "#FFBF00", 7500)
-            TriggerClientEvent('qb-phone:client:RefreshGroupsApp', -1, EmploymentGroup)
+            TriggerClientEvent('Renewed-Phone:client:RefreshGroupsApp', -1, EmploymentGroup)
             if not disconnected then TriggerClientEvent("QBCore:Notify", src, "You have left the group", "primary") end
 
             if EmploymentGroup[groupID].Users <= 0 then
@@ -150,7 +150,7 @@ local function setJobStatus(groupID, status, stages)
     if not m then return end
     for i=1, #m do
         if m[i] then
-            TriggerClientEvent("qb-phone:client:AddGroupStage", m[i], status, stages)
+            TriggerClientEvent("Renewed-Phone:client:AddGroupStage", m[i], status, stages)
         end
     end
 end exports('setJobStatus', setJobStatus)
@@ -168,8 +168,8 @@ local function resetJobStatus(groupID)
     if not m then return end
     for i=1, #m do
         if m[i] then
-            TriggerClientEvent("qb-phone:client:AddGroupStage", m[i], EmploymentGroup[groupID].status, EmploymentGroup[groupID].stage)
-            TriggerClientEvent('qb-phone:client:RefreshGroupsApp', m[i], EmploymentGroup, true)
+            TriggerClientEvent("Renewed-Phone:client:AddGroupStage", m[i], EmploymentGroup[groupID].status, EmploymentGroup[groupID].stage)
+            TriggerClientEvent('Renewed-Phone:client:RefreshGroupsApp', m[i], EmploymentGroup, true)
         end
     end
 end exports('resetJobStatus', resetJobStatus)
@@ -191,17 +191,17 @@ AddEventHandler('playerDropped', function()
 end)
 
 
-RegisterNetEvent("qb-phone:server:employment_checkJobStauts", function ()
+RegisterNetEvent("Renewed-Phone:server:employment_checkJobStauts", function ()
     local src = source
     local checkStatus = GetGroupByMembers(src)
     if checkStatus then
-        TriggerClientEvent('qb-phone:client:showEmploymentPage', src)
+        TriggerClientEvent('Renewed-Phone:client:showEmploymentPage', src)
     else
-        TriggerClientEvent('qb-phone:client:showEmploymentGroupPage', src)
+        TriggerClientEvent('Renewed-Phone:client:showEmploymentGroupPage', src)
     end
 end)
 
-RegisterNetEvent("qb-phone:server:jobcenter_CreateJobGroup", function(data)
+RegisterNetEvent("Renewed-Phone:server:jobcenter_CreateJobGroup", function(data)
     local src = source
     local player = QBCore.Functions.GetPlayer(src)
     if Players[src] then TriggerClientEvent('QBCore:Notify', src, "You have already created a group", "error") return end
@@ -221,7 +221,7 @@ RegisterNetEvent("qb-phone:server:jobcenter_CreateJobGroup", function(data)
         stage = {},
     }
 
-    TriggerClientEvent('qb-phone:client:RefreshGroupsApp', -1, EmploymentGroup)
+    TriggerClientEvent('Renewed-Phone:client:RefreshGroupsApp', -1, EmploymentGroup)
 end)
 
 RegisterNetEvent("TestGroups", function()
@@ -235,7 +235,7 @@ RegisterNetEvent("TestGroups", function()
     setJobStatus((GetGroupByMembers(src)), "garbage", TestTable)
 end)
 
-RegisterNetEvent('qb-phone:server:jobcenter_DeleteGroup', function(data)
+RegisterNetEvent('Renewed-Phone:server:jobcenter_DeleteGroup', function(data)
     local src = source
     if not Players[src] then return print("You are not in a group?!?") end
     if GetGroupLeader(data.delete) == src then
@@ -245,11 +245,16 @@ RegisterNetEvent('qb-phone:server:jobcenter_DeleteGroup', function(data)
     end
 end)
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:GetGroupsApp', function(_, cb)
     cb(EmploymentGroup)
+=======
+lib.callback.register('Renewed-Phone:server:GetGroupsApp', function(_)
+    return EmploymentGroup
+>>>>>>> Stashed changes
 end)
 
-RegisterNetEvent('qb-phone:server:jobcenter_JoinTheGroup', function(data)
+RegisterNetEvent('Renewed-Phone:server:jobcenter_JoinTheGroup', function(data)
     local src = source
     local player = QBCore.Functions.GetPlayer(src)
 
@@ -261,7 +266,7 @@ RegisterNetEvent('qb-phone:server:jobcenter_JoinTheGroup', function(data)
     EmploymentGroup[data.id].Users += 1
     Players[src] = true
     TriggerClientEvent('QBCore:Notify', src, "You joined the group", "success")
-    TriggerClientEvent('qb-phone:client:RefreshGroupsApp', -1, EmploymentGroup)
+    TriggerClientEvent('Renewed-Phone:client:RefreshGroupsApp', -1, EmploymentGroup)
 end)
 
 local function GetGroupStages(groupID)
@@ -269,7 +274,11 @@ local function GetGroupStages(groupID)
     return EmploymentGroup[groupID].stage
 end exports('GetGroupStages', GetGroupStages)
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:getAllGroups', function(source, cb)
+=======
+lib.callback.register('Renewed-Phone:server:getAllGroups', function(source)
+>>>>>>> Stashed changes
     local src = source
 
     if Players[src] then
@@ -279,7 +288,11 @@ QBCore.Functions.CreateCallback('qb-phone:server:getAllGroups', function(source,
     end
 end)
 
+<<<<<<< Updated upstream
 QBCore.Functions.CreateCallback('qb-phone:server:jobcenter_CheckPlayerNames', function(_, cb, csn)
+=======
+lib.callback.register('Renewed-Phone:server:jobcenter_CheckPlayerNames', function(_, csn)
+>>>>>>> Stashed changes
     local Names = {}
     for _, v in pairs(EmploymentGroup[csn].members) do
         Names[#Names+1] = v.name
@@ -287,8 +300,12 @@ QBCore.Functions.CreateCallback('qb-phone:server:jobcenter_CheckPlayerNames', fu
     cb(Names)
 end)
 
+<<<<<<< Updated upstream
 
 RegisterNetEvent('qb-phone:server:jobcenter_leave_grouped', function(data)
+=======
+RegisterNetEvent('Renewed-Phone:server:jobcenter_leave_grouped', function(data)
+>>>>>>> Stashed changes
     local src = source
     if not Players[src] then return end
     RemovePlayerFromGroup(src, data.id)
@@ -319,6 +336,6 @@ local function CreateGroup(src, name, password)
         ScriptCreated = true,
     }
 
-    TriggerClientEvent('qb-phone:client:RefreshGroupsApp', -1, EmploymentGroup)
+    TriggerClientEvent('Renewed-Phone:client:RefreshGroupsApp', -1, EmploymentGroup)
     return id
 end exports('CreateGroup', CreateGroup)

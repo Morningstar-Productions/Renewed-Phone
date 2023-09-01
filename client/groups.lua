@@ -78,12 +78,16 @@ RegisterNetEvent("groups:createBlip", function(name, data)
 end)
 
 RegisterNUICallback('GetGroupsApp', function (_, cb)
+<<<<<<< Updated upstream
     QBCore.Functions.TriggerCallback('qb-phone:server:getAllGroups', function (getGroups)
+=======
+    lib.callback('Renewed-Phone:server:getAllGroups', false, function (getGroups)
+>>>>>>> Stashed changes
         cb(getGroups)
     end)
 end)
 
-RegisterNetEvent('qb-phone:client:RefreshGroupsApp', function(Groups, finish)
+RegisterNetEvent('Renewed-Phone:client:RefreshGroupsApp', function(Groups, finish)
     if finish then inJob = false end
     if inJob then return end
     SendNUIMessage({
@@ -93,7 +97,7 @@ RegisterNetEvent('qb-phone:client:RefreshGroupsApp', function(Groups, finish)
 end)
 
 
-RegisterNetEvent('qb-phone:client:AddGroupStage', function(_, stage)
+RegisterNetEvent('Renewed-Phone:client:AddGroupStage', function(_, stage)
     inJob = true
     SendNUIMessage({
         action = "addGroupStage",
@@ -103,32 +107,36 @@ end)
 
 
 RegisterNUICallback('jobcenter_CreateJobGroup', function(data, cb) --employment
-    TriggerServerEvent('qb-phone:server:jobcenter_CreateJobGroup', data)
+    TriggerServerEvent('Renewed-Phone:server:jobcenter_CreateJobGroup', data)
     cb("ok")
 end)
 
 RegisterNUICallback('jobcenter_JoinTheGroup', function(data, cb) --employment
-    TriggerServerEvent('qb-phone:server:jobcenter_JoinTheGroup', data)
+    TriggerServerEvent('Renewed-Phone:server:jobcenter_JoinTheGroup', data)
     cb("ok")
 end)
 
 RegisterNUICallback('jobcenter_leave_grouped', function(data, cb) --employment
     if not data then return end
-    local success = exports['qb-phone']:PhoneNotification("Job Center", 'Are you sure you want to leave the group?', 'fas fa-users', '#FFBF00', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
+    local success = exports['Renewed-Phone']:PhoneNotification("Job Center", 'Are you sure you want to leave the group?', 'fas fa-users', '#FFBF00', "NONE", 'fas fa-check-circle', 'fas fa-times-circle')
     if success then
-        TriggerServerEvent('qb-phone:server:jobcenter_leave_grouped', data)
+        TriggerServerEvent('Renewed-Phone:server:jobcenter_leave_grouped', data)
     end
     cb("ok")
 end)
 
 RegisterNUICallback('jobcenter_DeleteGroup', function(data, cb) --employment
-    TriggerServerEvent('qb-phone:server:jobcenter_DeleteGroup', data)
+    TriggerServerEvent('Renewed-Phone:server:jobcenter_DeleteGroup', data)
     cb("ok")
 end)
 
 
 RegisterNUICallback('jobcenter_CheckPlayerNames', function(data, cb) --employment
+<<<<<<< Updated upstream
     QBCore.Functions.TriggerCallback('qb-phone:server:jobcenter_CheckPlayerNames', function(HasName)
+=======
+    lib.callback('Renewed-Phone:server:jobcenter_CheckPlayerNames', false, function(HasName)
+>>>>>>> Stashed changes
         cb(HasName)
     end, data.id)
 end)

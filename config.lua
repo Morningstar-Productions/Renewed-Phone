@@ -1,11 +1,13 @@
 Config = Config or {}
 
 -- Configs for Payment and Banking
-
 Config.RenewedBanking = true -- Either put this to true or false if you use Renewed Banking or not
 Config.RenewedFinances = false -- Either put this to true or false if you use Renewed Finances or not
 Config.RenewedCameras = false -- Either put this to true or false if you use Renewed Cameras or not
 
+Config.Framework = 'qb'
+
+-- Billing Config
 Config.BillingCommissions = { -- This is a percentage (0.10) == 10%
     mechanic = 0.10
 }
@@ -33,12 +35,23 @@ Config.BlipScale = 0.75
 Config.TweetDuration = 8 -- How many hours to load tweets (12 will load the past 12 hours of tweets)
 Config.MailDuration = 72 -- How many hours to load Mails (72 will load the past 72 hours of Mails)
 
+Config.BoothModels = {
+    -2103798695,
+    1158960338,
+    1281992692,
+    1511539537,
+    295857659,
+    -78626473,
+    -1559354806,
+    `np_mdm_phonebooth`
+}
 
+-- Call Configs
 Config.RepeatTimeout = 4000
 Config.CallRepeats = 10
 Config.AllowWalking = false -- Allow walking and driving with phone out
 
-
+-- Application Configs
 Config.PhoneApplications = {
     ["details"] = {
         app = "details",
@@ -365,9 +378,11 @@ Config.MaxSlots = 28
 
 Config.JobCenter = {
     [1] = {
-        job = "unemployed",
-        label = "Unemployment",
-        Coords = {},
+        vpn = false,
+        icon = 'fas fa-warehouse',
+        icons = '💲💲💲💲💲',
+        label = "Impound Worker",
+        event = "qb-phone:jobcenter:tow",
     },
     [2] = {
         job = "garbage",
@@ -380,21 +395,49 @@ Config.JobCenter = {
         Coords = {909.11, -174.59},
     },
     [4] = {
-        job = "amazon",
-        label = "Amazon Driver",
-        Coords = {-1071.08, -2004.0},
+        vpn = false,
+        icon = 'fas fa-fish',
+        icons = '💲💲💲💲',
+        label = 'Fishing',
+        event = 'qb-phone:jobcenter:fish',
     },
     [5] = {
-        job = "trucker",
-        label = "Truck Driver",
-        Coords = {925.83, -1560.23},
+        vpn = true,
+        icon = 'fas fa-tablets',
+        label = "Oxy Run",
+        event = "kevin-oxyruns:waypoint", -- Make Your Own Event
     },
+    [6] = {
+        vpn = false,
+        icon = 'fas fa-trash',
+        label = "Sanitation Worker",
+        icons = '💲💲💲💲💲',
+        event = "qb-phone:jobcenter:sanitation",
+    },
+    [7] = {
+        vpn = false,
+        icon = 'fas fa-shop',
+        icons = '💲💲💲💲',
+        label = "Road Runner Delivery",
+        event = "qb-phone:jobcenter:postop",
+    },
+    [8] = {
+        vpn = true,
+        icon = 'fas fa-cannabis',
+        label = "Weed Runs",
+        event = "kevin-weedruns:waypoint", -- Make Your Own Event
+    },
+    [9] = {
+        vpn = false,
+        icon = 'fas fa-warehouse',
+        icons = '💲💲💲💲💲',
+        label = "PD Impound Worker",
+        event = "qb-phone:jobcenter:pdimpound"
+    }
 }
 
 Config.TaxiJob = {
-    {
-        Job = "taxi",
-    },
+    { Job = "taxi" },
 }
 
 Config.CryptoCoins = {
