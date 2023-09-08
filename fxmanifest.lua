@@ -3,7 +3,10 @@ game 'gta5'
 
 author 'FjamZoo#0001 & MannyOnBrazzers#6826'
 description 'A No Pixel inspired edit of QBCore\'s Phone. Released By RenewedScripts'
-version 'Release'
+version 'Test'
+
+lua54 'yes'
+use_experimental_fxv2_oal 'yes'
 
 ui_page 'html/index.html'
 
@@ -15,6 +18,7 @@ shared_scripts {
 
 client_scripts {
     'client/*.lua',
+    'modules/targets/*.lua'
 }
 
 server_scripts {
@@ -31,6 +35,8 @@ files {
     'html/img/apps/*.png',
 }
 
-lua54 'yes'
-
-dependency 'qb-target'
+dependencies {
+    'oxmysql',
+    'ox_lib',
+    'Renewed-Lib'
+}
