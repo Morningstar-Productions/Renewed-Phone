@@ -25,33 +25,50 @@ end)
 RegisterNUICallback('gps-vehicle-garage', function(data, cb)
     local veh = data.veh
     if Config.Garage == 'jdev' then
-        exports['qb-garages']:TrackVehicleByPlate(veh.plate)
-        TriggerEvent('Renewed-Phone:client:CustomNotification',
-            "GARAGE",
-            "GPS Marker Set!",
-            "fas fa-car",
-            "#e84118",
-            5000
-        )
-        cb("ok")
+        if veh.state == 'In' then
+            exports['qb-garages']:TrackVehicleByPlate(veh.plate)
+            TriggerEvent('qb-phone:client:CustomNotification',
+                "GARAGE",
+                "GPS Marker Set!",
+                "fas fa-car",
+                "#e84118",
+                5000
+            )
+            cb("ok")
+        elseif veh.state == 'Out' then
+            exports['qb-garages']:TrackVehicleByPlate(veh.plate)
+            TriggerEvent('qb-phone:client:CustomNotification',
+                "GARAGE",
+                "GPS Marker Set!",
+                "fas fa-car",
+                "#e84118",
+                5000
+            )
+            cb("ok")
+        else
+            TriggerEvent('qb-phone:client:CustomNotification',
+                "GARAGE",
+                "This vehicle cannot be located",
+                "fas fa-car",
+                "#e84118",
+                5000
+            )
+            cb("ok")
+        end
     elseif Config.Garage == 'qbcore' then
         --Deprecated
         if veh.state == 'In' then
             if veh.parkingspot then
                 SetNewWaypoint(veh.parkingspot.x, veh.parkingspot.y)
-                lib.notify({ title = 'Valet', description = "Your vehicle has been marked", type = "success" })
+                QBCore.Functions.Notify("Your vehicle has been marked", "success")
             end
         elseif veh.state == 'Out' and findVehFromPlateAndLocate(veh.plate) then
-            lib.notify({ title = 'Valet', description = "Your vehicle has been marked", type = "success" })
+            QBCore.Functions.Notify("Your vehicle has been marked", "success")
         else
-            lib.notify({ title = 'Valet', description = "This vehicle cannot be located", type = "error" })
+            QBCore.Functions.Notify("This vehicle cannot be located", "error")
         end
-    elseif veh.state == 'Out' and findVehFromPlateAndLocate(veh.plate) then
-        lib.notify({ title = 'Valet', description = "Your vehicle has been marked", type = "success" })
-    else
-        lib.notify({ title = 'Valet', description = "This vehicle cannot be located", type = "error" })
+        cb("ok") 
     end
-    cb("ok")
 end)
 
 RegisterNUICallback('sellVehicle', function(data, cb)
