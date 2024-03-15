@@ -30,7 +30,7 @@ function CopyMentionTag(elem) {
     var $temp = $("<input>");
     $("body").append($temp);
     $temp.val($(elem).data('mentiontag')).select();
-    QB.Phone.Notifications.Add("fab fa-twitter", "Twitter", $(elem).data('mentiontag')+ " copied!", "rgb(27, 149, 224)", 1250);
+    QB.Phone.Notifications.Add("fab fa-twitter", "Twatter", $(elem).data('mentiontag')+ " copied!", "rgb(27, 149, 224)", 1250);
     document.execCommand("copy");
     $temp.remove();
 }
@@ -138,7 +138,7 @@ $(document).on('click', '#twt-sendmessage-chat', function(e){ // Submit Button F
                 ConfirmationFrame()
             }, 150);
         }
-        $.post('https://qb-phone/PostNewTweet', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/PostNewTweet`, JSON.stringify({
             Message: TweetMessage,
             Date: CurrentDate,
             url: imageURL,
@@ -149,7 +149,7 @@ $(document).on('click', '#twt-sendmessage-chat', function(e){ // Submit Button F
             $('#twt-box-textt').fadeOut(350);
         });
     } else {
-        QB.Phone.Notifications.Add("fab fa-twitter", "Twitter", "Fill a message!", "#1DA1F2");
+        QB.Phone.Notifications.Add("fab fa-twitter", "Twatter", "Fill a message!", "#1DA1F2");
     };
     $('.twt-box-image-input').val("");
 });
@@ -200,14 +200,14 @@ $(document).on('click', '.tweet-retweet', function(e){
         setTimeout(function(){
             ConfirmationFrame()
         }, 150);
-        $.post('https://qb-phone/PostNewTweet', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/PostNewTweet`, JSON.stringify({
             Message: CompleteRetweet,
             Date: CurrentDate,
             url: imageURL,
             type: 'retweet'
         }))
     } else {
-        QB.Phone.Notifications.Add("fab fa-twitter", "Twitter", "Cannot retweet a retweet!", "#1DA1F2");
+        QB.Phone.Notifications.Add("fab fa-twitter", "Twatter", "Cannot retwat a retwat!", "#1DA1F2");
     }
 });
 
@@ -215,7 +215,7 @@ $(document).on('click', '.tweet-flag', function(e){
     e.preventDefault();
     var TwtName = $(this).parent().parent().data('twthandler');
     var TwtMessage = $(this).parent().data('twtmessage');
-    $.post('https://qb-phone/FlagTweet', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/FlagTweet`, JSON.stringify({
         name: TwtName,
         message: TwtMessage,
     }))
@@ -224,5 +224,5 @@ $(document).on('click', '.tweet-flag', function(e){
 $(document).on('click','.tweet-trash',function(e){
     e.preventDefault();
     var source = $(this).parent().parent().data('twtid');
-    $.post('https://qb-phone/DeleteTweet', JSON.stringify({id: source}))
+    $.post(`https://${GetParentResourceName()}/DeleteTweet`, JSON.stringify({id: source}))
 })

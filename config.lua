@@ -24,6 +24,7 @@ Config.SellGarage = 'altastreet'
 -- NEW --
 Config.Garage = 'jdev'  -- Use 'jdev' if using JDev's QB Garage Script
                         -- Use 'qbcore' if using base QBCore Garage Script
+Config.GarageResource = 'qb-garages' -- Change to qbx_garages if using QBox
 
 -- How Long Does The Player Have To Accept The Ping - This Is In Seconds
 Config.Timeout = 30

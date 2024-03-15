@@ -1,7 +1,7 @@
 -- Functions
 
 local function findVehFromPlateAndLocate(plate)
-    local gameVehicles = QBCore.Functions.GetVehicles()
+    local gameVehicles = GetGamePool('CVehicle')
     for i = 1, #gameVehicles do
         local vehicle = gameVehicles[i]
         if DoesEntityExist(vehicle) then
@@ -17,23 +17,43 @@ end
 -- NUI Callback
 
 RegisterNUICallback('SetupGarageVehicles', function(_, cb)
-    lib.callback('qb-phone:server:GetGarageVehicles', false, function(vehicles)
-        cb(vehicles)
-    end)
+    local vehicles = lib.callback.await('qb-phone:server:GetGarageVehicles', false)
+    cb(vehicles)
 end)
 
 RegisterNUICallback('gps-vehicle-garage', function(data, cb)
     local veh = data.veh
     if Config.Garage == 'jdev' then
-        exports['qb-garages']:TrackVehicleByPlate(veh.plate)
-        TriggerEvent('qb-phone:client:CustomNotification',
-            "GARAGE",
-            "GPS Marker Set!",
-            "fas fa-car",
-            "#e84118",
-            5000
-        )
-        cb("ok")
+        if veh.state == 'In' then
+            exports[Config.GarageResource]:TrackVehicleByPlate(veh.plate)
+            TriggerEvent('qb-phone:client:CustomNotification',
+                "GARAGE",
+                "GPS Marker Set!",
+                "fas fa-car",
+                "#e84118",
+                5000
+            )
+            cb("ok")
+        elseif veh.state == 'Out' then
+            exports[Config.GarageResource]:TrackVehicleByPlate(veh.plate)
+            TriggerEvent('qb-phone:client:CustomNotification',
+                "GARAGE",
+                "GPS Marker Set!",
+                "fas fa-car",
+                "#e84118",
+                5000
+            )
+            cb("ok")
+        else
+            TriggerEvent('qb-phone:client:CustomNotification',
+                "GARAGE",
+                "This vehicle cannot be located",
+                "fas fa-car",
+                "#e84118",
+                5000
+            )
+            cb("ok")
+        end
     elseif Config.Garage == 'qbcore' then
         --Deprecated
         if veh.state == 'In' then

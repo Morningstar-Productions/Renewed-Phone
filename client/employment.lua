@@ -28,13 +28,12 @@ RegisterNUICallback('SendEmployeePayment', function(data, cb)
     if not data.job or not data.cid or not data.amount then return end
 
     TriggerServerEvent('qb-phone:server:SendEmploymentPayment', data.job, data.cid, data.amount)
+
     cb("ok")
 end)
 
 RegisterNUICallback('RemoveEmployee', function(data, cb)
     if not data or not data.job or not data.cid then return end
-
-
 
     TriggerServerEvent('qb-phone:server:fireUser', data.job, data.cid)
 
@@ -52,6 +51,7 @@ RegisterNUICallback('ClockIn', function(data, cb)
     if not data or not data.job then return end
 
     TriggerServerEvent('qb-phone:server:clockOnDuty', data.job)
+
     cb("ok")
 end)
 
@@ -114,35 +114,10 @@ end)
 AddEventHandler('onResourceStart', function(resource)
     if resource == GetCurrentResourceName() then
         Wait(300)
-        lib.callback('qb-phone:server:GetMyJobs', false, function(employees, myShit)
-            for k, _ in pairs(employees) do
-                for _, v in pairs(employees[k]) do
-                    if not cachedEmployees[k] then cachedEmployees[k] = {} end
-                    cachedEmployees[k][#cachedEmployees[k]+1] = {
-                        cid = v.cid,
-                        name = v.name,
-                        grade = tonumber(v.grade),
-                    }
-                end
-                table.sort(cachedEmployees[k], function(a, b)
-                    return a.grade > b.grade
-                end)
-            end
 
+        local employees, myShit = lib.callback.await('qb-phone:server:GetMyJobs', false)
+        if not employees then print('qb-phone first start might be enabled on the server, disable it!') return end
 
-            if myShit then
-                for k, v in pairs(myShit) do
-                    if QBCore.Shared.Jobs[k] and not myJobs[k] then myJobs[k] = v end
-                end
-            end
-        end)
-    end
-end)
-
-
-
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
-    lib.callback('qb-phone:server:GetMyJobs', false, function(employees, myShit)
         for k, _ in pairs(employees) do
             for _, v in pairs(employees[k]) do
                 if not cachedEmployees[k] then cachedEmployees[k] = {} end
@@ -157,13 +132,35 @@ RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
             end)
         end
 
-
         if myShit then
             for k, v in pairs(myShit) do
                 if QBCore.Shared.Jobs[k] and not myJobs[k] then myJobs[k] = v end
             end
         end
-    end)
+    end
+end)
+
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+    local employees, myShit = lib.callback.await('qb-phone:server:GetMyJobs', false)
+    for k, _ in pairs(employees) do
+        for _, v in pairs(employees[k]) do
+            if not cachedEmployees[k] then cachedEmployees[k] = {} end
+            cachedEmployees[k][#cachedEmployees[k]+1] = {
+                cid = v.cid,
+                name = v.name,
+                grade = tonumber(v.grade),
+            }
+        end
+        table.sort(cachedEmployees[k], function(a, b)
+            return a.grade > b.grade
+        end)
+    end
+
+    if myShit then
+        for k, v in pairs(myShit) do
+            if QBCore.Shared.Jobs[k] and not myJobs[k] then myJobs[k] = v end
+        end
+    end
 end)
 
 RegisterNetEvent('QBCore:Client:OnPlayerUnload', function() -- Reset all variables

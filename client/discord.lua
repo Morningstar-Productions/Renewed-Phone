@@ -1,8 +1,7 @@
 -- Find a room loaded in memory by room id or by room code.
--- @params int id
--- @params string code
---
--- @returns boolean | table
+---@param id integer
+---@param code string
+---@return boolean | table
 local function doesRoomExist(id, code)
     if id and not code then
         -- Find a room based on the room id
@@ -24,10 +23,9 @@ local function doesRoomExist(id, code)
 end
 
 -- Checks if a citizen id is a member of a room.
--- @params string citizenid
--- @params int roomID
---
--- @returns boolean
+---@param citizenid string
+---@param roomID integer
+---@return boolean
 local function isMemberOfRoom(citizenid, roomID)
     for _, room in pairs(PhoneData.ChatRooms) do
         if room.id == roomID then
@@ -65,7 +63,7 @@ RegisterNetEvent('qb-phone:client:notification', function(app, message)
         action = "PhoneNotification",
         PhoneNotify = {
             title = app,
-            text =message,
+            text = message,
             icon = "fab fa-discord",
             color = "rgb(183 183 181)",
             timeout = 5500
@@ -88,7 +86,7 @@ RegisterNetEvent('qb-phone:client:RefreshGroupChat', function(src, message)
                 action = "PhoneNotification",
                 PhoneNotify = {
                     title = "New post in #" .. slugCase(getChatRoomData(message.room_id).room_name),
-                    text =message.message,
+                    text = message.message,
                     icon = "fab fa-discord",
                     color = "rgb(183 183 181)",
                     timeout = 5500

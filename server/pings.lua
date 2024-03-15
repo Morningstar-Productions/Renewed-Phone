@@ -3,8 +3,8 @@ RegisterNetEvent("qb-phone:server:sendPing", function(id)
     local Player = QBCore.Functions.GetPlayer(src)
     local Shitter = tonumber(id)
     local Other = QBCore.Functions.GetPlayer(Shitter)
-    local HasVPN = Player.Functions.GetItemByName(Config.VPNItem)
-    local name = HasVPN and 'Anonymous' or Player.PlayerData.charinfo.firstname
+    local HasVPN = exports.ox_inventory:Search(src, 'count', Config.VPNItem)
+    local name = HasVPN > 0 and 'Anonymous' or Player.PlayerData.charinfo.firstname
 
     if not Other then return TriggerClientEvent("QBCore:Notify", src, 'State ID does not exist!', "error") end
 

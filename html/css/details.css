@@ -43,13 +43,14 @@
 .details-list {
     position: absolute;
     width: 90%;
-    height: 57%;
+    height: 47.5%;
     margin: 0 auto;
     left: 0;
     right: 0;
     bottom: 3%;
     border-radius: .5vh;
     overflow-y: scroll;
+    font-size: 1.8vh;
 }
 
 .details-list::-webkit-scrollbar {
@@ -61,7 +62,7 @@
     position: relative;
     width: 100%;
     color: whitesmoke;
-    font-size: 1.8vh;
+    font-size: 2.0vh;
 }
 
 .details-moneys-body-main{
@@ -78,11 +79,11 @@
 .details-icon-class{
     display: inline-block;
     text-align: center;
-    width: 10%;
+    width: 1.5vw;
 }
 .details-text-class{
     display: inline;
-    width: 90%;
+    width: 95vh;
 }
 
 .details-license-body-main{

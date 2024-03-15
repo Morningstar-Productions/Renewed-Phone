@@ -16,13 +16,11 @@ end)
 
 RegisterNUICallback('document_Send_Note', function(data, cb)
     if data.Type == 'LocalSend' then
-        local player, distance = QBCore.Functions.GetClosestPlayer()
-        if player ~= -1 and distance < 2.5 then
-            local playerId = GetPlayerServerId(player)
-            TriggerServerEvent("qb-phone:server:sendDocumentLocal", data, playerId)
-        else
-            TriggerEvent("DoShortHudText", "No one around!", 2)
-        end
+        local pID = lib.getClosestPlayer(GetEntityCoords(cache.ped), 2.5)
+        if not pID then return QBCore.Functions.Notify("No one around!", 'error', 2000) end
+
+        local PlayerId = GetPlayerServerId(pID)
+        TriggerServerEvent("qb-phone:server:sendDocumentLocal", data, PlayerId)
     elseif data.Type == 'PermSend' then
         TriggerServerEvent('qb-phone:server:sendDocument', data)
     end

@@ -1,5 +1,6 @@
 local Result = nil
 local test = false
+local createPhoneExport = require 'shared.export-function'
 
 -- NUI Callbacks
 
@@ -50,6 +51,13 @@ RegisterNetEvent("qb-phone:client:CustomNotification2", function(title, text, ic
 end)
 -- Functions
 
+---@param title string
+---@param text string
+---@param icon string
+---@param color string
+---@param timeout number
+---@param accept string
+---@param deny string
 local function PhoneNotification(title, text, icon, color, timeout, accept, deny)
     Result = nil
     test = true
@@ -70,4 +78,4 @@ local function PhoneNotification(title, text, icon, color, timeout, accept, deny
     end
     Wait(100)
     return Result
-end exports("PhoneNotification", PhoneNotification)
+end createPhoneExport("PhoneNotification", PhoneNotification)

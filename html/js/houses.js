@@ -106,7 +106,7 @@ $(document).on('click', '.house-key-delete', function(e){
         $(this).remove();
     });
 
-    $.post('https://qb-phone/RemoveKeyholder', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/RemoveKeyholder`, JSON.stringify({
         HolderData: Data,
         HouseData: CurrentHouseData,
     }));
@@ -124,7 +124,7 @@ $(document).on('click', '#myhouse-option-transfer-confirm', function(e){
         
     var NewBSN = $(".myhouse-option-transfer-container-citizenid").val();
 
-    $.post('https://qb-phone/TransferCid', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/TransferCid`, JSON.stringify({
         newBsn: NewBSN,
         HouseData: CurrentHouseData,
     }), function(CanTransfer){
@@ -138,7 +138,7 @@ $(document).on('click', '#myhouse-option-transfer-confirm', function(e){
             }, AnimationDuration);
 
             setTimeout(function(){
-                $.post('https://qb-phone/GetPlayerHouses', JSON.stringify({}), function(Houses){
+                $.post(`https://${GetParentResourceName()}/GetPlayerHouses`, JSON.stringify({}), function(Houses){
                     SetupPlayerHouses(Houses);
                     $(".myhouses-options-container").fadeOut(150);
                 });

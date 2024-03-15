@@ -110,7 +110,7 @@ $(document).on('click', '#advert-sendmessage-chat', function(e){
                 ConfirmationFrame()
             }, 150);
         }
-        $.post('https://qb-phone/PostAdvert', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/PostAdvert`, JSON.stringify({
             message: Advert,
             url: picture
         }));
@@ -132,7 +132,7 @@ $(document).on('click','.advert-contact-info',function(e){
                 number: InputNum,
                 name: InputNum,
             }
-            $.post('https://qb-phone/CallContact', JSON.stringify({
+            $.post(`https://${GetParentResourceName()}/CallContact`, JSON.stringify({
                 ContactData: cData,
                 Anonymous: QB.Phone.Data.AnonymousCall,
             }), function(status){
@@ -173,7 +173,6 @@ $(document).on('click','.advert-contact-info',function(e){
                     QB.Phone.Notifications.Add("fas fa-phone", "Phone", "You can't call yourself!");
                 }
             });
-            $.post('https://qb-phone/Close');
         } 
     }
 })
@@ -195,7 +194,7 @@ $(document).on('click', '.advert-image-attached', function(e){
 $(document).on('click', '.advert-flag', function(e){
     e.preventDefault();
     var Number = $(this).parent().attr('id');
-    $.post('https://qb-phone/FlagAdvert', JSON.stringify({number: Number}))
+    $.post(`https://${GetParentResourceName()}/FlagAdvert`, JSON.stringify({number: Number}))
 });
 
 $(document).on('click','.advert-trash',function(e){
@@ -204,5 +203,5 @@ $(document).on('click','.advert-trash',function(e){
         ConfirmationFrame()
         QB.Phone.Notifications.Add("fas fa-ad", "Advertisement", "The ad was deleted", "#ff8f1a", 2000);
     }, 150);
-    $.post('https://qb-phone/DeleteAdvert', function(){});
+    $.post(`https://${GetParentResourceName()}/DeleteAdvert`, function(){});
 })

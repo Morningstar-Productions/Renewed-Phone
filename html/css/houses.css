@@ -26,6 +26,10 @@
     transition: .075s linear;
 }
 
+.houses-app-header-icon {
+    color: rgba(255, 255, 255, 0.8)
+}
+
 .houses-app-header-tab > p {
     font-size: 1.5vh;
     color: rgba(255, 255, 255, 0.5);

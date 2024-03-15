@@ -47,7 +47,6 @@ lib.callback.register('qb-phone:server:GetPhoneData', function(source)
     if not Player or not src then return end
     local CID = Player.PlayerData.citizenid
 
-
     local PhoneData = {
         PlayerContacts = {},
         Chats = {},
@@ -104,7 +103,6 @@ lib.callback.register('qb-phone:server:GetPhoneData', function(source)
     return PhoneData
 end)
 
-
 -- Can't even wrap my head around this lol diffently needs a good old rewrite
 lib.callback.register('qb-phone:server:FetchResult', function(_, input)
     local search = escape_sqli(input)
@@ -157,6 +155,10 @@ lib.callback.register("qb-phone:server:GetWebhook",function(_)
 	return WebHook
 end)
 
+lib.callback.register('qb-phone:server:isPlayerOnline', function(source, callData)
+
+end)
+
 -- Events
 RegisterNetEvent('qb-phone:server:SetCallState', function(bool)
     local src = source
@@ -183,9 +185,13 @@ RegisterNetEvent('qb-phone:server:EditContact', function(newName, newNumber, old
 
     if not Player then return end
 
-    exports.oxmysql:execute(
-        'UPDATE player_contacts SET name = ?, number = ? WHERE citizenid = ? AND name = ? AND number = ?',
-        {newName, newNumber, Player.PlayerData.citizenid, oldName, oldNumber})
+    exports.oxmysql:execute('UPDATE player_contacts SET name = ?, number = ? WHERE citizenid = ? AND name = ? AND number = ?', {
+        newName,
+        newNumber,
+        Player.PlayerData.citizenid,
+        oldName,
+        oldNumber
+    })
 end)
 
 RegisterNetEvent('qb-phone:server:RemoveContact', function(Name, Number)
@@ -194,8 +200,11 @@ RegisterNetEvent('qb-phone:server:RemoveContact', function(Name, Number)
 
     if not Player then return end
 
-    exports.oxmysql:execute('DELETE FROM player_contacts WHERE name = ? AND number = ? AND citizenid = ?',
-        {Name, Number, Player.PlayerData.citizenid})
+    exports.oxmysql:execute('DELETE FROM player_contacts WHERE name = ? AND number = ? AND citizenid = ?', {
+        Name,
+        Number,
+        Player.PlayerData.citizenid
+    })
 end)
 
 RegisterNetEvent('qb-phone:server:AddNewContact', function(name, number)

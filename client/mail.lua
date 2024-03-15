@@ -30,7 +30,7 @@ RegisterNetEvent('qb-phone:client:NewMailNotify', function(MailData)
         "Mail",
         "New E-Mail from: "..MailData.sender,
         "fas fa-envelope",
-        "ff002f",
+        "#ff002f",
         1500
     )
 

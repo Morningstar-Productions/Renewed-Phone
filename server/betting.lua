@@ -18,7 +18,11 @@ RegisterNetEvent('qb-phone:server:BettingAddToTable', function(data)
     if casino_status then
         if Player.PlayerData.money.bank >= amount then
             if not CasinoBetList[CSN] then
-                Player.Functions.RemoveMoney('bank', amount, "casino betting")
+                local account = Player.PlayerData.citizenid
+                local name = Player.PlayerData.charinfo.firstname .. ' ' .. Player.PlayerData.charinfo.lastname
+                exports['Renewed-Banking']:handleTransaction(account, 'Casino Betting', amount, 'Casino Betting', 'Diamond Casino', name, 'withdraw' )
+
+                Player.Functions.RemoveMoney('bank', amount, "Casino Betting")
                 CasinoBetList[CSN] = {['csn'] = CSN, ['amount'] = amount, ['player'] = data.player, ['chanse'] = data.chanse, ['id'] = data.id}
             else
                 TriggerClientEvent('QBCore:Notify', src, "You are already betting...", "error")
@@ -60,7 +64,7 @@ RegisterNetEvent('qb-phone:server:WineridCasino', function(data)
             local OtherPly = QBCore.Functions.GetPlayerByCitizenId(v.csn)
             if OtherPly then
                 local amount = v.amount * v.chanse
-                OtherPly.Functions.AddMoney('bank', tonumber(amount), "Casino Winner")
+                OtherPly.Functions.AddMoney('casino', tonumber(amount), "Casino Winner")
             end
         end
     end

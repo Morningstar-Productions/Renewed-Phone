@@ -37,7 +37,7 @@ $(document).on('click', '.taxi-list-call', function(e){
                 number: InputNum,
                 name: InputNum,
             }
-            $.post('https://qb-phone/CallContact', JSON.stringify({
+            $.post(`https://${GetParentResourceName()}/CallContact`, JSON.stringify({
                 ContactData: cData,
                 Anonymous: QB.Phone.Data.AnonymousCall,
             }), function(status){

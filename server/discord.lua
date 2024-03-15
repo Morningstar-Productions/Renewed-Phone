@@ -1,3 +1,4 @@
+local logger = require '@qbx_core.modules.logger'
 ChatRooms = {}
 
 -- Generates a random letter
@@ -16,10 +17,9 @@ end
 
 -- Check if a citizen id is a member of a room.
 --
--- @param cid string
--- @param roomid int
---
--- @returns boolean
+---@param citizenid string
+---@param roomID integer
+---@return boolean
 local function isMemberOfRoom(citizenid, roomID)
     for _, room in pairs(ChatRooms) do
         if room.id == roomID then
@@ -40,10 +40,9 @@ end
 
 -- Check if a citizen id is an owner of a room.
 --
--- @param cid string
--- @param roomid int
---
--- @returns boolean
+---@param citizenid string
+---@param roomID integer
+---@return boolean
 local function isOwnerOfRoom(citizenid, roomID)
     for _, room in pairs(ChatRooms) do
         if (room.id == roomID) and (citizenid == room.room_owner_id) then
@@ -75,7 +74,7 @@ AddEventHandler('onResourceStart', function(resource)
                 if Player then
                     if Player.PlayerData.money.bank >= price then
                         Player.Functions.RemoveMoney('bank', price)
-                        sendNewMailToOffline(room.room_owner_id, {
+                        exports['qb-phone']:sendNewMailToOffline(room.room_owner_id, {
                             sender = "Discord Rooms",
                             subject = "Paid Subscription for (" .. room.room_name .. ") $" .. price,
                             message = "You have been billed for your ownership of the chat channel " .. room.room_name .. " for the amount of $" .. price .. ". If you no longer wish to continue paying, please deactivate the room in your phone app."
@@ -167,7 +166,12 @@ RegisterNetEvent('qb-phone:server:SendGroupChatMessage', function(messageData, s
             })
             messageData.messageID = msg
             TriggerClientEvent('qb-phone:client:RefreshGroupChat', -1, src, messageData)
-            TriggerEvent("qb-log:server:CreateLog", "discord", "Message Posted (room: ".. messageData.room_id .. ", from: ".. Player.PlayerData.citizenid ..")", "blue", messageData.message)
+
+            lib.logger({
+                source = 'qb-phone',
+                event = "Message Posted (room: ".. messageData.room_id .. ", from: ".. Player.PlayerData.citizenid ..")",
+                message = messageData.message,
+            })
         else
             TriggerClientEvent('qb-phone:client:notification', src, 'Discord', 'You must be a member or room owner to send messages.')
         end
@@ -301,7 +305,13 @@ lib.callback.register('qb-phone:server:PurchaseRoom', function(source, price, ro
         ChatRooms[#ChatRooms + 1] = ChatRoom
 
         TriggerClientEvent('qb-phone:client:RefreshChatRooms', -1, ChatRooms)
-        TriggerEvent("qb-log:server:CreateLog", "discord", "Channel Created:  ".. roomData.room_name .."(id: ".. roomID.. ", by: "..Player.PlayerData.citizenid..")", "blue")
+
+        lib.logger({
+            source = 'qb-phone',
+            event = 'Channel Created',
+            message = "Channel Created:  ".. roomData.room_name .."(id: ".. roomID.. ", by: "..Player.PlayerData.citizenid..")",
+        })
+
 		return true
 	else
 		return false

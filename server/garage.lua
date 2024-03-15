@@ -48,15 +48,14 @@ lib.callback.register('qb-phone:server:GetGarageVehicles', function(source)
     local result = exports.oxmysql:executeSync('SELECT * FROM player_vehicles WHERE citizenid = ?', {Player.PlayerData.citizenid})
     if result[1] then
         for _, v in pairs(result) do
-            local VehicleData = QBCore.Shared.Vehicles[v.vehicle]
+            local VehicleData = exports.qbx_core:GetVehiclesByName()[v.vehicle]
             local VehicleGarage = "None"
             local enginePercent = round(v.engine / 10, 0)
             local bodyPercent = round(v.body / 10, 0)
-            if v.garage then
-                if Config.Garages[v.garage] then
-                    VehicleGarage = Config.Garages[v.garage]["label"]
-                else
-                    VehicleGarage = v.garage
+            local garage = exports.oxmysql:executeSync('SELECT * FROM garagelocations WHERE name = ?', { v.garage })
+            if garage[1] then
+                for _, j in pairs(garage) do
+                    VehicleGarage = j.label
                 end
             end
 
