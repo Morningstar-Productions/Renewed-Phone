@@ -44,7 +44,7 @@ CreateThread(function()
                     local FirstName = json.decode(v.charinfo) and json.decode(v.charinfo).firstname or false
                     local LastName = json.decode(v.charinfo) and json.decode(v.charinfo).lastname or false
 
-                    if grade and QBCore.Shared.Jobs[k].grades and QBCore.Shared.Jobs[k].grades[grade] and v.citizenid and v.charinfo and FirstName and LastName then
+                    if grade and QBCore.Shared.Jobs[k].grades and QBCore.Shared.Jobs[k].grades[tostring(grade)] and v.citizenid and v.charinfo and FirstName and LastName then
                         if not CachedJobs[k].employees then CachedJobs[k].employees = {} end
                         if not CachedJobs[k].employees[v.citizenid] then
 
@@ -160,7 +160,7 @@ RegisterNetEvent('qb-phone:server:fireUser', function(Job, sCID)
     local grade = tostring(CachedJobs[Job].employees[srcCID].grade)
     if not QBCore.Shared.Jobs[Job].grades[grade].isboss then return end
 
-    if CachedJobs[Job].employees[srcCID].grade < CachedJobs[Job].employees[CID].grade then return end
+    if tonumber(CachedJobs[Job].employees[srcCID].grade) < tonumber(CachedJobs[Job].employees[CID].grade) then return end
 
 
     CachedJobs[Job].employees[CID] = nil
@@ -200,7 +200,7 @@ RegisterNetEvent('qb-phone:server:SendEmploymentPayment', function(Job, CID, amo
 
     if not CachedJobs[Job].employees[srcCID].grade then return end
 
-    local grade = CachedJobs[Job].employees[srcCID].grade
+    local grade = tostring(CachedJobs[Job].employees[srcCID].grade)
     if not QBCore.Shared.Jobs[Job].grades[grade].isboss then return notifyPlayer(src, "You aren't a manager...") end
 
     local Reciever = QBCore.Functions.GetPlayerByCitizenId(CID)
@@ -239,7 +239,7 @@ RegisterNetEvent('qb-phone:server:hireUser', function(Job, id, grade)
 
     if not CachedJobs[Job].employees[pCID] or not CachedJobs[Job].employees[pCID].grade then return end
 
-    local bossGrade = CachedJobs[Job].employees[pCID].grade
+    local bossGrade = tostring(CachedJobs[Job].employees[pCID].grade)
     if not QBCore.Shared.Jobs[Job].grades[bossGrade].isboss then return notifyPlayer(src, "You arent a manager // boss...") end
 
     CachedJobs[Job].employees[CID] = {
@@ -276,7 +276,7 @@ RegisterNetEvent('qb-phone:server:gradesHandler', function(Job, CID, grade)
 
     if tonumber(grade) > tonumber(CachedJobs[Job].employees[srcCID].grade) then return notifyPlayer(src, "You cannot promote someone higher than you...") end
 
-    local bossGrade = CachedJobs[Job].employees[srcCID].grade
+    local bossGrade = tostring(CachedJobs[Job].employees[srcCID].grade)
     if not QBCore.Shared.Jobs[Job].grades[bossGrade].isboss then return notifyPlayer(src, "You arent a manager // boss...") end
 
     CachedJobs[Job].employees[CID].grade = tonumber(grade)
@@ -306,16 +306,13 @@ RegisterNetEvent('qb-phone:server:clockOnDuty', function(Job)
 
     if CachedPlayers[CID][Job] and CachedJobs[Job].employees[CID] then
         local grade = type(CachedJobs[Job].employees[CID].grade) ~= "number" and tonumber(CachedJobs[Job].employees[CID].grade) or CachedJobs[Job].employees[CID].grade
+        Player.Functions.SetJob(Job, grade)
         Wait(50)
         if Player.PlayerData.job.onduty then
             notifyPlayer(src, "You have signed off duty")
-            Player.Functions.SetJob('unemployed', 0)
-            Wait(50)
             Player.Functions.SetJobDuty(false)
         else
             notifyPlayer(src, "You have signed on duty")
-            Player.Functions.SetJob(Job, grade)
-            Wait(50)
             Player.Functions.SetJobDuty(true)
         end
         TriggerClientEvent('qb-phone:client:clearAppAlerts', src)
