@@ -6,12 +6,12 @@ var keyPadHTML;
 
 $( "input[type=text], textarea, input[type=number]" ).focusin(function(e) {
     e.preventDefault();
-    $.post('https://qb-phone/DissalowMoving');
+    $.post(`https://${GetParentResourceName()}/DissalowMoving`);
 });
 
 $( "input[type=text], textarea, input[type=number]" ).focusout(function(e) {
     e.preventDefault();
-    $.post('https://qb-phone/AllowMoving');
+    $.post(`https://${GetParentResourceName()}/AllowMoving`);
 });
 
 $(document).ready(function(){
@@ -58,7 +58,7 @@ $(document).on('click', '#phone-recent-chat', function(e){
     var RecentData = $("[data-recentid='"+RecentId+"']").data('recentData');
 
     if (RecentData.number !== QB.Phone.Data.PlayerData.charinfo.phone) {
-        $.post('https://qb-phone/GetWhatsappChats', JSON.stringify({}), function(chats){
+        $.post(`https://${GetParentResourceName()}/GetWhatsappChats`, JSON.stringify({}), function(chats){
             QB.Phone.Functions.LoadWhatsappChats(chats);
         });
 
@@ -75,7 +75,7 @@ $(document).on('click', '#phone-recent-chat', function(e){
             QB.Phone.Functions.ToggleApp("whatsapp", "block");
             QB.Phone.Data.currentApplication = "whatsapp";
 
-            $.post('https://qb-phone/GetWhatsappChat', JSON.stringify({phone: RecentData.number}), function(chat){
+            $.post(`https://${GetParentResourceName()}/GetWhatsappChat`, JSON.stringify({phone: RecentData.number}), function(chat){
                 QB.Phone.Functions.SetupChatMessages(chat, {
                     name: RecentData.name,
                     number: RecentData.number
@@ -118,7 +118,7 @@ $(document).on('click', '#phone-recent-start-call', function(e){
         name: RecentData.name
     }
 
-    $.post('https://qb-phone/CallContact', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/CallContact`, JSON.stringify({
         ContactData: cData,
         Anonymous: QB.Phone.Data.AnonymousCall,
     }), function(status){
@@ -178,7 +178,7 @@ $(document).on('click', "#phone-number-call-free-btn", function(e){
             name: InputNum,
         }
 
-        $.post('https://qb-phone/CallContact', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/CallContact`, JSON.stringify({
             ContactData: cData,
             Anonymous: QB.Phone.Data.AnonymousCall,
         }), function(status){
@@ -250,7 +250,7 @@ QB.Phone.Functions.LoadContacts = function(myContacts) { // THIS
                 ALLOWED_ATTR: []
             });
             if (contact.name == '') contact.name = 'Hmm, I shouldn\'t be able to do this...'
-            var ContactElement = '<div class="phone-contact" data-contactid="'+i+'"><div class="phone-contact-firstletter" style="background-color: whitesmoke;">'+'<i style="color: rgb(44, 70, 95); font-size:2.4vh; margin-top:15%;" class="fas fa-user"></i>'+'</div><div class="phone-contact-name">'+contact.name+'</div><div class="phone-contact-number">'+formatPhoneNumber(contact.number)+'</div><div class="phone-contact-action-buttons"> <i class="fas fa-user-alt-slash" id="delete-contact" data-toggle="tooltip" title="Delete"></i> <i class="fas fa-phone" id="phone-start-call" data-toggle="tooltip" title="Call"></i> <i class="fas fa-comment" id="new-chat-phone" data-toggle="tooltip" title="Message"></i> <i class="fas fa-edit" id="edit-contact" data-toggle="tooltip" title="Edit"></i> <i class="fas fa-clipboard" id="copy-contact" data-toggle="tooltip" title="Copy"></i>  </div></div>'
+            var ContactElement = '<div class="phone-contact" data-contactid="'+i+'"><div class="phone-contact-firstletter" style="background-color: whitesmoke;">'+'<i style="color: rgb(44, 70, 95); font-size:2.4vh; margin-top:15%;" class="fas fa-user"></i>'+'</div><div class="phone-contact-name">'+contact.name+'</div><div class="phone-contact-number">'+formatPhoneNumber(contact.number)+'</div><div class="phone-contact-action-buttons"> <i class="fas fa-user-alt-slash" id="delete-contact" data-toggle="tooltip" title="Yeet"></i> <i class="fas fa-phone" id="phone-start-call" data-toggle="tooltip" title="Call"></i> <i class="fas fa-comment" id="new-chat-phone" data-toggle="tooltip" title="Message"></i> <i class="fas fa-edit" id="edit-contact" data-toggle="tooltip" title="Edit"></i> <i class="fas fa-clipboard" id="copy-contact" data-toggle="tooltip" title="Copy Contact"></i>  </div></div>'
             $(ContactsObject).append(ContactElement);
             $("[data-contactid='"+i+"']").data('contactData', contact);
         });
@@ -262,7 +262,7 @@ $(document).on('click', '#new-chat-phone', function(e){
     var ContactData = $("[data-contactid='"+ContactId+"']").data('contactData');
 
     if (ContactData.number !== QB.Phone.Data.PlayerData.charinfo.phone) {
-        $.post('https://qb-phone/GetWhatsappChats', JSON.stringify({}), function(chats){
+        $.post(`https://${GetParentResourceName()}/GetWhatsappChats`, JSON.stringify({}), function(chats){
             QB.Phone.Functions.LoadWhatsappChats(chats);
         });
 
@@ -279,7 +279,7 @@ $(document).on('click', '#new-chat-phone', function(e){
             QB.Phone.Functions.ToggleApp("whatsapp", "block");
             QB.Phone.Data.currentApplication = "whatsapp";
 
-            $.post('https://qb-phone/GetWhatsappChat', JSON.stringify({phone: ContactData.number}), function(chat){
+            $.post(`https://${GetParentResourceName()}/GetWhatsappChat`, JSON.stringify({phone: ContactData.number}), function(chat){
                 QB.Phone.Functions.SetupChatMessages(chat, {
                     name: ContactData.name,
                     number: ContactData.number
@@ -348,7 +348,7 @@ $(document).on('click', '#phone-number-savecontact-edit', function(e){
 
     if (ContactName != "" && ContactNumber != "" && !regExp.test(ContactNumber)) {
         ConfirmationFrame()
-        $.post('https://qb-phone/EditContact', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/EditContact`, JSON.stringify({
             CurrentContactName: ContactName,
             CurrentContactNumber: ContactNumber,
             OldContactName: CurrentEditContactData.name,
@@ -376,7 +376,7 @@ $(document).on('click', '#delete-contact', function(e){
     var ContactName = ContactData.name;
     var ContactNumber = ContactData.number;
 
-    $.post('https://qb-phone/DeleteContact', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/DeleteContact`, JSON.stringify({
         CurrentContactName: ContactName,
         CurrentContactNumber: ContactNumber,
     }), function(PhoneContacts){
@@ -419,7 +419,7 @@ $(document).on('click', '#phone-number-savecontact', function(e){
 
     if (ContactName != "" && ContactNumber != "" && !regExp.test(ContactNumber)) {
         ConfirmationFrame()
-        $.post('https://qb-phone/AddNewContact', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/AddNewContact`, JSON.stringify({
             ContactName: ContactName,
             ContactNumber: ContactNumber,
         }), function(PhoneContacts){
@@ -455,7 +455,7 @@ $(document).on('click', '#phone-start-call', function(e){
 });
 
 SetupCall = function(cData) {
-    $.post('https://qb-phone/CallContact', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/CallContact`, JSON.stringify({
         ContactData: cData,
         Anonymous: QB.Phone.Data.AnonymousCall,
     }), function(status){
@@ -514,18 +514,18 @@ CancelOutgoingCall = function() {
 $(document).on('click', '#outgoing-cancel', function(e){
     e.preventDefault();
 
-    $.post('https://qb-phone/CancelOutgoingCall');
+    $.post(`https://${GetParentResourceName()}/CancelOutgoingCall`);
 });
 
 $(document).on('click', '#incoming-deny', function(e){
     e.preventDefault();
-    $.post('https://qb-phone/DenyIncomingCall');
+    $.post(`https://${GetParentResourceName()}/DenyIncomingCall`);
 });
 
 $(document).on('click', '#ongoing-cancel', function(e){
     e.preventDefault();
 
-    $.post('https://qb-phone/CancelOngoingCall');
+    $.post(`https://${GetParentResourceName()}/CancelOngoingCall`);
 });
 
 IncomingCallAlert = function(CallData, Canceled, AnonymousCall) {
@@ -612,7 +612,7 @@ QB.Phone.Functions.SetupCurrentCall = function(cData) {
 $(document).on('click', '#incoming-answer', function(e){
     e.preventDefault();
 
-    $.post('https://qb-phone/AnswerCall');
+    $.post(`https://${GetParentResourceName()}/AnswerCall`);
     $("#incoming-answer").css({"display":"none"});
 });
 

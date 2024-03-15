@@ -4,16 +4,16 @@ var ExtraButtonsOpen = false;
 
 $( "input[type=text], textarea, input[type=number]" ).focusin(function(e) {
     e.preventDefault();
-    $.post('https://qb-phone/DissalowMoving');
+    $.post(`https://${GetParentResourceName()}/DissalowMoving`);
 });
 $(".whatsapp-openedchat").focusin(function(e) {
     e.preventDefault();
-    $.post('https://qb-phone/DissalowMoving');
+    $.post(`https://${GetParentResourceName()}/DissalowMoving`);
 });
 
 $( "input[type=text], textarea, input[type=number]" ).focusout(function(e) {
     e.preventDefault();
-    $.post('https://qb-phone/AllowMoving');
+    $.post(`https://${GetParentResourceName()}/AllowMoving`);
 });
 
 
@@ -59,7 +59,7 @@ $(document).on('click', '.whatsapp-chat', function(e){
 
     QB.Phone.Functions.SetupChatMessages(ChatData);
 
-    $.post('https://qb-phone/ClearAlerts', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/ClearAlerts`, JSON.stringify({
         number: ChatData.number
     }));
 
@@ -84,7 +84,7 @@ $(document).on('click', '.whatsapp-chat', function(e){
 
 $(document).on('click', '#whatsapp-openedchat-back', function(e){
     e.preventDefault();
-    $.post('https://qb-phone/GetWhatsappChats', JSON.stringify({}), function(chats){
+    $.post(`https://${GetParentResourceName()}/GetWhatsappChats`, JSON.stringify({}), function(chats){
         QB.Phone.Functions.LoadWhatsappChats(chats);
     });
     OpenedChatData.number = null;
@@ -208,7 +208,7 @@ $(document).on('click', '#whatsapp-save-note-for-doc', function(e){
     var Number = $(".whatsapp-input-number").val();
     var regExp = /[a-zA-Z]/g;
     if ((Message &&Number ) != "" && !regExp.test(Number)){
-        $.post('https://qb-phone/SendMessage', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/SendMessage`, JSON.stringify({
             ChatNumber: Number,
             ChatDate: GetCurrentDateKey(),
             ChatMessage: Message,
@@ -219,7 +219,7 @@ $(document).on('click', '#whatsapp-save-note-for-doc', function(e){
         $(".whatsapp-input-message").val("");
         $(".whatsapp-input-number").val("");
         $('#whatsapp-box-new-add-new').fadeOut(350);
-        $.post('https://qb-phone/GetWhatsappChats', JSON.stringify({}), function(chats){
+        $.post(`https://${GetParentResourceName()}/GetWhatsappChats`, JSON.stringify({}), function(chats){
             QB.Phone.Functions.LoadWhatsappChats(chats);
         });
     } else {
@@ -259,7 +259,7 @@ $(document).on('click', '#whatsapp-openedchat-send', function(e){
     }
 
     if (NewMessage !== null && NewMessage !== undefined && NewMessage !== "") {
-        $.post('https://qb-phone/SendMessage', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/SendMessage`, JSON.stringify({
             ChatNumber: OpenedChatData.number,
             ChatDate: GetCurrentDateKey(),
             ChatMessage: NewMessage,
@@ -270,7 +270,7 @@ $(document).on('click', '#whatsapp-openedchat-send', function(e){
 
     if (urlDetect != null){
         if (/(jpg|jpeg|gif|png)$/i.test(urlDetect)) {
-            $.post('https://qb-phone/SendMessage', JSON.stringify({
+            $.post(`https://${GetParentResourceName()}/SendMessage`, JSON.stringify({
                 ChatNumber: OpenedChatData.number,
                 ChatDate: GetCurrentDateKey(),
                 ChatMessage: null,
@@ -293,7 +293,7 @@ $(document).on('click', '#whatsapp-openedchat-call', function(e){
             number: InputNum,
             name: InputNum,
         }
-        $.post('https://qb-phone/CallContact', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/CallContact`, JSON.stringify({
             ContactData: cData,
             Anonymous: QB.Phone.Data.AnonymousCall,
         }), function(status){

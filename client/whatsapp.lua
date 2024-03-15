@@ -89,7 +89,6 @@ RegisterNUICallback('SendMessage', function(data, cb)
         chatNumber = ChatNumber,
     })
 
-
     cb("ok")
 end)
 

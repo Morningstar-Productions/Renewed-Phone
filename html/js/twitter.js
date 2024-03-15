@@ -30,7 +30,7 @@ function CopyMentionTag(elem) {
     var $temp = $("<input>");
     $("body").append($temp);
     $temp.val($(elem).data('mentiontag')).select();
-    QB.Phone.Notifications.Add("fab fa-twitter", "Twitter", $(elem).data('mentiontag')+ " copied!", "rgb(27, 149, 224)", 1250);
+    QB.Phone.Notifications.Add("fab fa-twitter", "Twatter", $(elem).data('mentiontag')+ " copied!", "rgb(27, 149, 224)", 1250);
     document.execCommand("copy");
     $temp.remove();
 }
@@ -85,11 +85,11 @@ QB.Phone.Notifications.LoadTweets = function(Tweets, hasVPN=false) {
                             '<div class="tweet-message"><p>'+TwtMessage+'</p></div>' +
                             '<div class="tweet-image-attached">Images Attached: 1<p><u>Hide (click image to copy URL)</u></p></div>'+
                             '<div class="tweet-time">' + TimeAgo + '</div>' +
-                            '<img class="image" src= ' + Tweet.url + ' style = " display: none; border-radius:4px; width: 70%; position:relative; z-index: 1; left:25px; margin:.6rem .5rem .6rem 1rem;height: auto; bottom: 20px;">' +
+                            '<img class="image" src= ' + Tweet.url + ' style = " display: none; border-radius:4px; width: 80%; position:relative; z-index: 1; left: 0.4vw; margin:.6rem .5rem .6rem 1rem;height: auto; bottom: 3.5vh;">' +
                             '<div class="tweet-block">' +
                                 '<div class="tweet-eye"><i class="fas fa-eye"></i></div>'+
                                 '<div class="tweet-image-text">Click to View</div>'+
-                                '<div class="tweet-image-text-other">Only revel images from those you<p>know are not dick heads</p></div>'+
+                                '<div class="tweet-image-text-other">Only reveal images from those you<p>know are not total pricks</p></div>'+
                             '</div>'+
                         '</div>';
                     $(".twitter-home-tab").append(TweetElement);
@@ -102,11 +102,11 @@ QB.Phone.Notifications.LoadTweets = function(Tweets, hasVPN=false) {
                     '<div class="tweet-message"><p>'+TwtMessage+'</p></div>' +
                     '<div class="tweet-image-attached">Images Attached: 1<p><u>Hide (click image to copy URL)</u></p></div>'+
                     '<div class="tweet-time">' + TimeAgo + '</div>' +
-                    '<img class="image" src= ' + Tweet.url + ' style = " display: none; border-radius:4px; width: 70%; position:relative; z-index: 1; left:25px; margin:.6rem .5rem .6rem 1rem;height: auto; bottom: 20px;">' +
+                    '<img class="image" src= ' + Tweet.url + ' style = " display: none; border-radius:4px; width: 80%; position:relative; z-index: 1; left: 0.4vw; margin:.6rem .5rem .6rem 1rem;height: auto; bottom: 3.5vh;">' +
                     '<div class="tweet-block">' +
                         '<div class="tweet-eye"><i class="fas fa-eye"></i></div>'+
                         '<div class="tweet-image-text">Click to View</div>'+
-                        '<div class="tweet-image-text-other">Only revel images from those you<p>know are not dick heads</p></div>'+
+                        '<div class="tweet-image-text-other">Only reveal images from those you<p>know are not total pricks</p></div>'+
                     '</div>'+
                 '</div>';
             $(".twitter-home-tab").append(TweetElement);
@@ -138,7 +138,7 @@ $(document).on('click', '#twt-sendmessage-chat', function(e){ // Submit Button F
                 ConfirmationFrame()
             }, 150);
         }
-        $.post('https://qb-phone/PostNewTweet', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/PostNewTweet`, JSON.stringify({
             Message: TweetMessage,
             Date: CurrentDate,
             url: imageURL,
@@ -149,7 +149,7 @@ $(document).on('click', '#twt-sendmessage-chat', function(e){ // Submit Button F
             $('#twt-box-textt').fadeOut(350);
         });
     } else {
-        QB.Phone.Notifications.Add("fab fa-twitter", "Twitter", "Fill a message!", "#1DA1F2");
+        QB.Phone.Notifications.Add("fab fa-twitter", "Twatter", "Fill a message!", "#1DA1F2");
     };
     $('.twt-box-image-input').val("");
 });
@@ -200,14 +200,14 @@ $(document).on('click', '.tweet-retweet', function(e){
         setTimeout(function(){
             ConfirmationFrame()
         }, 150);
-        $.post('https://qb-phone/PostNewTweet', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/PostNewTweet`, JSON.stringify({
             Message: CompleteRetweet,
             Date: CurrentDate,
             url: imageURL,
             type: 'retweet'
         }))
     } else {
-        QB.Phone.Notifications.Add("fab fa-twitter", "Twitter", "Cannot retweet a retweet!", "#1DA1F2");
+        QB.Phone.Notifications.Add("fab fa-twitter", "Twatter", "Cannot retwat a retwat!", "#1DA1F2");
     }
 });
 
@@ -215,7 +215,7 @@ $(document).on('click', '.tweet-flag', function(e){
     e.preventDefault();
     var TwtName = $(this).parent().parent().data('twthandler');
     var TwtMessage = $(this).parent().data('twtmessage');
-    $.post('https://qb-phone/FlagTweet', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/FlagTweet`, JSON.stringify({
         name: TwtName,
         message: TwtMessage,
     }))
@@ -224,5 +224,5 @@ $(document).on('click', '.tweet-flag', function(e){
 $(document).on('click','.tweet-trash',function(e){
     e.preventDefault();
     var source = $(this).parent().parent().data('twtid');
-    $.post('https://qb-phone/DeleteTweet', JSON.stringify({id: source}))
+    $.post(`https://${GetParentResourceName()}/DeleteTweet`, JSON.stringify({id: source}))
 })

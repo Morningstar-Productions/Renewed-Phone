@@ -17,7 +17,7 @@ function ConfirmationFrame() {
 }
 
 function LoadCryptoCoins(){
-    $.post('https://qb-phone/GetCryptosFromDegens', JSON.stringify({}), function(Jobs){
+    $.post(`https://${GetParentResourceName()}/GetCryptosFromDegens`, JSON.stringify({}), function(Jobs){
         $(".crypto-lists").html("");
         for (const [k, v] of Object.entries(Jobs)) {
             var CryptoType = QB.Phone.Data.PlayerData.metadata.crypto;
@@ -102,7 +102,7 @@ $(document).on('click', '#crypto-send-purchase', function(e){
         setTimeout(function(){
             ConfirmationFrame()
         }, 150);
-        $.post('https://qb-phone/BuyCrypto', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/BuyCrypto`, JSON.stringify({
             metadata: crypto,
             amount: amount,
         }));
@@ -130,7 +130,7 @@ $(document).on('click', '#crypto-send-exchange', function(e){
             setTimeout(function(){
                 ConfirmationFrame()
             }, 150);
-            $.post('https://qb-phone/ExchangeCrypto', JSON.stringify({
+            $.post(`https://${GetParentResourceName()}/ExchangeCrypto`, JSON.stringify({
                 metadata: crypto,
                 amount: amount,
                 stateid: stateid,
@@ -161,7 +161,7 @@ $(document).on('click', '#crypto-send-sell', function(e){
             setTimeout(function(){
                 ConfirmationFrame()
             }, 150);
-            $.post('https://qb-phone/SellCrypto', JSON.stringify({
+            $.post(`https://${GetParentResourceName()}/SellCrypto`, JSON.stringify({
                 metadata: crypto,
                 amount: amount,
             }));

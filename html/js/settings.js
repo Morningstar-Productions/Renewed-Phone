@@ -47,13 +47,13 @@ $(document).on('click', '#settings-app-submit', function(e){
     if (checkbox){
         QB.Phone.Notifications.Add("fas fa-paint-brush", "SETTINGS", "Default background set!")
         $(".phone-background").css({"background-image":"url('/html/img/backgrounds/default-qbcore.png')"})
-        $.post('https://qb-phone/SetBackground', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/SetBackground`, JSON.stringify({
             background: '/html/img/backgrounds/default-qbcore.png',
         }))
     }else if (customurl){
         QB.Phone.Notifications.Add("fas fa-paint-brush", "SETTINGS", "Personal background set!")
         $(".phone-background").css({"background-image":"url('"+customurl+"')"});
-        $.post('https://qb-phone/SetBackground', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/SetBackground`, JSON.stringify({
             background: customurl,
         }))
     }

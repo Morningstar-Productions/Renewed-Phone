@@ -4,7 +4,9 @@ Config = Config or {}
 
 Config.RenewedBanking = true -- Either put this to true or false if you use Renewed Banking or not
 Config.RenewedFinances = false -- Either put this to true or false if you use Renewed Finances or not
-Config.RenewedCameras = false -- Either put this to true or false if you use Renewed Cameras or not
+
+-- Configs for GoPro Script
+Config.BrazzersCameras = false -- Either put this to true or false if you use Renewed Cameras or not
 
 Config.BillingCommissions = { -- This is a percentage (0.10) == 10%
     mechanic = 0.10
@@ -18,6 +20,11 @@ Config.VPNItem = 'vpn'
 
 -- The garage the vehicle goes to when you sell a car to a player
 Config.SellGarage = 'altastreet'
+
+-- NEW --
+Config.Garage = 'jdev'  -- Use 'jdev' if using JDev's QB Garage Script
+                        -- Use 'qbcore' if using base QBCore Garage Script
+Config.GarageResource = 'qb-garages' -- Change to qbx_garages if using QBox
 
 -- How Long Does The Player Have To Accept The Ping - This Is In Seconds
 Config.Timeout = 30
@@ -71,7 +78,7 @@ Config.PhoneApplications = {
         color = "#51da80",
         color2 = "#009436",
         icon = "fas fa-phone-volume",
-        tooltipText = "Phone",
+        tooltipText = "Calls",
         tooltipPos = "top",
         style = "font-size: 3.3vh";
         job = false,
@@ -97,7 +104,7 @@ Config.PhoneApplications = {
         color = "#6d10f5",
         color2 = "#4b67ef",
         icon = "fas fa-map-marker-alt",
-        tooltipText = "Ping",
+        tooltipText = "Ping!",
         tooltipPos = "top",
         style = "font-size: 3.3vh";
         job = false,
@@ -110,7 +117,7 @@ Config.PhoneApplications = {
         color = "#009ee5",
         color2 = "#87d9e7",
         icon = "fas fa-envelope",
-        tooltipText = "Mail",
+        tooltipText = "System Mail",
         style = "font-size: 3vh";
         job = false,
         blockedjobs = {},
@@ -122,7 +129,7 @@ Config.PhoneApplications = {
         color = "#ffc900",
         color2 = "#f7c816",
         icon = "fas fa-bullhorn",
-        tooltipText = "Advertisements",
+        tooltipText = "Yellow Pages",
         style = "font-size: 2vh";
         job = false,
         blockedjobs = {},
@@ -159,7 +166,7 @@ Config.PhoneApplications = {
         color = "#fdfeff",
         color2 = "#d5e6fa",
         icon = "fas fa-ad",
-        tooltipText = "Debt",
+        tooltipText = "Loans & Debt",
         job = false,
         blockedjobs = {},
         slot = 10,
@@ -193,7 +200,7 @@ Config.PhoneApplications = {
         color = "#42a042",
         color2 = "#3f9e4a",
         icon = "fas fa-house-user",
-        tooltipText = "Houses",
+        tooltipText = "Housing",
         style = "font-size: 3vh";
         job = false,
         blockedjobs = {},
@@ -212,8 +219,8 @@ Config.PhoneApplications = {
         slot = 14,
         Alerts = 0,
     },
-    ["jobcenter"] = {
-        app = "jobcenter",
+    ["job"] = {
+        app = "job",
         color = "#151515",
         color2 = "#161616",
         icon = "fas fa-id-badge",
@@ -224,15 +231,27 @@ Config.PhoneApplications = {
         slot = 15,
         Alerts = 0,
     },
-    ["employment"] = {
-        app = "employment",
+    ["jobcenter"] = {
+        app = "jobcenter",
         color = "#151515",
         color2 = "#161616",
-        icon = "fas fa-ad",
-        tooltipText = "Employment",
+        icon = "fas fa-id-badge",
+        tooltipText = "Group",
+        style = "color: #78bdfd; font-size: 2.7vh";
         job = false,
         blockedjobs = {},
         slot = 16,
+        Alerts = 0,
+    },
+    ["employment"] = {
+        app = "employment",
+        color = "#009ee5",
+        color2 = "#87d9e7",
+        icon = "fas fa-briefcase",
+        tooltipText = "Employment",
+        job = false,
+        blockedjobs = {},
+        slot = 17,
         Alerts = 0,
     },
     ["lsbn"] = {
@@ -243,7 +262,7 @@ Config.PhoneApplications = {
         tooltipText = "LSBN",
         job = false,
         blockedjobs = {},
-        slot = 17,
+        slot = 18,
         Alerts = 0,
     },
     ["taxi"] = {
@@ -256,7 +275,7 @@ Config.PhoneApplications = {
         style = "font-size: 3vh";
         job = false,
         blockedjobs = {},
-        slot = 18,
+        slot = 19,
         Alerts = 0,
     },
     ["casino"] = {
@@ -264,12 +283,12 @@ Config.PhoneApplications = {
         color = "#000100",
         color2 = "#000100",
         icon = "fas fa-gem",
-        tooltipText = "Betting",
+        tooltipText = "Diamond Sports Book",
         tooltipPos = "bottom",
         style = "font-size: 2.7vh";
         job = false,
         blockedjobs = {},
-        slot = 19,
+        slot = 20,
         Alerts = 0,
     },
     ["calculator"] = {
@@ -282,7 +301,7 @@ Config.PhoneApplications = {
         style = "font-size: 2.5vh";
         job = false,
         blockedjobs = {},
-        slot = 20,
+        slot = 21,
         Alerts = 0,
     },
     ["gallery"] = {
@@ -295,7 +314,7 @@ Config.PhoneApplications = {
         style = "font-size: 2.7vh";
         job = false,
         blockedjobs = {},
-        slot = 21,
+        slot = 22,
         Alerts = 0,
     },
     ["racing"] = {
@@ -307,7 +326,7 @@ Config.PhoneApplications = {
         style = "font-size: 3vh";
         job = false,
         blockedjobs = {},
-        slot = 22,
+        slot = 23,
         Alerts = 0,
     },
     ["bank"] = {
@@ -319,7 +338,7 @@ Config.PhoneApplications = {
         style = "font-size: 2.7vh";
         job = false,
         blockedjobs = {},
-        slot = 23,
+        slot = 24,
         Alerts = 0,
     },
     ["gopro"] = {
@@ -327,12 +346,12 @@ Config.PhoneApplications = {
         color = "#008FFF",
         color2 = "#008FFF",
         icon = "fas fa-camera",
-        tooltipText = "camera",
+        tooltipText = "GoPro",
         tooltipPos = "top",
         style = "padding-right: .08vh; font-size: 3.3vh";
         job = false,
         blockedjobs = {},
-        slot = 24,
+        slot = 25,
         Alerts = 0,
     },
     ["group-chats"] = {
@@ -345,17 +364,6 @@ Config.PhoneApplications = {
         style = "padding-right: .08vh; font-size: 3.3vh";
         job = false,
         blockedjobs = {},
-        slot = 25,
-        Alerts = 0,
-    },
-    ["meos"] = {
-        app = "meos",
-        color = "#004682",
-        color2 = "#00325c",
-        icon = "fas fa-ad",
-        tooltipText = "MDT",
-        job = "police",
-        blockedjobs = {},
         slot = 26,
         Alerts = 0,
     },
@@ -365,30 +373,64 @@ Config.MaxSlots = 28
 
 Config.JobCenter = {
     [1] = {
-        job = "unemployed",
-        label = "Unemployment",
-        Coords = {},
+        vpn = false,
+        icon = 'fas fa-warehouse',
+        icons = '💲💲💲💲💲',
+        label = "Impound Worker",
+        event = "qb-phone:jobcenter:tow",
     },
     [2] = {
-        job = "garbage",
-        label = "Garbage",
-        Coords = {-344.76, -1564.34},
+        vpn = true,
+        icon = 'fas fa-house',
+        label = "House Robbery",
+        event = "qb-robbery:waypoint", -- Make Your Own Event
     },
     [3] = {
-        job = "taxi",
-        label = "Taxi Driver",
-        Coords = {909.11, -174.59},
+        vpn = true,
+        icon = 'fas fa-pills',
+        label = "Meth Run",
+        event = "kevin-methruns:waypoint", -- Make Your Own Event
     },
     [4] = {
-        job = "amazon",
-        label = "Amazon Driver",
-        Coords = {-1071.08, -2004.0},
+        vpn = false,
+        icon = 'fas fa-fish',
+        icons = '💲💲💲💲',
+        label = 'Fishing',
+        event = 'qb-phone:jobcenter:fish',
     },
     [5] = {
-        job = "trucker",
-        label = "Truck Driver",
-        Coords = {925.83, -1560.23},
+        vpn = true,
+        icon = 'fas fa-tablets',
+        label = "Oxy Run",
+        event = "kevin-oxyruns:waypoint", -- Make Your Own Event
     },
+    [6] = {
+        vpn = false,
+        icon = 'fas fa-trash',
+        label = "Sanitation Worker",
+        icons = '💲💲💲💲💲',
+        event = "qb-phone:jobcenter:sanitation",
+    },
+    [7] = {
+        vpn = false,
+        icon = 'fas fa-shop',
+        icons = '💲💲💲💲',
+        label = "Road Runner Delivery",
+        event = "qb-phone:jobcenter:postop",
+    },
+    [8] = {
+        vpn = true,
+        icon = 'fas fa-cannabis',
+        label = "Weed Runs",
+        event = "kevin-weedruns:waypoint", -- Make Your Own Event
+    },
+    [9] = {
+        vpn = false,
+        icon = 'fas fa-warehouse',
+        icons = '💲💲💲💲💲',
+        label = "PD Impound Worker",
+        event = "qb-phone:jobcenter:pdimpound"
+    }
 }
 
 Config.TaxiJob = {

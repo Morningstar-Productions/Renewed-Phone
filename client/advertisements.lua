@@ -1,5 +1,7 @@
 -- Functions
 
+---@param Number number
+---@return any
 local function GetKeyByNumber(Number)
     if PhoneData.Chats then
         for k, v in pairs(PhoneData.Chats) do
@@ -70,7 +72,7 @@ RegisterNetEvent('qb-phone:client:UpdateAdverts', function(Adverts, LastAd, src)
     })
 
     if not LastAd or not src then return end
-    if GetPlayerServerId(PlayerId()) == src then return end
+    if GetPlayerServerId(cache.playerId) == src then return end
 
     TriggerEvent('qb-phone:client:CustomNotification',
         "Advertisement",

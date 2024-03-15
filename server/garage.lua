@@ -1,5 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 RegisterNetEvent('qb-phone:server:sendVehicleRequest', function(data)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
@@ -20,8 +18,8 @@ RegisterNetEvent('qb-phone:server:sellVehicle', function(data, Seller, type)
 
     if type == 'accepted' then
         if Player.PlayerData.money.bank and Player.PlayerData.money.bank >= tonumber(data.price) then
-            Player.Functions.RemoveMoney('bank', data.price, "vehicle sale")
-            SellerData.Functions.AddMoney('bank', data.price)
+            Player.Functions.RemoveMoney('bank', data.price, "Bought Used Vehicle")
+            SellerData.Functions.AddMoney('bank', data.price, "Sold Used Vehicle")
             TriggerClientEvent('qb-phone:client:CustomNotification', src, "VEHICLE SALE", "You purchased the vehicle for $"..data.price, "fas fa-chart-line", "#D3B300", 5500)
             TriggerClientEvent('qb-phone:client:CustomNotification', Seller.PlayerData.source, "VEHICLE SALE", "Your vehicle was successfully purchased!", "fas fa-chart-line", "#D3B300", 5500)
             MySQL.update('UPDATE player_vehicles SET citizenid = ?, garage = ?, state = ? WHERE plate = ?',{Player.PlayerData.citizenid, Config.SellGarage, 1, data.plate})
@@ -42,22 +40,22 @@ local function round(num, numDecimalPlaces)
     return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
 
-QBCore.Functions.CreateCallback('qb-phone:server:GetGarageVehicles', function(source, cb)
-    local Player = QBCore.Functions.GetPlayer(source)
+lib.callback.register('qb-phone:server:GetGarageVehicles', function(source)
+    local src = source
+    local Player = QBCore.Functions.GetPlayer(src)
     local Vehicles = {}
     local vehdata
     local result = exports.oxmysql:executeSync('SELECT * FROM player_vehicles WHERE citizenid = ?', {Player.PlayerData.citizenid})
     if result[1] then
         for _, v in pairs(result) do
-            local VehicleData = QBCore.Shared.Vehicles[v.vehicle]
+            local VehicleData = exports.qbx_core:GetVehiclesByName()[v.vehicle]
             local VehicleGarage = "None"
             local enginePercent = round(v.engine / 10, 0)
             local bodyPercent = round(v.body / 10, 0)
-            if v.garage then
-                if Config.Garages[v.garage] then
-                    VehicleGarage = Config.Garages[v.garage]["label"]
-                else
-                    VehicleGarage = v.garage
+            local garage = exports.oxmysql:executeSync('SELECT * FROM garagelocations WHERE name = ?', { v.garage })
+            if garage[1] then
+                for _, j in pairs(garage) do
+                    VehicleGarage = j.label
                 end
             end
 
@@ -97,8 +95,8 @@ QBCore.Functions.CreateCallback('qb-phone:server:GetGarageVehicles', function(so
             end
             Vehicles[#Vehicles+1] = vehdata
         end
-        cb(Vehicles)
+        return Vehicles
     else
-        cb(nil)
+        return nil
     end
 end)

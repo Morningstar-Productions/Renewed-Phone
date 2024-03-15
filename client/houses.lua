@@ -1,15 +1,13 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 -- NUI Callback
 
 RegisterNUICallback('GetPlayerHouses', function(_, cb)
-    QBCore.Functions.TriggerCallback('qb-phone:server:GetPlayerHouses', function(Houses)
+    lib.callback('qb-phone:server:GetPlayerHouses', false, function(Houses)
         cb(Houses)
     end)
 end)
 
 RegisterNUICallback('GetPlayerKeys', function(_, cb)
-    QBCore.Functions.TriggerCallback('qb-phone:server:GetHouseKeys', function(Keys)
+    lib.callback('qb-phone:server:GetHouseKeys', false, function(Keys)
         cb(Keys)
     end)
 end)
@@ -33,13 +31,13 @@ end)
 RegisterNUICallback('TransferCid', function(data, cb)
     local TransferedCid = data.newBsn
 
-    QBCore.Functions.TriggerCallback('qb-phone:server:TransferCid', function(CanTransfer)
+    lib.callback('qb-phone:server:TransferCid', false, function(CanTransfer)
         cb(CanTransfer)
     end, TransferedCid, data.HouseData)
 end)
 
 RegisterNUICallback('FetchPlayerHouses', function(data, cb)
-    QBCore.Functions.TriggerCallback('qb-phone:server:MeosGetPlayerHouses', function(result)
+    lib.callback('qb-phone:server:MeosGetPlayerHouses', false, function(result)
         cb(result)
     end, data.input)
 end)

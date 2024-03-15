@@ -1,8 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
 
+
+:root {
+    --tooltip-color: #46494b; /* Change this with the color you prefer */
+}
+
 .tooltip-inner {
-    font-size: 11px;
-    color: white;
+    background-color: var(--tooltip-color) !important;
+    color: #fff ;
+    font-family: 'Roboto';
+    font-weight: bold;
+    font-size: 1.3vh;
+}
+
+.tooltip.bs-tooltip-right .tooltip-arrow::before {
+    border-right-color: var(--tooltip-color) !important;
+}
+.tooltip.bs-tooltip-left .tooltip-arrow::before {
+    border-left-color: var(--tooltip-color) !important;
+}
+.tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+    border-bottom-color: var(--tooltip-color) !important;
+}
+.tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: var(--tooltip-color) !important;
 }
 
 .toggle.ios, .toggle-on.ios, .toggle-off.ios { 
@@ -14,5 +35,5 @@
 }
 
 .custom-control, .custom-switch, .custom-control-input {
-    color: white
+    color: white;
 }

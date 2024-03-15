@@ -30,7 +30,7 @@ RegisterNetEvent('qb-phone:client:NewMailNotify', function(MailData)
         "Mail",
         "New E-Mail from: "..MailData.sender,
         "fas fa-envelope",
-        "ff002f",
+        "#ff002f",
         1500
     )
 
@@ -59,18 +59,5 @@ RegisterNetEvent('qb-phone:client:UpdateMails', function(NewMails)
     SendNUIMessage({
         action = "UpdateMails",
         Mails = NewMails
-    })
-end)
-
-RegisterCommand('dumbmail', function()
-    TriggerServerEvent('qb-phone:server:sendNewMail', {
-        sender = "Booya",
-        subject = "I love Zoo",
-        message = "This is an interesting email from yours truly, booya. I'm so mad you took my phone and made it better. Maybe I just take it all and upload it soon!",
-        button = {
-            buttonEvent = "Renewed-Debt:server:AcceptShit",
-            buttonData = 10,
-            isServer = false
-        }
     })
 end)

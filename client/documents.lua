@@ -1,7 +1,13 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 -- NUI Callback
 
+-- WORK IN PROGRESS
+--[[
+RegisterNUICallback('SetupHousingDocuments', function(_, cb)
+    QBCore.Functions.TriggerCallback('qb-phone:server:GetHousingLocations', function(houses)
+        cb(houses)
+    end)
+end)
+]]
 
 RegisterNUICallback('documents_Save_Note_As', function(data, cb)
     TriggerServerEvent('qb-phone:server:documents_Save_Note_As', data)
@@ -10,13 +16,11 @@ end)
 
 RegisterNUICallback('document_Send_Note', function(data, cb)
     if data.Type == 'LocalSend' then
-        local player, distance = QBCore.Functions.GetClosestPlayer()
-        if player ~= -1 and distance < 2.5 then
-            local playerId = GetPlayerServerId(player)
-            TriggerServerEvent("qb-phone:server:sendDocumentLocal", data, playerId)
-        else
-            TriggerEvent("DoShortHudText", "No one around!", 2)
-        end
+        local pID = lib.getClosestPlayer(GetEntityCoords(cache.ped), 2.5)
+        if not pID then return QBCore.Functions.Notify("No one around!", 'error', 2000) end
+
+        local PlayerId = GetPlayerServerId(pID)
+        TriggerServerEvent("qb-phone:server:sendDocumentLocal", data, PlayerId)
     elseif data.Type == 'PermSend' then
         TriggerServerEvent('qb-phone:server:sendDocument', data)
     end

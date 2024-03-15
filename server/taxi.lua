@@ -1,6 +1,4 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
-QBCore.Functions.CreateCallback('qb-phone:server:GetAvailableTaxiDrivers', function(_, cb)
+lib.callback.register('qb-phone:server:GetAvailableTaxiDrivers', function(_)
     local TaxiDrivers = {}
 
     for i = 1, #Config.TaxiJob do
@@ -9,17 +7,19 @@ QBCore.Functions.CreateCallback('qb-phone:server:GetAvailableTaxiDrivers', funct
         TaxiDrivers[job.Job].Players = {}
     end
 
-    for _, v in pairs(QBCore.Functions.GetPlayers()) do
-        local Player = QBCore.Functions.GetPlayer(v)
-        if Player then
-            local job = Player.PlayerData.job.name
-            if TaxiDrivers[job] and Player.PlayerData.job.onduty then
-                TaxiDrivers[job].Players[#(TaxiDrivers[job].Players)+1] = {
-                    Name = Player.PlayerData.charinfo.firstname .. " " .. Player.PlayerData.charinfo.lastname,
-                    Phone = Player.PlayerData.charinfo.phone,
-                }
-            end
+    for _, v in pairs(GetPlayers()) do
+        local player = QBCore.Functions.GetPlayer(v)
+
+        if not player then return end
+
+        local job = player.PlayerData.job.name
+
+        if TaxiDrivers[job] and player.PlayerData.job.onduty then
+            TaxiDrivers[job].Players[#(TaxiDrivers[job].Players) + 1] = {
+                name = player.PlayerData.charinfo.firstname .. " " .. player.PlayerData.charinfo.lastname,
+                phone = player.PlayerData.charinfo.phone,
+            }
         end
     end
-    cb(TaxiDrivers)
+    return TaxiDrivers
 end)

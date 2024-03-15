@@ -2,7 +2,7 @@ var JoinPass = null;
 var JoinID = null;
 
 function LoadJobCenterApp(){
-    $.post('https://qb-phone/GetGroupsApp', JSON.stringify({}), function(data){
+    $.post(`https://${GetParentResourceName()}/GetGroupsApp`, JSON.stringify({}), function(data){
         AddDIV(data)
     });
 }
@@ -20,14 +20,10 @@ $(document).on('click', '#jobcenter-submit-create-group', function(e){
     var pass2 = $(".jobcenter-input-password2").val();
     if (Name != "" && pass != "" && pass2 != ""){
         if(pass == pass2){
-            $.post('https://qb-phone/jobcenter_CreateJobGroup', JSON.stringify({
+            $.post(`https://${GetParentResourceName()}/jobcenter_CreateJobGroup`, JSON.stringify({
                 name: Name,
                 pass: pass,
             }));
-
-
-
-
             $('#jobcenter-box-new-dashboard').fadeOut(350);
         }else{
             QB.Phone.Notifications.Add("fas fa-exclamation-circle", "System", "The password entered is incorrect")
@@ -148,8 +144,6 @@ function AddGroupJobs(data){
     clearInterval(Interval);
     Interval = setInterval(startTimer, 10);
     if(data) {
-
-
         for (const [k, v] of Object.entries(data)) {
             if (v.isDone) {
                 AddOption =
@@ -180,7 +174,7 @@ function AddGroupJobs(data){
 $(document).on('click', '#jobcenter-delete-group', function(e){
     e.preventDefault();
     var Delete = $(this).data('delete')
-    $.post('https://qb-phone/jobcenter_DeleteGroup', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/jobcenter_DeleteGroup`, JSON.stringify({
         delete: Delete,
     }));
 });
@@ -198,7 +192,7 @@ $(document).on('click', '#jobcenter-submit-join-group', function(e){
     var EnterPass = $(".jobcenter-input-join-password").val();
     if(EnterPass == JoinPass){
         var CSN = QB.Phone.Data.PlayerData.citizenid;
-        $.post('https://qb-phone/jobcenter_JoinTheGroup', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/jobcenter_JoinTheGroup`, JSON.stringify({
             PCSN: CSN,
             id: JoinID,
         }));
@@ -210,21 +204,21 @@ $(document).on('click', '#jobcenter-submit-join-group', function(e){
 $(document).on('click', '#jobcenter-list-group', function(e){
     e.preventDefault();
     var id = $(this).data('id')
-    $.post('https://qb-phone/jobcenter_CheckPlayerNames', JSON.stringify({
-        id: id,
-        }), function(Data){
-           ClearInputNew()
-           $('#jobcenter-box-new-player-name').fadeIn(350);
-           $("#phone-new-box-main-playername").html("");
-            for (const [k, v] of Object.entries(Data)) {
-                var AddOption = `<div style=" margin-top: 10px; height: 6vh; font-size: 2vh; border-bottom: 1px white solid; background: #2c465f;" class="casino-text-clear icon"><div style="position: absolute;"><i class="fas fa-user" style="font-size: 4.2vh; margin-left: 15px; margin-top: 10px;"></i></div class="jobcenter-playerlist-name" style="color: black;"><div class="jobcenter-playerlist-name">${v}</div></div>`
+    $.post(`https://${GetParentResourceName()}/jobcenter_CheckPlayerNames`, JSON.stringify({
+            id: id,
+    }), function(Data){
+        ClearInputNew()
+        $('#jobcenter-box-new-player-name').fadeIn(350);
+        $("#phone-new-box-main-playername").html("");
+        for (const [k, v] of Object.entries(Data)) {
+            var AddOption = `<div style=" margin-top: 10px; height: 6vh; font-size: 2vh; border-bottom: 1px white solid; background: #2c465f;" class="casino-text-clear icon"><div style="position: absolute;"><i class="fas fa-user" style="font-size: 4.2vh; margin-left: 15px; margin-top: 10px;"></i></div class="jobcenter-playerlist-name" style="color: black;"><div class="jobcenter-playerlist-name">${v}</div></div>`
 
-                $('#phone-new-box-main-playername').append(AddOption);
-            }
+            $('#phone-new-box-main-playername').append(AddOption);
+        }
 
-           var AddOption2 = '<p> </p>'
+        var AddOption2 = '<p> </p>'
 
-           $('#phone-new-box-main-playername').append(AddOption2);
+        $('#phone-new-box-main-playername').append(AddOption2);
     });
 });
 
@@ -232,7 +226,7 @@ $(document).on('click', '#jobcenter-leave-grouped', function(e){
     e.preventDefault();
     var CSN = QB.Phone.Data.PlayerData.citizenid;
     var id = $(this).data('id')
-    $.post('https://qb-phone/jobcenter_leave_grouped', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/jobcenter_leave_grouped`, JSON.stringify({
         id: id,
         csn: CSN,
     }));

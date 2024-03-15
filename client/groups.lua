@@ -1,5 +1,3 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 local inJob = false
 local GroupBlips = {}
 
@@ -78,9 +76,8 @@ RegisterNetEvent("groups:createBlip", function(name, data)
 end)
 
 RegisterNUICallback('GetGroupsApp', function (_, cb)
-    QBCore.Functions.TriggerCallback('qb-phone:server:getAllGroups', function (getGroups)
-        cb(getGroups)
-    end)
+    local getGroups = lib.callback.await('qb-phone:server:getAllGroups', false)
+    cb(getGroups)
 end)
 
 RegisterNetEvent('qb-phone:client:RefreshGroupsApp', function(Groups, finish)
@@ -128,7 +125,6 @@ end)
 
 
 RegisterNUICallback('jobcenter_CheckPlayerNames', function(data, cb) --employment
-    QBCore.Functions.TriggerCallback('qb-phone:server:jobcenter_CheckPlayerNames', function(HasName)
-        cb(HasName)
-    end, data.id)
+    local HasName = lib.callback.await('qb-phone:server:jobcenter_CheckPlayerNames', false, data.id)
+    cb(HasName)
 end)

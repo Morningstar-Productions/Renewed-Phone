@@ -4,7 +4,7 @@ var PlayerIDOf = null
 
 function LoadCasinoJob(){
     var PlayerJob = QB.Phone.Data.PlayerData.job.name;
-    if (PlayerJob == "pilot"){
+    if (PlayerJob == "casino"){
         $(".casino-dashboard-boss").css({"display":"block"});
         $("#casino-Winer-this").css({"display":"block"});
     } else {
@@ -14,7 +14,7 @@ function LoadCasinoJob(){
 
     CheckStatus();
 
-    $.post('https://qb-phone/CheckHasBetTable', JSON.stringify({}), function(HasTable){
+    $.post(`https://${GetParentResourceName()}/CheckHasBetTable`, JSON.stringify({}), function(HasTable){
         if(JSON.stringify(HasTable) != "[]"){
             AddToChat(HasTable)
         }else{
@@ -44,12 +44,12 @@ $(document).on('click', '#casino_create_bet', function(e){
 
 $(document).on('click', '#casino_delete', function(e){
     e.preventDefault();
-    $.post('https://qb-phone/CasinoDeleteTable', JSON.stringify({}));
+    $.post(`https://${GetParentResourceName()}/CasinoDeleteTable`, JSON.stringify({}));
 });
 
 $(document).on('click', '#casino_status', function(e){
     e.preventDefault();
-    $.post('https://qb-phone/casino_status', JSON.stringify({}));
+    $.post(`https://${GetParentResourceName()}/casino_status`, JSON.stringify({}));
     CheckStatus();
 });
 
@@ -58,7 +58,7 @@ $(document).on('click', '#casino-submit-bet', function(e){
     var InName = $(".casino_input_name").val();
     var InChanse = $(".casino_input_Chanse").val();
     if (InName != "" && InChanse != "" && InChanse >= 1.0){
-        $.post('https://qb-phone/CasinoAddBet', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/CasinoAddBet`, JSON.stringify({
             name: InName,
             chanse: InChanse,
         }));
@@ -103,7 +103,7 @@ function AddToChat(data){
 }
 
 function CheckStatus(){
-    $.post('https://qb-phone/CheckHasBetStatus', JSON.stringify({}), function(HasStatus){
+    $.post(`https://${GetParentResourceName()}/CheckHasBetStatus`, JSON.stringify({}), function(HasStatus){
         if (HasStatus){
             $("#casino_status").html("Status: Betting Enabled");
         }else{
@@ -135,7 +135,7 @@ $(document).on('click', '#casino-end-task-accept', function(e){
     e.preventDefault();
     var Amount = $(".casino-amount-for-bet-player").val();
     if (Amount != "" && Amount >= 1.0){
-        $.post('https://qb-phone/BettingAddToTable', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/BettingAddToTable`, JSON.stringify({
             amount: Amount,
             chanse: PlayerChanseOf,
             player: PlayerNameOf,
@@ -149,7 +149,7 @@ $(document).on('click', '#casino-end-task-accept', function(e){
 
 $(document).on('click', '#casino-Winer-this', function(e){
     e.preventDefault();
-        $.post('https://qb-phone/WineridCasino', JSON.stringify({
-            id: PlayerIDOf,
-        }));
+    $.post(`https://${GetParentResourceName()}/WineridCasino`, JSON.stringify({
+        id: PlayerIDOf,
+    }));
 });

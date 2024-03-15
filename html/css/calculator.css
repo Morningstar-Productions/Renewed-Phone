@@ -114,4 +114,5 @@ input[type="button"]:nth-last-of-type(1):hover{
 .calc-icon{
 	margin-left: -0.1vh;
     width: 4.8vh;
+	border-radius: 1.5vh;
 }

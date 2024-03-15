@@ -64,7 +64,7 @@ $(document).on('click', '.mail-accept', function(e){
     e.preventDefault();
     var mailId = $(this).parent().parent().parent().data('mailid');
     var MailData = $("#"+OpenedMail).data('MailData');
-    $.post('https://qb-phone/AcceptMailButton', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/AcceptMailButton`, JSON.stringify({
         buttonEvent: MailData.button.buttonEvent,
         buttonData: MailData.button.buttonData,
         isServer: MailData.button.isServer,
@@ -75,7 +75,7 @@ $(document).on('click', '.mail-accept', function(e){
 $(document).on('click', '.mail-delete', function(e){
     e.preventDefault();
     var mailId = $(this).parent().parent().parent().data('mailid');
-    $.post('https://qb-phone/RemoveMail', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/RemoveMail`, JSON.stringify({
         mailId: mailId
     }));
 });

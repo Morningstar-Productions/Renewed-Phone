@@ -2,6 +2,8 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local CachedJobs = {}
 local CachedPlayers = {}
 
+local createPhoneExport = require 'shared.export-function'
+
 local function getJobs(cid)
     local jobs = {}
     local employees = {}
@@ -18,7 +20,7 @@ local function getJobs(cid)
     end
 
     return jobs, employees
-end exports('getJobs', getJobs)
+end createPhoneExport('getJobs', getJobs)
 
 local FirstStart = false
 
@@ -30,37 +32,49 @@ CreateThread(function()
         if k ~= 'unemployed' then
             if not CachedJobs[k] then CachedJobs[k] = {} end
 
+            local jobCheck = MySQL.query.await('SELECT * FROM player_jobs WHERE jobname = ?', { k })
             local players = MySQL.query.await("SELECT * FROM `players` WHERE `job` LIKE '%".. k .."%'", {})
+
             if players[1] then
                 for _, v in pairs(players) do
-                    if v.job then
-                        local grade = json.decode(v.job).grade.level or false
-                        local FirstName = json.decode(v.charinfo) and json.decode(v.charinfo).firstname or false
-                        local LastName = json.decode(v.charinfo) and json.decode(v.charinfo).lastname or false
+                    --if v.job == ignoredJobs then return end
+                    if not v.job then return end
 
-                        if grade and QBCore.Shared.Jobs[k].grades and QBCore.Shared.Jobs[k].grades[tostring(grade)] and v.citizenid and v.charinfo and FirstName and LastName then
-                            if not CachedJobs[k].employees then CachedJobs[k].employees = {} end
-                            if not CachedJobs[k].employees[v.citizenid] then
+                    local grade = json.decode(v.job).grade.level or false
+                    local FirstName = json.decode(v.charinfo) and json.decode(v.charinfo).firstname or false
+                    local LastName = json.decode(v.charinfo) and json.decode(v.charinfo).lastname or false
 
-                                CachedJobs[k].employees[v.citizenid] = {
-                                    cid = v.citizenid,
-                                    grade = json.decode(v.job).grade.level,
-                                    name = json.decode(v.charinfo).firstname .. ' ' .. json.decode(v.charinfo).lastname
-                                }
-                            end
+                    if grade and QBCore.Shared.Jobs[k].grades and QBCore.Shared.Jobs[k].grades[tostring(grade)] and v.citizenid and v.charinfo and FirstName and LastName then
+                        if not CachedJobs[k].employees then CachedJobs[k].employees = {} end
+                        if not CachedJobs[k].employees[v.citizenid] then
+
+                            CachedJobs[k].employees[v.citizenid] = {
+                                cid = v.citizenid,
+                                grade = json.decode(v.job).grade.level,
+                                name = json.decode(v.charinfo).firstname .. ' ' .. json.decode(v.charinfo).lastname
+                            }
                         end
                     end
                 end
 
-                MySQL.insert('INSERT INTO player_jobs (`jobname`, `employees`) VALUES (?, ?)', {
-                    k,
-                    json.encode(CachedJobs[k].employees)
-                })
+                if not jobCheck[1] then -- Create job w/ employees if non-existent
+                    MySQL.insert('INSERT INTO player_jobs (`jobname`, `employees`) VALUES (?, ?)', {
+                        k,
+                        json.encode(CachedJobs[k].employees)
+                    })
+                else -- Update employees if job exist
+                    MySQL.update('UPDATE player_jobs SET employees = ? WHERE jobname = ?', {
+                        json.encode(CachedJobs[k].employees),
+                        k
+                    })
+                end
             else
-                MySQL.insert('INSERT INTO player_jobs (`jobname`, `employees`) VALUES (?, ?)', {
-                    k,
-                    json.encode({})
-                })
+                if not jobCheck[1] then -- Create job w/o employees if it does not exist
+                    MySQL.insert('INSERT INTO player_jobs (`jobname`, `employees`) VALUES (?, ?)', {
+                        k,
+                        json.encode({})
+                    })
+                end
             end
             Wait(10)
         end
@@ -94,8 +108,37 @@ local function notifyPlayer(src, message)
         "#FFFC00",
         10000
     )
-
 end
+
+local function JobsHandler(source, Job, CID, grade)
+    local src = source
+    local srcPlayer = QBCore.Functions.GetPlayer(src)
+
+    if not srcPlayer then return print("no source") end
+
+    local srcCID = srcPlayer.PlayerData.citizenid
+
+    if not Job or not CID or not CachedJobs[Job] then return end
+    local Player = QBCore.Functions.GetPlayerByCitizenId(CID)
+    if not CachedJobs[Job].employees[CID] then return notifyPlayer(src, "Citizen is not employed at the job...") end
+    if tonumber(grade) > tonumber(CachedJobs[Job].employees[srcCID].grade) then return notifyPlayer(src, "You cannot promote someone higher than you...") end
+
+    CachedJobs[Job].employees[CID].grade = tonumber(grade)
+
+    MySQL.update('UPDATE player_jobs SET employees = ? WHERE jobname = ?', { json.encode(CachedJobs[Job].employees), Job })
+
+    TriggerClientEvent("qb-phone:client:JobsHandler", -1, Job, CachedJobs[Job].employees)
+
+    if Player and CachedPlayers[CID] then
+        CachedPlayers[CID][Job] = CachedJobs[Job].employees[CID]
+
+        local newGrade = type(CachedJobs[Job].employees[CID].grade) ~= "number" and tonumber(CachedJobs[Job].employees[CID].grade) or CachedJobs[Job].employees[CID].grade
+        Player.Functions.SetJob(Job, newGrade)
+
+        TriggerClientEvent('qb-phone:client:MyJobsHandler', Player.PlayerData.source, Job, CachedPlayers[CID][Job], CachedJobs[Job].employees)
+    end
+end
+createPhoneExport('JobsHandler', JobsHandler)
 
 -- ** Fire someone in the business the player firing someone MUST be boss ** --
 RegisterNetEvent('qb-phone:server:fireUser', function(Job, sCID)
@@ -116,7 +159,7 @@ RegisterNetEvent('qb-phone:server:fireUser', function(Job, sCID)
 
     local grade = tostring(CachedJobs[Job].employees[srcCID].grade)
     if not QBCore.Shared.Jobs[Job].grades[grade].isboss then return end
-    -- for some reason the line next doesnt like being compared to each other even tho they are both numbers so i had to use tonumber
+
     if tonumber(CachedJobs[Job].employees[srcCID].grade) < tonumber(CachedJobs[Job].employees[CID].grade) then return end
 
 
@@ -178,7 +221,7 @@ RegisterNetEvent('qb-phone:server:SendEmploymentPayment', function(Job, CID, amo
     else
         if not exports['qb-management']:RemoveMoney(Job, amt) then return notifyPlayer(src, "Insufficient Funds...") end
     end
-    Player.Functions.AddMoney('bank', amt)
+    Player.Functions.AddMoney('bank', amt, 'Employment Payment')
 end)
 
 ---- ** Player can hire someone aslong as they are boss within the group
@@ -277,11 +320,11 @@ RegisterNetEvent('qb-phone:server:clockOnDuty', function(Job)
 end)
 
 ---- Gets the client side cache for players ----
-QBCore.Functions.CreateCallback("qb-phone:server:GetMyJobs", function(source, cb)
+lib.callback.register("qb-phone:server:GetMyJobs", function(source)
     if FirstStart then return end
     local Player = QBCore.Functions.GetPlayer(source)
 
-    if not Player then return cb(nil, nil) end
+    if not Player then return end
 
     local job = Player.PlayerData.job.name
 
@@ -294,8 +337,7 @@ QBCore.Functions.CreateCallback("qb-phone:server:GetMyJobs", function(source, cb
         Player.Functions.SetJob("unemployed", 0)
     end
 
-
-    cb(employees, CachedPlayers[CID])
+    return employees, CachedPlayers[CID]
 end)
 
 ---- Functions and Exports people can use across script to hire and fire people to sync ----
@@ -323,7 +365,7 @@ local function hireUser(Job, CID, grade)
     end
 
     TriggerClientEvent("qb-phone:client:JobsHandler", -1, Job, CachedJobs[Job].employees)
-end exports("hireUser", hireUser)
+end createPhoneExport("hireUser", hireUser)
 
 ---- Use this to fire anyone through scripts DO NOT use this through exploitable events since its meant to not be the securest ----
 local function fireUser(Job, CID)
@@ -349,7 +391,7 @@ local function fireUser(Job, CID)
     if Player.PlayerData.source then
         TriggerClientEvent('qb-phone:client:MyJobsHandler', Player.PlayerData.source, Job, nil, nil)
     end
-end exports("fireUser", fireUser)
+end createPhoneExport("fireUser", fireUser)
 
 local bills = {}
 
@@ -405,7 +447,6 @@ AddEventHandler('qb-phone:server:InvoiceHandler', function(paid, amount, source,
                         if #(coords - bills[source].coords) < 10.0 then
                             local tempPlayer = QBCore.Functions.GetPlayer(DutySrcs[i])
                             tempPlayer.Functions.AddItem('payticket', 1)
-                            TriggerClientEvent('inventory:client:ItemBox', DutySrcs[i], QBCore.Shared.Items['payticket'], "add", 1)
                             TriggerClientEvent('QBCore:Notify', DutySrcs[i], 'Receipt received', 'success')
                         end
                     end

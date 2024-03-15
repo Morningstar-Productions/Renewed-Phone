@@ -1,12 +1,9 @@
-local QBCore = exports['qb-core']:GetCoreObject()
-
 -- Functions
+local createPhoneExport = require 'shared.export-function'
 
 local function GenerateMailId()
     return math.random(111111, 999999)
 end
-
-
 
 RegisterNetEvent('qb-phone:server:RemoveMail', function(MailId)
     local src = source
@@ -66,8 +63,8 @@ RegisterNetEvent('qb-phone:server:sendNewMail', function(mailData, citizenID)
     end
 end)
 
-function sendNewMailToOffline(citizenid, mailData)
-    local Player = QBCore.Functions.GetPlayerByCitizenId(citizenid)
+local function sendNewMailToOffline(citizenid, mailData)
+    local Player = exports.qbx_core:GetOfflinePlayer(citizenid)
     if Player then
         local src = Player.PlayerData.source
         if mailData.button == nil then
@@ -98,4 +95,4 @@ function sendNewMailToOffline(citizenid, mailData)
         end
     end
 end
-exports("sendNewMailToOffline",sendNewMailToOffline)
+createPhoneExport("sendNewMailToOffline",sendNewMailToOffline)

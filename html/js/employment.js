@@ -60,7 +60,7 @@ function changePage(){
 
     $('.employment-header').append(HeaderOption); // Creates the original header
     // Load Home Page
-    $.post('https://qb-phone/GetJobs', JSON.stringify({}), function(data){
+    $.post(`https://${GetParentResourceName()}/GetJobs`, JSON.stringify({}), function(data){
         LoadEmploymentApp(data)
     });
 }
@@ -75,7 +75,7 @@ $(document).on('click', '.employment-list', function(e){
     // Fade out the old header to create the new header
     $(".employment-header").html("");
 
-    $.post('https://qb-phone/GetEmployees', JSON.stringify({job: job}), function(data){
+    $.post(`https://${GetParentResourceName()}/GetEmployees`, JSON.stringify({job: job}), function(data){
         for (const [k, v] of Object.entries(data)) {
             var icon
 
@@ -129,7 +129,7 @@ $(document).on('click', '#employment-job-extras-icon', function(e){
     $('#employment-dropdown').html('')
     dropdownOpen = true
 
-    $.post('https://qb-phone/dutyStatus', JSON.stringify({}), function(data) {
+    $.post(`https://${GetParentResourceName()}/dutyStatus`, JSON.stringify({}), function(data) {
         currentJob = data["job"]
         if (data["duty"]) {
             onDuty = true
@@ -171,7 +171,7 @@ function closeDropDown(){
 $(document).on('click', '#clock-in', function(e){
     e.preventDefault();
 
-    $.post('https://qb-phone/ClockIn', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/ClockIn`, JSON.stringify({
         job: job
     }));
     closeDropDown()
@@ -191,7 +191,7 @@ $(document).on('click', '#hire-worker-submit', function(e){
         setTimeout(function(){
             ConfirmationFrame()
         }, 150);
-        $.post('https://qb-phone/HireFucker', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/HireFucker`, JSON.stringify({
             stateid: stateid,
             grade: grade,
             job: job,
@@ -217,7 +217,7 @@ $(document).on('click', '#employment-chargemf-submit', function(e){
         setTimeout(function(){
             ConfirmationFrame()
         }, 150);
-        $.post('https://qb-phone/ChargeMF', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/ChargeMF`, JSON.stringify({
             stateid: stateid,
             amount: amount,
             note: note,
@@ -247,7 +247,7 @@ $(document).on('click', '#send-employee-payment', function(e){
         setTimeout(function(){
             ConfirmationFrame()
         }, 150);
-        $.post('https://qb-phone/SendEmployeePayment', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/SendEmployeePayment`, JSON.stringify({
             cid: cid,
             job: job,
             amount: amount,
@@ -267,7 +267,7 @@ $(document).on('click', '#employment-remove-employee', function(e){
     setTimeout(function(){
         ConfirmationFrame()
     }, 150);
-    $.post('https://qb-phone/RemoveEmployee', JSON.stringify({
+    $.post(`https://${GetParentResourceName()}/RemoveEmployee`, JSON.stringify({
         cid: cid,
         job: job,
     }));
@@ -285,7 +285,7 @@ $(document).on('click', '#employment-changerole-submit', function(e){
         setTimeout(function(){
             ConfirmationFrame()
         }, 150);
-        $.post('https://qb-phone/ChangeRole', JSON.stringify({
+        $.post(`https://${GetParentResourceName()}/ChangeRole`, JSON.stringify({
             cid: cid,
             grade: grade,
             job: job
