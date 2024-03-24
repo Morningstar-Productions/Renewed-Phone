@@ -1,6 +1,6 @@
 lib.addCommand("p#", { help = "Provide Phone Number" }, function(source)
     local src = source
-    local player = QBCore.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     local PlayerPed = GetPlayerPed(src)
     local number = player.PlayerData.charinfo.phone
 	local PlayerCoords = GetEntityCoords(PlayerPed)

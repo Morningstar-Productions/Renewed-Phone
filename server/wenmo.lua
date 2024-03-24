@@ -1,7 +1,7 @@
 RegisterNetEvent('qb-phone:server:wenmo_givemoney_toID', function(data)
     local src = source
-    local Ply = QBCore.Functions.GetPlayer(src)
-    local OtherPly = QBCore.Functions.GetPlayer(tonumber(data.ID))
+    local Ply = exports.qbx_core:GetPlayer(src)
+    local OtherPly = exports.qbx_core:GetPlayer(tonumber(data.ID))
     local Amount = tonumber(data.Amount)
     local Reason = data.Reason
 

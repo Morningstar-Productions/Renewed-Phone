@@ -12,8 +12,8 @@ dependencies {
 
 ui_page 'html/index.html'
 
-shared_scripts { '@ox_lib/init.lua', 'config.lua', 'shared/shared.lua', '@qb-apartments/config.lua' }
-client_scripts { 'client/*.lua' }
+shared_scripts { '@ox_lib/init.lua', '@qbx_core/modules/lib.lua', 'config.lua', 'shared/shared.lua', '@qbx_apartments/config.lua' }
+client_scripts { '@qbx_core/modules/playerdata.lua', 'client/*.lua' }
 server_scripts { '@oxmysql/lib/MySQL.lua', 'server/*.lua' }
 
 files {

@@ -1,8 +1,8 @@
 RegisterNetEvent("qb-phone:server:sendPing", function(id)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local Shitter = tonumber(id)
-    local Other = QBCore.Functions.GetPlayer(Shitter)
+    local Other = exports.qbx_core:GetPlayer(Shitter)
     local HasVPN = exports.ox_inventory:Search(src, 'count', Config.VPNItem)
     local name = HasVPN > 0 and 'Anonymous' or Player.PlayerData.charinfo.firstname
 

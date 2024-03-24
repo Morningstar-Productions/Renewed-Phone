@@ -51,7 +51,7 @@ RegisterNUICallback('DeleteTweet',function(data)
 end)
 
 RegisterNUICallback('FlagTweet',function(data, cb)
-    QBCore.Functions.Notify(data.name..' was reported for saying '..data.message, "error")
+    exports.qbx_core:Notify(data.name..' was reported for saying '..data.message, "error")
     cb('ok')
 end)
 

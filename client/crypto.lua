@@ -25,6 +25,6 @@ end)
 RegisterNetEvent('qb-phone:client:UpdateCrypto', function()
     SendNUIMessage({
         action = "UpdateCrypto",
-        PlayerData = PlayerData,
+        PlayerData = QBX.PlayerData,
     })
 end)

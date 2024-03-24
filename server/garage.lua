@@ -1,8 +1,8 @@
 RegisterNetEvent('qb-phone:server:sendVehicleRequest', function(data)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local Asshole = tonumber(data.id)
-    local OtherAsshole = QBCore.Functions.GetPlayer(Asshole)
+    local OtherAsshole = exports.qbx_core:GetPlayer(Asshole)
 
     if not OtherAsshole then return TriggerClientEvent("QBCore:Notify", src, 'State ID does not exist!', "error") end
     if not data.price or not data.plate then return end
@@ -13,8 +13,8 @@ end)
 
 RegisterNetEvent('qb-phone:server:sellVehicle', function(data, Seller, type)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-    local SellerData = QBCore.Functions.GetPlayerByCitizenId(Seller.PlayerData.citizenid)
+    local Player = exports.qbx_core:GetPlayer(src)
+    local SellerData = exports.qbx_core:GetPlayerByCitizenId(Seller.PlayerData.citizenid)
 
     if type == 'accepted' then
         if Player.PlayerData.money.bank and Player.PlayerData.money.bank >= tonumber(data.price) then
@@ -42,16 +42,22 @@ end
 
 lib.callback.register('qb-phone:server:GetGarageVehicles', function(source)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local Vehicles = {}
     local vehdata
+
+    ---@todo Figure out how to do INNER JOIN
+
+    -- local result = exports.oxmysql:executeSync('SELECT * FROM vehicle_financing INNER JOIN player_vehicles WHERE citizenid = ?', {Player.PlayerData.citizenid})
     local result = exports.oxmysql:executeSync('SELECT * FROM player_vehicles WHERE citizenid = ?', {Player.PlayerData.citizenid})
     if result[1] then
         for _, v in pairs(result) do
             local VehicleData = exports.qbx_core:GetVehiclesByName()[v.vehicle]
+
             local VehicleGarage = "None"
             local enginePercent = round(v.engine / 10, 0)
             local bodyPercent = round(v.body / 10, 0)
+
             local garage = exports.oxmysql:executeSync('SELECT * FROM garagelocations WHERE name = ?', { v.garage })
             if garage[1] then
                 for _, j in pairs(garage) do
@@ -77,7 +83,7 @@ lib.callback.register('qb-phone:server:GetGarageVehicles', function(source)
                     fuel = v.fuel,
                     engine = enginePercent,
                     body = bodyPercent,
-                    paymentsleft = v.paymentsleft
+                    paymentsleft = v.paymentsleft or 0
                 }
             else
                 vehdata = {
@@ -90,7 +96,7 @@ lib.callback.register('qb-phone:server:GetGarageVehicles', function(source)
                     fuel = v.fuel,
                     engine = enginePercent,
                     body = bodyPercent,
-                    paymentsleft = v.paymentsleft
+                    paymentsleft = v.paymentsleft or 0
                 }
             end
             Vehicles[#Vehicles+1] = vehdata

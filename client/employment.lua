@@ -10,8 +10,8 @@ end)
 
 RegisterNUICallback('dutyStatus', function(_, cb)
     cb({
-        job = QBCore.Functions.GetPlayerData().job.name,
-        duty = QBCore.Functions.GetPlayerData().job.onduty
+        job = QBX.PlayerData.job.name,
+        duty = QBX.PlayerData.job.onduty
     })
 end)
 
@@ -90,7 +90,7 @@ end)
 
 
 RegisterNetEvent('qb-phone:client:MyJobsHandler', function(job, jobTable, employees)
-    if not QBCore.Shared.Jobs[job] then return end
+    if not exports.qbx_core:GetJobs()[job] then return end
 
     myJobs[job] = jobTable
 
@@ -134,7 +134,7 @@ AddEventHandler('onResourceStart', function(resource)
 
         if myShit then
             for k, v in pairs(myShit) do
-                if QBCore.Shared.Jobs[k] and not myJobs[k] then myJobs[k] = v end
+                if exports.qbx_core:GetJobs()[k] and not myJobs[k] then myJobs[k] = v end
             end
         end
     end
@@ -158,7 +158,7 @@ RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
 
     if myShit then
         for k, v in pairs(myShit) do
-            if QBCore.Shared.Jobs[k] and not myJobs[k] then myJobs[k] = v end
+            if exports.qbx_core:GetJobs()[k] and not myJobs[k] then myJobs[k] = v end
         end
     end
 end)

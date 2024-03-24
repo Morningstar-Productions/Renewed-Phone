@@ -2,8 +2,8 @@ RegisterNetEvent('qb-phone:server:UpdateMessages', function(ChatMessages, ChatNu
     if not ChatNumber or not ChatMessages then return end
 
     local src = source
-    local SenderData = QBCore.Functions.GetPlayer(src)
-    local TargetData = QBCore.Functions.GetPlayerByPhone(ChatNumber)
+    local SenderData = exports.qbx_core:GetPlayer(src)
+    local TargetData = exports.qbx_core:GetPlayerByPhone(ChatNumber)
 
     if TargetData then
         local Chat = MySQL.query.await('SELECT * FROM phone_messages WHERE citizenid = ? AND number = ?', {SenderData.PlayerData.citizenid, ChatNumber})

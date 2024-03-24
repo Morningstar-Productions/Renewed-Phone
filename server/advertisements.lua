@@ -10,7 +10,7 @@ end
 
 RegisterNetEvent('qb-phone:server:AddAdvert', function(msg, url)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local name = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
     local table = GetAdvertFromNumb(src)
     if not url then url = "" else url = url:gsub("[%<>\"()\'$]","") end
@@ -45,7 +45,7 @@ end)
 
 RegisterNetEvent('qb-phone:server:flagAdvert', function(number)
     local src = source
-    local Player = QBCore.Functions.GetPlayerByPhone(number)
+    local Player = exports.qbx_core:GetPlayerByPhone(number)
     local citizenid = Player.PlayerData.citizenid
     local name = Player.PlayerData.charinfo.firstname..' '..Player.PlayerData.charinfo.lastname
     -- Add some type of log here for admins to keep track of flagged posts

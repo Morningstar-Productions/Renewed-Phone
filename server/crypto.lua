@@ -6,7 +6,7 @@ local createPhoneExport = require 'shared.export-function'
 ---@param amount? number
 local function RemoveCrypto(src, type, amount)
     if not src then return end
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     if not Player or not type or not amount then return end
 
     local Crypto = Player.PlayerData.metadata.crypto
@@ -31,7 +31,7 @@ end createPhoneExport("RemoveCrypto", RemoveCrypto)
 ---@param amount number
 local function hasEnough(src, type, amount)
     if not src then return end
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
 
     if not Player or not type or not amount then return end
 
@@ -52,7 +52,7 @@ end createPhoneExport("hasEnough", hasEnough)
 ---@param amount number
 local function AddCrypto(src, type, amount)
     if not src then return end
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
 
     if not Player or not type or not amount then return false end
 
@@ -76,7 +76,7 @@ end
 
 RegisterNetEvent('qb-phone:server:PurchaseCrypto', function(type, amount)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     if not Player or not Player.PlayerData.metadata.crypto[type] then return end -- if the crypto dosnt exist
     local v = Config.CryptoCoins[GetConfig(type)]
     local cashAmount = tonumber(amount) * v.value
@@ -115,7 +115,7 @@ end)
 
 RegisterNetEvent('qb-phone:server:SellCrypto', function(type, amount)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     if not Player or not Player.PlayerData.metadata.crypto[type] then return end -- if the crypto dosnt exist
     local v = Config.CryptoCoins[GetConfig(type)]
     local cryptoAmount = tonumber(amount) * v.value
@@ -144,8 +144,8 @@ end)
 
 RegisterNetEvent('qb-phone:server:ExchangeCrypto', function(type, amount, stateid)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-    local Receiver = QBCore.Functions.GetPlayer(tonumber(stateid))
+    local Player = exports.qbx_core:GetPlayer(src)
+    local Receiver = exports.qbx_core:GetPlayer(tonumber(stateid))
     if not Player or not Player.PlayerData.metadata.crypto[type] then return end -- if the crypto dosnt exist
     if not Receiver then return TriggerClientEvent("QBCore:Notify", src, 'This state id does not exists!', "error") end
 

@@ -1,7 +1,7 @@
 RegisterNetEvent("qb-phone:server:sendDocument", function(data)
     local src = source
-    local Ply = QBCore.Functions.GetPlayer(src)
-    local Receiver = QBCore.Functions.GetPlayer(tonumber(data.StateID))
+    local Ply = exports.qbx_core:GetPlayer(src)
+    local Receiver = exports.qbx_core:GetPlayer(tonumber(data.StateID))
     local SenderName = Ply.PlayerData.charinfo.firstname..' '..Ply.PlayerData.charinfo.lastname
     if not Receiver then
         TriggerClientEvent('qb-phone:client:CustomNotification', src,
@@ -36,8 +36,8 @@ end)
 
 RegisterNetEvent("qb-phone:server:sendDocumentLocal", function(data, playerId)
     local src = source
-    local Ply = QBCore.Functions.GetPlayer(src)
-    local Receiver = QBCore.Functions.GetPlayer(playerId)
+    local Ply = exports.qbx_core:GetPlayer(src)
+    local Receiver = exports.qbx_core:GetPlayer(playerId)
     local SenderName = Ply.PlayerData.charinfo.firstname..' '..Ply.PlayerData.charinfo.lastname
 
     TriggerClientEvent('qb-phone:client:CustomNotification', src,
@@ -98,7 +98,7 @@ end
 
 RegisterNetEvent('qb-phone:server:documents_Save_Note_As', function(data, Receiver)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     if not data or not Player then return end
     if data.Type ~= 'Delete' then
         if not data.Title or not data.Text or not data.Time then return end

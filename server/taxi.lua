@@ -8,7 +8,7 @@ lib.callback.register('qb-phone:server:GetAvailableTaxiDrivers', function(_)
     end
 
     for _, v in pairs(GetPlayers()) do
-        local player = QBCore.Functions.GetPlayer(v)
+        local player = exports.qbx_core:GetPlayer(v)
 
         if not player then return end
 

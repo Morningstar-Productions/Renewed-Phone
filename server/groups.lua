@@ -7,7 +7,7 @@ local createPhoneExport = require 'shared.export-function'
 
 -- All the utility Functions to help us developer have a funner job
 local function GetPlayerCharName(src)
-    local player = QBCore.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     return player.PlayerData.charinfo.firstname.." "..player.PlayerData.charinfo.lastname
 end
 
@@ -203,7 +203,7 @@ end)
 
 RegisterNetEvent("qb-phone:server:jobcenter_CreateJobGroup", function(data)
     local src = source
-    local player = QBCore.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
     if Players[src] then TriggerClientEvent('QBCore:Notify', src, "You have already created a group", "error") return end
     if not data or not data.pass or not data.name then return end
     Players[src] = true
@@ -251,7 +251,7 @@ end)
 
 RegisterNetEvent('qb-phone:server:jobcenter_JoinTheGroup', function(data)
     local src = source
-    local player = QBCore.Functions.GetPlayer(src)
+    local player = exports.qbx_core:GetPlayer(src)
 
     if Players[src] then return TriggerClientEvent('QBCore:Notify', src, "You are already a part of a group!", "success") end
 
@@ -300,7 +300,7 @@ end createPhoneExport('isGroupTemp', isGroupTemp)
 
 local function CreateGroup(src, name, password)
     if not src or not name then return end
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     Players[src] = true
     local id = #EmploymentGroup+1
     EmploymentGroup[id] = {

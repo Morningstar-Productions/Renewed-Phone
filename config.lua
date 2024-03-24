@@ -434,9 +434,7 @@ Config.JobCenter = {
 }
 
 Config.TaxiJob = {
-    {
-        Job = "taxi",
-    },
+    { Job = "taxi" },
 }
 
 Config.CryptoCoins = {

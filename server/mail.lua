@@ -7,7 +7,7 @@ end
 
 RegisterNetEvent('qb-phone:server:RemoveMail', function(MailId)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     if not MailId or not Player then return end
 
     local CID = Player.PlayerData.citizenid
@@ -27,9 +27,9 @@ RegisterNetEvent('qb-phone:server:sendNewMail', function(mailData, citizenID)
     local Player
 
     if citizenID then
-        Player = QBCore.Functions.GetPlayerByCitizenId(citizenID)
+        Player = exports.qbx_core:GetPlayerByCitizenId(citizenID)
     else
-        Player = QBCore.Functions.GetPlayer(source)
+        Player = exports.qbx_core:GetPlayer(source)
     end
 
     if Player then

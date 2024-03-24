@@ -1,4 +1,4 @@
-QBCore = exports['qb-core']:GetCoreObject()
+QBCore = exports['qb-core']:GetCoreObject() -- Backwards Compat
 
 local phoneProp = 0
 local phoneModel = joaat("prop_player_phone_01")

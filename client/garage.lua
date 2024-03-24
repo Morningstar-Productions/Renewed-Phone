@@ -5,7 +5,7 @@ local function findVehFromPlateAndLocate(plate)
     for i = 1, #gameVehicles do
         local vehicle = gameVehicles[i]
         if DoesEntityExist(vehicle) then
-            if QBCore.Functions.GetPlate(vehicle) == plate then
+            if qbx.getVehiclePlate(vehicle) == plate then
                 local vehCoords = GetEntityCoords(vehicle)
                 SetNewWaypoint(vehCoords.x, vehCoords.y)
                 return true
@@ -25,7 +25,7 @@ RegisterNUICallback('gps-vehicle-garage', function(data, cb)
     local veh = data.veh
     if Config.Garage == 'jdev' then
         if veh.state == 'In' then
-            exports[Config.GarageResource]:TrackVehicleByPlate(veh.plate)
+            exports['qbx_garages']:TrackVehicleByPlate(veh.plate)
             TriggerEvent('qb-phone:client:CustomNotification',
                 "GARAGE",
                 "GPS Marker Set!",
@@ -35,7 +35,7 @@ RegisterNUICallback('gps-vehicle-garage', function(data, cb)
             )
             cb("ok")
         elseif veh.state == 'Out' then
-            exports[Config.GarageResource]:TrackVehicleByPlate(veh.plate)
+            exports['qbx_garages']:TrackVehicleByPlate(veh.plate)
             TriggerEvent('qb-phone:client:CustomNotification',
                 "GARAGE",
                 "GPS Marker Set!",
@@ -59,12 +59,12 @@ RegisterNUICallback('gps-vehicle-garage', function(data, cb)
         if veh.state == 'In' then
             if veh.parkingspot then
                 SetNewWaypoint(veh.parkingspot.x, veh.parkingspot.y)
-                QBCore.Functions.Notify("Your vehicle has been marked", "success")
+                exports.qbx_core:Notify("Your vehicle has been marked", "success")
             end
         elseif veh.state == 'Out' and findVehFromPlateAndLocate(veh.plate) then
-            QBCore.Functions.Notify("Your vehicle has been marked", "success")
+            exports.qbx_core:Notify("Your vehicle has been marked", "success")
         else
-            QBCore.Functions.Notify("This vehicle cannot be located", "error")
+            exports.qbx_core:Notify("This vehicle cannot be located", "error")
         end
         cb("ok")
     end

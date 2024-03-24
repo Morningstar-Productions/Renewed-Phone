@@ -28,7 +28,7 @@ CreateThread(function()
     ---- Convertion Tool I guess LOL ----
     if not FirstStart then return end
     while not QBCore do Wait(25) end
-    for k, _ in pairs(QBCore.Shared.Jobs) do
+    for k, _ in pairs(exports.qbx_core:GetJobs()) do
         if k ~= 'unemployed' then
             if not CachedJobs[k] then CachedJobs[k] = {} end
 
@@ -44,7 +44,7 @@ CreateThread(function()
                     local FirstName = json.decode(v.charinfo) and json.decode(v.charinfo).firstname or false
                     local LastName = json.decode(v.charinfo) and json.decode(v.charinfo).lastname or false
 
-                    if grade and QBCore.Shared.Jobs[k].grades and QBCore.Shared.Jobs[k].grades[tostring(grade)] and v.citizenid and v.charinfo and FirstName and LastName then
+                    if grade and exports.qbx_core:GetJobs()[k].grades and exports.qbx_core:GetJobs()[k].grades[grade] and v.citizenid and v.charinfo and FirstName and LastName then
                         if not CachedJobs[k].employees then CachedJobs[k].employees = {} end
                         if not CachedJobs[k].employees[v.citizenid] then
 
@@ -112,18 +112,18 @@ end
 
 local function JobsHandler(source, Job, CID, grade)
     local src = source
-    local srcPlayer = QBCore.Functions.GetPlayer(src)
+    local srcPlayer = exports.qbx_core:GetPlayer(src)
 
     if not srcPlayer then return print("no source") end
 
     local srcCID = srcPlayer.PlayerData.citizenid
 
     if not Job or not CID or not CachedJobs[Job] then return end
-    local Player = QBCore.Functions.GetPlayerByCitizenId(CID)
+    local Player = exports.qbx_core:GetPlayerByCitizenId(CID)
     if not CachedJobs[Job].employees[CID] then return notifyPlayer(src, "Citizen is not employed at the job...") end
-    if tonumber(grade) > tonumber(CachedJobs[Job].employees[srcCID].grade) then return notifyPlayer(src, "You cannot promote someone higher than you...") end
+    if grade > CachedJobs[Job].employees[srcCID].grade then return notifyPlayer(src, "You cannot promote someone higher than you...") end
 
-    CachedJobs[Job].employees[CID].grade = tonumber(grade)
+    CachedJobs[Job].employees[CID].grade = grade
 
     MySQL.update('UPDATE player_jobs SET employees = ? WHERE jobname = ?', { json.encode(CachedJobs[Job].employees), Job })
 
@@ -157,10 +157,10 @@ RegisterNetEvent('qb-phone:server:fireUser', function(Job, sCID)
 
     if not CachedJobs[Job].employees[srcCID].grade then return end
 
-    local grade = tostring(CachedJobs[Job].employees[srcCID].grade)
-    if not QBCore.Shared.Jobs[Job].grades[grade].isboss then return end
+    local grade = CachedJobs[Job].employees[srcCID].grade
+    if not exports.qbx_core:GetJobs()[Job].grades[grade].isboss then return end
 
-    if tonumber(CachedJobs[Job].employees[srcCID].grade) < tonumber(CachedJobs[Job].employees[CID].grade) then return end
+    if CachedJobs[Job].employees[srcCID].grade < CachedJobs[Job].employees[CID].grade then return end
 
 
     CachedJobs[Job].employees[CID] = nil
@@ -200,8 +200,8 @@ RegisterNetEvent('qb-phone:server:SendEmploymentPayment', function(Job, CID, amo
 
     if not CachedJobs[Job].employees[srcCID].grade then return end
 
-    local grade = tostring(CachedJobs[Job].employees[srcCID].grade)
-    if not QBCore.Shared.Jobs[Job].grades[grade].isboss then return notifyPlayer(src, "You aren't a manager...") end
+    local grade = CachedJobs[Job].employees[srcCID].grade
+    if not exports.qbx_core:GetJobs()[Job].grades[grade].isboss then return notifyPlayer(src, "You aren't a manager...") end
 
     local Reciever = QBCore.Functions.GetPlayerByCitizenId(CID)
     if not Reciever then return notifyPlayer(src, "Employee not found...") end
@@ -209,7 +209,7 @@ RegisterNetEvent('qb-phone:server:SendEmploymentPayment', function(Job, CID, amo
     local amt = tonumber(amount)
     if Config.RenewedBanking then
         if not exports['Renewed-Banking']:removeAccountMoney(Job, amt) then return notifyPlayer(src, "Insufficient Funds...") end
-        local title = QBCore.Shared.Jobs[Job].label.." // Employee Payment"
+        local title = exports.qbx_core:GetJobs()[Job].label.." // Employee Payment"
 
         ---- Business Account ----
         local BusinessName = ("%s %s"):format(Player.PlayerData.charinfo.firstname, Player.PlayerData.charinfo.lastname)
@@ -217,7 +217,7 @@ RegisterNetEvent('qb-phone:server:SendEmploymentPayment', function(Job, CID, amo
         local trans = exports['Renewed-Banking']:handleTransaction(Job, title, amt, "Payment given of $"..amt.." given to "..RecieverName, BusinessName, RecieverName, "withdraw")
 
         ---- Player Account ----
-        exports['Renewed-Banking']:handleTransaction(Reciever.PlayerData.citizenid, title, amt, "Payment recieved of $"..amt.." recieved from Business "..QBCore.Shared.Jobs[Job].label.. " and Manager "..BusinessName, BusinessName, RecieverName, "deposit", trans.trans_id)
+        exports['Renewed-Banking']:handleTransaction(Reciever.PlayerData.citizenid, title, amt, "Payment recieved of $"..amt.." recieved from Business "..exports.qbx_core:GetJobs()[Job].label.. " and Manager "..BusinessName, BusinessName, RecieverName, "deposit", trans.trans_id)
     else
         if not exports['qb-management']:RemoveMoney(Job, amt) then return notifyPlayer(src, "Insufficient Funds...") end
     end
@@ -239,8 +239,8 @@ RegisterNetEvent('qb-phone:server:hireUser', function(Job, id, grade)
 
     if not CachedJobs[Job].employees[pCID] or not CachedJobs[Job].employees[pCID].grade then return end
 
-    local bossGrade = tostring(CachedJobs[Job].employees[pCID].grade)
-    if not QBCore.Shared.Jobs[Job].grades[bossGrade].isboss then return notifyPlayer(src, "You arent a manager // boss...") end
+    local bossGrade = CachedJobs[Job].employees[pCID].grade
+    if not exports.qbx_core:GetJobs()[Job].grades[bossGrade].isboss then return notifyPlayer(src, "You arent a manager // boss...") end
 
     CachedJobs[Job].employees[CID] = {
         cid = CID,
@@ -276,8 +276,8 @@ RegisterNetEvent('qb-phone:server:gradesHandler', function(Job, CID, grade)
 
     if tonumber(grade) > tonumber(CachedJobs[Job].employees[srcCID].grade) then return notifyPlayer(src, "You cannot promote someone higher than you...") end
 
-    local bossGrade = tostring(CachedJobs[Job].employees[srcCID].grade)
-    if not QBCore.Shared.Jobs[Job].grades[bossGrade].isboss then return notifyPlayer(src, "You arent a manager // boss...") end
+    local bossGrade = CachedJobs[Job].employees[srcCID].grade
+    if not exports.qbx_core:GetJobs()[Job].grades[bossGrade].isboss then return notifyPlayer(src, "You arent a manager // boss...") end
 
     CachedJobs[Job].employees[CID].grade = tonumber(grade)
 

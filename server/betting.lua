@@ -12,7 +12,7 @@ local casino_status = true
 
 RegisterNetEvent('qb-phone:server:BettingAddToTable', function(data)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local amount = tonumber(data.amount)
     local CSN = Player.PlayerData.citizenid
     if casino_status then
@@ -61,7 +61,7 @@ RegisterNetEvent('qb-phone:server:WineridCasino', function(data)
     local Winer = data.id
     for _, v in pairs(CasinoBetList) do
         if v.id == Winer then
-            local OtherPly = QBCore.Functions.GetPlayerByCitizenId(v.csn)
+            local OtherPly = exports.qbx_core:GetPlayerByCitizenId(v.csn)
             if OtherPly then
                 local amount = v.amount * v.chanse
                 OtherPly.Functions.AddMoney('casino', tonumber(amount), "Casino Winner")

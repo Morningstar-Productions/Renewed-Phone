@@ -1,5 +1,3 @@
--- BACKWARDS COMPAT FOR HOUSES IF NOT USING QB HOUSES
-
 local function escape_sqli(source)
     local replacements = {
         ['"'] = '\\"',
@@ -27,7 +25,7 @@ end)
 
 lib.callback.register('qb-phone:server:GetPlayerHouses', function(source)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local MyHouses = {}
     local result = MySQL.query.await('SELECT * FROM player_houses WHERE citizenid = ?', { Player.PlayerData.citizenid })
     if result and result[1] then
@@ -93,7 +91,7 @@ end)
 
 lib.callback.register('qb-phone:server:GetHouseKeys', function(source)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
+    local Player = exports.qbx_core:GetPlayer(src)
     local MyKeys = {}
 
     local result = MySQL.query.await('SELECT * FROM player_houses', {})

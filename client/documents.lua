@@ -17,7 +17,7 @@ end)
 RegisterNUICallback('document_Send_Note', function(data, cb)
     if data.Type == 'LocalSend' then
         local pID = lib.getClosestPlayer(GetEntityCoords(cache.ped), 2.5)
-        if not pID then return QBCore.Functions.Notify("No one around!", 'error', 2000) end
+        if not pID then return exports.qbx_core:Notify("No one around!", 'error', 2000) end
 
         local PlayerId = GetPlayerServerId(pID)
         TriggerServerEvent("qb-phone:server:sendDocumentLocal", data, PlayerId)
